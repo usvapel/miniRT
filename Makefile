@@ -85,8 +85,7 @@ PROGRESS_FILE		:= $(OBJ_DIR)/.progress
 # Utility variables for build optimization
 LATEST_SRC			:= $(shell find src -name "*.c" | \
 							xargs ls -t 2>/dev/null | head -1)
-OBJ_FILES_EXIST		:= $(shell [ -n "$(wildcard $(OBJ_DIR)/*.o)" ] \
-							&& echo yes)
+OBJ_FILES_EXIST		:= $(shell [ -n "$(wildcard $(OBJ_DIR)/*.o)" ] && echo yes)
 
 # Looking for updated header files
 LATEST_HEADER		:= $(shell find include \
@@ -159,7 +158,7 @@ $(MLX):
 	--single-branch \
 	https://github.com/codam-coding-college/MLX42.git > /dev/null 2>&1
 	@echo "$(BOLD)$(GREEN)✅ MLX42 successfully cloned!$(RESET)"
-	@cd ./lib/$(MLX_BPATH) && cmake -B build > /dev/null 2>&1
+	@cd $(LIB_DIR)/$(MLX_BPATH) && cmake -B build > /dev/null 2>&1
 	@echo "$(BOLD)$(GREEN)✅ MLX42 successfully built to ./lib/MLX42/build$(RESET)"
 	@$(MAKE) -sC $(MLX_PATH) --no-print-directory
 	@echo "$(BOLD)$(GREEN)✅ $(MLX) successfully compiled!$(RESET)"
