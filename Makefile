@@ -21,15 +21,28 @@ CFLAGS			:= -Wall -Wextra -Werror
 DEBUG_FLAGS		:= -g3 -fsanitize=address -fsanitize=undefined
 OPTFLAGS		:= -O2
 
+# Additional flags
+LDFLAGS			:=	-L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
+					-lglfw -lXext -lX11 -lm -ldl -pthread
+
 # Directory structure
 SRC_DIR			:= src
 OBJ_DIR			:= obj
 DEP_DIR			:= $(OBJ_DIR)/.deps
 
+# Libraries
+LIBFT_DIR		:=	./libft
+LIBFT			:=	$(LIBFT_DIR)/libft.a
+
+MLX_PATH		:=	./MLX42/build/
+MLX_NAME		:=	libmlx42.a
+MLX_BPATH		:= ./MLX42/
+MLX				:=	$(MLX_PATH)$(MLX_NAME)
+
 VPATH			:= $(SRC_DIR)
 
 # Include paths and libraries
-INC				:= -I./include
+INC				:= -I./include -I./MLX42/include/MLX42 -I$(LIBFT_DIR)
 
 # Dependency generation flags
 DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
@@ -98,7 +111,7 @@ all:
 	fi
 
 # Main executable linking with dependency checking
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBFT) $(MLX)
 	@echo ">$(BOLD)$(GREEN) Linking $(NAME)...$(RESET)"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(OPTFLAGS)
 	@touch $(MARKER_STANDARD)
@@ -128,6 +141,24 @@ $(OBJ_DIR):
 
 $(DEP_DIR): | $(OBJ_DIR)
 	@mkdir -p $@
+
+# build libft if needed
+$(LIBFT):
+	@echo "$(MAGENTA)📚 Building libft library...$(RESET)"
+	@$(MAKE) -sC $(LIBFT_DIR) --no-print-directory
+
+# Build MLX42 if needed
+$(MLX):
+	@echo "$(CYAN)📚 Building MLX42 library...$(RESET)"
+	@git clone -q --depth 1 \
+	--branch v2.4.1 \
+	--single-branch \
+	https://github.com/codam-coding-college/MLX42.git > /dev/null 2>&1
+	@echo "$(BOLD)$(GREEN)✅ ./MLX42 successfully cloned!$(RESET)"
+	@cd $(MLX_BPATH) && cmake -B build > /dev/null 2>&1
+	@echo "$(BOLD)$(GREEN)✅ ./MLX42 successfully built to ./MLX42/build$(RESET)"
+	@$(MAKE) -sC $(MLX_PATH) --no-print-directory
+	@echo "$(BOLD)$(GREEN)✅ $(MLX) successfully compiled!$(RESET)"
 
 # Development and debugging build configuration
 debug: CXXFLAGS	+= $(DEBUG_FLAGS)
