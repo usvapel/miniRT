@@ -25,13 +25,14 @@ OPTFLAGS		:= -O2
 # Directory structure
 SRC_DIR			:= src
 OBJ_DIR			:= obj
+LIB_DIR			:= lib
 DEP_DIR			:= $(OBJ_DIR)/.deps
 
 # Libraries
-LIBFT_DIR		:= ./lib/libft
+LIBFT_DIR		:= $(LIB_DIR)/libft
 LIBFT			:= $(LIBFT_DIR)/libft.a
 
-MLX_PATH		:= ./lib/MLX42/build/
+MLX_PATH		:= $(LIB_DIR)/MLX42/build/
 MLX_NAME		:= libmlx42.a
 MLX_BPATH		:= MLX42/
 MLX				:= $(MLX_PATH)$(MLX_NAME)
@@ -39,7 +40,7 @@ MLX				:= $(MLX_PATH)$(MLX_NAME)
 VPATH			:= $(SRC_DIR)
 
 # Include paths and libraries
-INC				:= -I./include -I./lib/MLX42/include/MLX42 -I$(LIBFT_DIR)/include
+INC				:= -I./include -I$(LIB_DIR)/MLX42/include/MLX42 -I$(LIBFT_DIR)/include
 
 # Dependency generation flags
 DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
@@ -152,7 +153,7 @@ $(LIBFT):
 # Build MLX42 if needed
 $(MLX):
 	@echo "$(CYAN)📚 Building MLX42 library...$(RESET)"
-	@cd ./lib && \
+	@cd $(LIB_DIR) && \
 	git clone -q --depth 1 \
 	--branch v2.4.1 \
 	--single-branch \
