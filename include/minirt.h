@@ -14,5 +14,9 @@
 # define MINIRT_H
 
 # include <stdio.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <errno.h>
 
 #endif // MINIRT_T
