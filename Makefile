@@ -164,7 +164,7 @@ $(MLX):
 	@echo "$(BOLD)$(GREEN)✅ $(MLX) successfully compiled!$(RESET)"
 
 # Development and debugging build configuration
-debug: CXXFLAGS	+= $(DEBUG_FLAGS)
+debug: CFLAGS	+= $(DEBUG_FLAGS)
 debug: OPTFLAGS	:= -O0
 debug: clean $(NAME)
 	@echo ">$(BOLD)$(CYAN)  Debug build completed!$(RESET)"
