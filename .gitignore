@@ -53,3 +53,8 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+.standard_build
+compile_commands.json
+miniRT
+.cache
