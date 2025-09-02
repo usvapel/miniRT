@@ -18,5 +18,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <errno.h>
+# include <math.h>
+# include "libft.h"
+# include <MLX42.h>
 
 #endif // MINIRT_T
