@@ -58,3 +58,4 @@ dkms.conf
 compile_commands.json
 miniRT
 .cache
+obj
