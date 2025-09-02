@@ -192,6 +192,12 @@ fclean: clean
 		echo "> [ $(NAME) ] $(BOLD)$(YELLOW) Nothing to be done with \
 		$(RESET)$(BOLD)$(WHITE)fclean$(RESET)"; \
 	fi
+	@if [ -f $(LIBFT) ]; then \
+		$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory; \
+	else \
+		echo "> [ libft     ] $(BOLD)$(YELLOW) Nothing to be done with \
+		$(RESET)$(BOLD)$(WHITE)fclean$(RESET)"; \
+	fi
 
 # Full rebuild from clean slate
 re:
