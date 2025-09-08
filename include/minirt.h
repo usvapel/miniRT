@@ -22,4 +22,4 @@
 # include "libft.h"
 # include <MLX42.h>
 
-#endif // MINIRT_T
+#endif // MINIRT_H
