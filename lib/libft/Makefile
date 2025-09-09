@@ -191,28 +191,33 @@ $(DEP_DIR):
 # Remove object files and build artifacts
 clean:
 	@if [ -d $(OBJ_DIR) ]; then \
-		echo "> [ libft     ] $(YELLOW) Cleaning object files...$(RESET)"; \
+		echo "> [ $(NAME) ] $(YELLOW) Cleaning object files...$(RESET)"; \
 		rm -rf $(OBJ_DIR); \
-		echo "                $(YELLOW) Object files cleaned!$(RESET)"; \
+		printf "> [ %-5s ] %b %s Object files cleaned!%b\n" "$(NAME)" \
+		"$(YELLOW)" "$(NAME)" "$(RESET)"; \
 	else \
-		echo "> [ libft     ] $(BOLD)$(YELLOW) Nothing to be done with $(RESET)$(WHITE)clean$(RESET)"; \
+		echo "> [ $(NAME) ] $(BOLD)$(YELLOW) Nothing to be done with \
+		$(RESET)$(WHITE)clean$(RESET)"; \
 	fi
 
 # Complete cleanup including executables and external libraries
 fclean: clean
 	@if [ -f $(NAME) ]; then \
-		echo "> [ libft     ] $(YELLOW) Removing $(NAME)...$(RESET)"; \
-		rm -rf $(NAME); \
-		rm -f $(MARKER); \
-		echo "                $(YELLOW) $(NAME) removed!$(RESET)"; \
+		echo "> [ $(NAME) ] $(YELLOW) Removing $(NAME)...$(RESET)"; \
+		rm -f $(NAME); \
+		rm -f $(MARKER_STANDARD); \
+		printf "> [ %-5s ] %b %s removed!%b\n" "$(NAME)" "$(YELLOW)" \
+		"$(NAME)" "$(RESET)"; \
 	else \
-		echo "> [ libft     ] $(BOLD)$(YELLOW) Nothing to be done with $(RESET)$(WHITE)fclean$(RESET)"; \
+		echo "> [ $(NAME) ] $(BOLD)$(YELLOW) Nothing to be done with \
+		$(RESET)$(BOLD)$(WHITE)fclean$(RESET)"; \
 	fi
 
 # Full rebuild from clean slate
-re: fclean
-	@echo "> [ libft     ] $(BOLD)$(WHITE) Rebuilding from scratch...$(RESET)"
-	@$(MAKE) all --no-print-directory
+re:
+	@echo "> [ $(NAME) ] $(BOLD)$(WHITE) Rebuilding from scratch...$(RESET)"
+	@$(MAKE) fclean --no-print-directory
+	@$(MAKE) $(NAME) --no-print-directory
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ TARGET DECLARATIONS ■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
