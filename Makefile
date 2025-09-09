@@ -19,7 +19,7 @@ CC				:= cc
 # Compiler flags
 CFLAGS			:= -Wall -Wextra -Werror
 DEBUG_FLAGS		:= -g3 -fsanitize=address -fsanitize=undefined
-OPTFLAGS		:= -O2
+OPTFLAGS		:= -Ofast -ffast-math -march=native -flto -funroll-loops -fomit-frame-pointer
 
 
 # Directory structure
