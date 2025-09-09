@@ -59,3 +59,5 @@ compile_commands.json
 miniRT
 .cache
 obj
+mlx42.supp
+MLX42

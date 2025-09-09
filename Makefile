@@ -146,12 +146,12 @@ $(DEP_DIR): | $(OBJ_DIR)
 
 # build libft if needed
 $(LIBFT):
-	@echo "$(MAGENTA)📚 Building libft library...$(RESET)"
+	@echo ">$(MAGENTA) Building libft library...$(RESET)"
 	@$(MAKE) -sC $(LIBFT_DIR) --no-print-directory
 
 # Build MLX42 if needed
 $(MLX):
-	@echo "$(CYAN)📚 Building MLX42 library...$(RESET)"
+	@echo "$(CYAN) Building MLX42 library...$(RESET)"
 	@cd $(LIB_DIR) && \
 	git clone -q --depth 1 \
 	--branch v2.4.1 \
