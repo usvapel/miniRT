@@ -115,7 +115,7 @@ all:
 # Main executable linking with dependency checking
 $(NAME): $(OBJS) $(LIBFT) $(MLX)
 	@echo ">$(BOLD)$(GREEN) Linking $(NAME)...$(RESET)"
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(OPTFLAGS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(OPTFLAGS) $(LDFLAGS) 
 	@touch $(MARKER_STANDARD)
 	@rm -f $(PROGRESS_FILE)
 	@echo ">$(BOLD)$(GREEN) $(NAME) successfully compiled!$(RESET)"

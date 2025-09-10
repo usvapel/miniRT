@@ -12,8 +12,14 @@
 
 #include "minirt.h"
 
-int main()
+int main(int ac, char **av)
 {
-	printf("hello world\n");
+	(void)ac;
+	(void)av;
+	mlx_t *mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "asd", false);
+	mlx_image_t *img = mlx_new_image(mlx, 200, 200);
+	mlx_image_to_window(mlx, img, 0, 0);
+	mlx_loop(mlx);
+	mlx_terminate(mlx);
 	return (0);
 }
