@@ -21,5 +21,9 @@
 # include <math.h>
 # include "libft.h"
 # include <MLX42.h>
+# include "MLX42.h"
+
+# define WINDOW_WIDTH 800
+# define WINDOW_HEIGHT 800
 
 #endif // MINIRT_T
