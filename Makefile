@@ -10,6 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 
+# ████████████
+
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SETTINGS ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Project configuration
@@ -20,7 +22,6 @@ CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 DEBUG_FLAGS		:= -g3 -fsanitize=address -fsanitize=undefined
 OPTFLAGS		:= -Ofast -ffast-math -march=native -flto -funroll-loops -fomit-frame-pointer
-
 
 # Directory structure
 SRC_DIR			:= src
