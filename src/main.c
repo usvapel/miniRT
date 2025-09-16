@@ -72,7 +72,7 @@ void set_values(t_engine *engine, char **split)
 	// 	init_sp();
 	// init_pl();
 	// init_cy();
-
+//test
 }
 
 void input_parsing(t_engine *engine, char **av)
