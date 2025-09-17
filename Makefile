@@ -168,7 +168,7 @@ $(MLX):
 debug: CFLAGS	+= $(DEBUG_FLAGS)
 debug: OPTFLAGS	:= -O0
 debug: clean $(NAME)
-	@echo ">$(BOLD)$(CYAN)  Debug build completed!$(RESET)"
+	@echo ">$(BOLD)$(CYAN) Debug build completed!$(RESET)"
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ CLEAN TARGETS ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
