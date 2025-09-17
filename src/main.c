@@ -10,31 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minirt.h"
-#include <stdlib.h>
 
 void free_array(void **array)
 {
+	void **copy;
+
 	if (!array)
 		return ;
-	void **copy;
 	copy = array;
 	while (*copy)
 		free(*copy++);
 	free(array);
-}
-
-void exit_on_parsing_failure(char *s, char **ss, char **sss[3])
-{
-	free(s);
-	free_array( (void *) ss);
-	if (!sss)
-		exit(EXIT_FAILURE);
-	free_array( (void *) sss[0] );
-	free_array( (void *) sss[1] );
-	free_array( (void *) sss[2] );
-	exit(EXIT_FAILURE);
 }
 
 void print_array(char **arr)
@@ -46,11 +33,17 @@ void print_array(char **arr)
 void init_C(t_engine *engine, char **split)
 {
 	char **pos[3];
+
 	pos[0] = ft_split(split[1], ',');
 	pos[1] = ft_split(split[2], ',');
 	pos[2] = ft_split(split[3], ',');
 	if (!pos[0] || !pos[1] || !pos[2])
-		exit_on_parsing_failure(NULL, NULL, pos);
+	{
+		free_array( (void *) pos[0] );
+		free_array( (void *) pos[1] );
+		free_array( (void *) pos[2] );
+		exit(EXIT_FAILURE);
+	}
 	engine->camera.pos.x = ft_atof(pos[0][0]);
 	engine->camera.pos.y = ft_atof(pos[0][1]);
 	engine->camera.pos.z = ft_atof(pos[0][2]);
@@ -72,15 +65,16 @@ void init_sp(t_engine *engine, char **split)
 
 void set_values(t_engine *engine, char **split)
 {
-
+	if (!split[0])
+		return ;
 	// if (!ft_strcmp(split[1], "A"))
 	// 	init_A(engine, split);
 	print_array(split);
-	if (ft_strcmp(split[1], "C"))
+	if (ft_strcmp(split[1], "C") == 0)
 		init_C(engine, split);
 	// init_L();
 	// if (!ft_strcmp(split[1], "sp"))
-	if (ft_strcmp(split[1], "sp"))
+	if (ft_strcmp(split[1], "sp") == 0)
 		init_sp(engine, split);
 	// init_pl();
 	// init_cy();
@@ -94,7 +88,7 @@ void input_parsing(t_engine *engine, char **av)
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		exit(1);
+		exit(EXIT_FAILURE);
 	while (true)
 	{
 		line = get_next_line(fd);
@@ -117,7 +111,9 @@ void input_parsing(t_engine *engine, char **av)
 
 void key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_engine *engine = param;
+	t_engine *engine;
+
+	engine = param;
 	if (keydata.action == MLX_PRESS)
 		if (keydata.key == MLX_KEY_ESCAPE)
 			mlx_close_window(engine->mlx);
@@ -125,9 +121,11 @@ void key_hook(mlx_key_data_t keydata, void *param)
 
 int main(int ac, char **av)
 {
+	t_engine *engine;
+
 	if (ac < 2)
 		return (0);
-	t_engine *engine = ft_calloc(1, sizeof(t_engine));
+	engine = ft_calloc(1, sizeof(t_engine));
 	if (!engine)
 		return (1);
 	input_parsing(engine, av);
