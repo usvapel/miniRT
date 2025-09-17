@@ -83,4 +83,6 @@ typedef enum e_id
 	CYLINDER
 } t_id ;
 
+void input_parsing(t_engine *engine, char **av);
+
 #endif // MINIRT_T
