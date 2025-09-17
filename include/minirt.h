@@ -31,6 +31,20 @@ typedef struct s_color t_color;
 typedef struct s_vec3d t_vec3d;
 typedef enum e_id t_id;
 
+typedef struct s_vec3d
+{
+	float x;
+	float y;
+	float z;
+} t_vec3d;
+
+typedef struct s_camera
+{
+	t_vec3d pos;
+	t_vec3d dir;
+	float fov;
+} t_camera;
+
 typedef struct s_engine
 {
 	int32_t	monitor_width;
@@ -38,30 +52,9 @@ typedef struct s_engine
 	mlx_t *mlx;
 	mlx_image_t *image_background;
 	mlx_image_t *objects;
-	t_camera *camera;
+	t_camera camera;
 }	t_engine;
 
-typedef struct s_camera
-{
-	t_vec3d *pos;
-	t_vec3d *dir;
-	int fov;
-} t_camera;
-
-typedef struct s_sphere
-{
-	int type;
-	t_vec3d *pos;
-	float diameter;
-	t_color *color;
-} t_sphere;
-
-typedef struct s_vec3d
-{
-	float x;
-	float y;
-	float z;
-} t_vec3d;
 
 typedef struct s_color
 {
@@ -70,6 +63,15 @@ typedef struct s_color
 	int b;
 	int a;
 } t_color;
+
+typedef struct s_sphere
+{
+	int type;
+	t_vec3d pos;
+	float diameter;
+	t_color color;
+} t_sphere;
+
 
 typedef enum e_id
 {
