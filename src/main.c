@@ -58,9 +58,30 @@ void init_C(t_engine *engine, char **split)
 
 void init_sp(t_engine *engine, char **split)
 {
-	(void)engine;
-	(void)split;
-	return ;
+	char **pos[3];
+
+	pos[0] = ft_split(split[1], ',');
+	pos[1] = ft_split(split[2], ',');
+	pos[2] = ft_split(split[3], ',');
+	if (!pos[0] || !pos[1] || !pos[2])
+	{
+		free_array( (void *) pos[0] );
+		free_array( (void *) pos[1] );
+		free_array( (void *) pos[2] );
+		exit(EXIT_FAILURE);
+	}
+	engine->sphere.type = SPHERE;
+	engine->sphere.pos.x = ft_atof(pos[0][1]);
+	engine->sphere.pos.y = ft_atof(pos[0][2]);
+	engine->sphere.pos.z = ft_atof(pos[0][3]);
+	engine->sphere.diameter = ft_atof(pos[1][0]);
+	engine->sphere.color.r = ft_atof(pos[2][0]);
+	engine->sphere.color.g = ft_atof(pos[2][1]);
+	engine->sphere.color.b = ft_atof(pos[2][2]);
+	engine->sphere.color.a = 255;
+	free_array( (void *) pos[0] );
+	free_array( (void *) pos[1] );
+	free_array( (void *) pos[2] );
 }
 
 void set_values(t_engine *engine, char **split)
