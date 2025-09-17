@@ -45,16 +45,6 @@ typedef struct s_camera
 	float fov;
 } t_camera;
 
-typedef struct s_engine
-{
-	int32_t	monitor_width;
-	int32_t monitor_height;
-	mlx_t *mlx;
-	mlx_image_t *image_background;
-	mlx_image_t *objects;
-	t_camera camera;
-}	t_engine;
-
 
 typedef struct s_color
 {
@@ -72,6 +62,16 @@ typedef struct s_sphere
 	t_color color;
 } t_sphere;
 
+typedef struct s_engine
+{
+	int32_t	monitor_width;
+	int32_t monitor_height;
+	mlx_t *mlx;
+	mlx_image_t *image_background;
+	mlx_image_t *objects;
+	t_camera camera;
+	t_sphere sphere;
+}	t_engine;
 
 typedef enum e_id
 {
@@ -82,4 +82,5 @@ typedef enum e_id
 	PLANE,
 	CYLINDER
 } t_id ;
+
 #endif // MINIRT_T
