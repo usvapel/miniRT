@@ -22,6 +22,17 @@ void key_hook(mlx_key_data_t keydata, void *param)
 			mlx_close_window(engine->mlx);
 }
 
+void print_values(t_engine *engine)
+{
+	printf("%f ", engine->camera.pos.x);
+	printf("%f ", engine->camera.pos.y);
+	printf("%f\n", engine->camera.pos.z);
+	printf("%f ", engine->camera.dir.x);
+	printf("%f ", engine->camera.dir.y);
+	printf("%f\n", engine->camera.dir.z);
+	printf("%f\n", engine->camera.fov);
+}
+
 int main(int ac, char **av)
 {
 	t_engine *engine;
@@ -32,6 +43,9 @@ int main(int ac, char **av)
 	if (!engine)
 		return (1);
 	input_parsing(engine, av);
+	print_values(engine);
+	free(engine);
+	return 0;
 	mlx_set_setting(MLX_HEADLESS, true);
 	engine->mlx = mlx_init(10, 10, "miniRT", true);
     mlx_get_monitor_size(0, &engine->monitor_width, &engine->monitor_height);

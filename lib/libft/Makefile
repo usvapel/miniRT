@@ -165,7 +165,7 @@ $(NAME): $(OBJS)
 	@echo ">$(BOLD)$(GREEN) $(NAME) successfully compiled!$(RESET)"
 
 # Individual object file compilation with progress tracking
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR) $(DEP_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c include/libft.h | $(OBJ_DIR) $(DEP_DIR)
 	$(eval COMPILED_COUNT := $(shell echo $$(($(COMPILED_COUNT)+1))))
 	$(eval PROGRESS := $(shell echo $$(($(COMPILED_COUNT)*100/$(TOTAL_SRCS)))))
 	@if [ $$(($(PROGRESS) % 25)) -eq 0 ] || [ $(PROGRESS) -eq 100 ]; then \
