@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jpelline <jpelline@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/02 13:04:43 by jpelline          #+#    #+#             */
-/*   Updated: 2025/09/19 13:06:33 by jpelline         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minirt.h"
 
 void	key_hook(mlx_key_data_t keydata, void *param)
@@ -31,7 +19,7 @@ void	print_values(t_engine *engine)
 	printf("%f ", engine->camera.dir.x);
 	printf("%f ", engine->camera.dir.y);
 	printf("%f\n", engine->camera.dir.z);
-	printf("%f\n", engine->camera.fov);
+	printf("%d\n", engine->camera.fov);
 
 	printf("sphere\n");
 	printf("%d\n", engine->sphere.type);
