@@ -21,6 +21,7 @@
 # include "camera.h"
 # include "geometry.h"
 # include "primitives.h"
+# include "viewport.h"
 
 typedef struct s_window
 {
@@ -36,6 +37,7 @@ typedef struct s_engine
 	mlx_image_t *image;
 	t_camera camera;
 	t_sphere sphere;
+	t_viewport viewport;
 }	t_engine;
 
 void input_parsing(t_engine *engine, char **av);
