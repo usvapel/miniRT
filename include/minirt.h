@@ -26,7 +26,7 @@ typedef struct s_window
 {
 	int32_t	width;
 	int32_t height;
-	float	aspect_ratio;
+	int32_t	aspect_ratio;
 }	t_window;
 
 typedef struct s_engine
@@ -39,5 +39,6 @@ typedef struct s_engine
 }	t_engine;
 
 void input_parsing(t_engine *engine, char **av);
+void color_background(t_engine *engine);
 
 #endif // MINIRT_T

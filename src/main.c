@@ -1,5 +1,12 @@
 #include "minirt.h"
-// hello
+
+t_engine *get_engine()
+{
+	static t_engine engine;
+
+	return (&engine);
+}
+
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_engine	*engine;
@@ -33,13 +40,6 @@ void	print_values(t_engine *engine)
 	printf("%d\n", engine->sphere.color.a);
 }
 
-t_engine *get_engine()
-{
-	static t_engine engine;
-
-	return (&engine);
-}
-
 int	main(int ac, char **av)
 {
 	t_engine	*engine;
@@ -58,6 +58,7 @@ int	main(int ac, char **av)
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
+	color_background(engine);
 	mlx_key_hook(engine->mlx, key_hook, engine);
 	mlx_loop(engine->mlx);
 	mlx_terminate(engine->mlx);
