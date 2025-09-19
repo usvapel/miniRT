@@ -58,6 +58,7 @@ int	main(int ac, char **av)
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
+	color_background(engine);
 	mlx_key_hook(engine->mlx, key_hook, engine);
 	mlx_loop(engine->mlx);
 	mlx_terminate(engine->mlx);
