@@ -6,7 +6,7 @@
 /*   By: jpelline <jpelline@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/09/15 15:00:47 by jpelline         ###   ########.fr       */
+/*   Updated: 2025/09/19 13:09:42 by jpelline         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ typedef struct s_camera
 	t_vec3d dir;
 	float fov;
 } t_camera;
-
-
 typedef struct s_color
 {
 	int r;

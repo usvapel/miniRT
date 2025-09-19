@@ -6,15 +6,15 @@
 /*   By: jpelline <jpelline@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:04:43 by jpelline          #+#    #+#             */
-/*   Updated: 2025/09/09 14:40:07 by jpelline         ###   ########.fr       */
+/*   Updated: 2025/09/19 13:06:33 by jpelline         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void key_hook(mlx_key_data_t keydata, void *param)
+void	key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_engine *engine;
+	t_engine	*engine;
 
 	engine = param;
 	if (keydata.action == MLX_PRESS)
@@ -22,8 +22,9 @@ void key_hook(mlx_key_data_t keydata, void *param)
 			mlx_close_window(engine->mlx);
 }
 
-void print_values(t_engine *engine)
+void	print_values(t_engine *engine)
 {
+	printf("camera\n");
 	printf("%f ", engine->camera.pos.x);
 	printf("%f ", engine->camera.pos.y);
 	printf("%f\n", engine->camera.pos.z);
@@ -31,11 +32,22 @@ void print_values(t_engine *engine)
 	printf("%f ", engine->camera.dir.y);
 	printf("%f\n", engine->camera.dir.z);
 	printf("%f\n", engine->camera.fov);
+
+	printf("sphere\n");
+	printf("%d\n", engine->sphere.type);
+	printf("%f ", engine->sphere.pos.x);
+	printf("%f ", engine->sphere.pos.y);
+	printf("%f\n", engine->sphere.pos.z);
+	printf("%f\n", engine->sphere.diameter);
+	printf("%d ", engine->sphere.color.r);
+	printf("%d ", engine->sphere.color.g);
+	printf("%d ", engine->sphere.color.b);
+	printf("%d\n", engine->sphere.color.a);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_engine *engine;
+	t_engine	*engine;
 
 	if (ac < 2)
 		return (0);
