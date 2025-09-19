@@ -107,7 +107,7 @@ void	init_sp(t_engine *engine, char **split)
 	values[2] = safe_split(values, split[3]);
 	engine->sphere.type = SPHERE;
 	engine->sphere.pos = parse_vec3d(values[0]);
-	engine->sphere.diameter = ft_atof(values[1][0]);
+	engine->sphere.r = ft_atof(values[1][0]) / 2;
 	engine->sphere.color = parse_color(values[2]);
 	free_values(values);
 }
