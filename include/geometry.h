@@ -1,13 +1,13 @@
 #ifndef GEOMETRY_H
-#define GEOMETRY_H
+# define GEOMETRY_H
 
-#include "primitives.h"
+# include "primitives.h"
 
 typedef struct s_sphere
 {
 	int type;
 	t_vec3d pos;
-	float diameter;
+	float r;
 	t_color color;
 } t_sphere;
 
