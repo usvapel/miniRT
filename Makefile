@@ -67,7 +67,8 @@ RESET			:= $(shell tput sgr0)
 
 # Parsing and syntax analysis
 SRCS_MAIN := \
-	main.c
+	main.c \
+	parsing.c
 
 # Combine all source files
 SRCS := \
@@ -168,7 +169,7 @@ $(MLX):
 debug: CFLAGS	+= $(DEBUG_FLAGS)
 debug: OPTFLAGS	:= -O0
 debug: clean $(NAME)
-	@echo ">$(BOLD)$(CYAN)  Debug build completed!$(RESET)"
+	@echo ">$(BOLD)$(CYAN) Debug build completed!$(RESET)"
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ CLEAN TARGETS ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
