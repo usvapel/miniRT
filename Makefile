@@ -68,7 +68,8 @@ RESET			:= $(shell tput sgr0)
 # Parsing and syntax analysis
 SRCS_MAIN := \
 	main.c \
-	parsing.c
+	parsing.c \
+	color.c
 
 # Combine all source files
 SRCS := \
