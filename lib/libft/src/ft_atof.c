@@ -36,9 +36,9 @@ static int	check_for_dots(const char *nptr, int *flag, int *floats)
 	return (1);
 }
 
-double	ft_atof(const char *nptr)
+float	ft_atof(const char *nptr)
 {
-	double	result;
+	float	result;
 	int		neg;
 	int		floats;
 	int		flag;
@@ -61,5 +61,5 @@ double	ft_atof(const char *nptr)
 		return (0);
 	while (--floats && flag == 1)
 		result = result / 10;
-	return ((double)(result *= neg));
+	return ((float)(result *= neg));
 }

@@ -1,5 +1,5 @@
 #ifndef PRIMITIVES_H
-#define PRIMITIVES_H
+# define PRIMITIVES_H
 
 typedef struct s_vec3d
 {
