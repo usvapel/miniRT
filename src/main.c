@@ -1,5 +1,12 @@
 #include "minirt.h"
-// hello
+
+t_engine *get_engine()
+{
+	static t_engine engine;
+
+	return (&engine);
+}
+
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_engine	*engine;
@@ -31,13 +38,6 @@ void	print_values(t_engine *engine)
 	printf("%d ", engine->sphere.color.g);
 	printf("%d ", engine->sphere.color.b);
 	printf("%d\n", engine->sphere.color.a);
-}
-
-t_engine *get_engine()
-{
-	static t_engine engine;
-
-	return (&engine);
 }
 
 int	main(int ac, char **av)

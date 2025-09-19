@@ -26,7 +26,7 @@ typedef struct s_window
 {
 	int32_t	width;
 	int32_t height;
-	float	aspect_ratio;
+	int32_t	aspect_ratio;
 }	t_window;
 
 typedef struct s_engine
