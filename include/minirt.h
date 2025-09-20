@@ -23,11 +23,13 @@
 # include "primitives.h"
 # include "viewport.h"
 
+#define deg_to_radians(degres) ((degres) * M_PI / 180.0)
+
 typedef struct s_window
 {
 	int32_t	width;
 	int32_t height;
-	int32_t	aspect_ratio;
+	float	aspect_ratio;
 }	t_window;
 
 typedef struct s_engine
