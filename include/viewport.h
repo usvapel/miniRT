@@ -3,6 +3,8 @@
 
 #include "primitives.h"
 
+#define FOCAL_LENGTH 1
+
 typedef struct s_viewport
 {
     float w;
@@ -16,5 +18,6 @@ typedef struct s_viewport
 } t_viewport;
 
 void    setup_viewport(void);
+void    update_viewport(t_viewport *viewport, t_window window);
 
 #endif
