@@ -54,6 +54,10 @@ int	main(int ac, char **av)
     mlx_get_monitor_size(0, &engine->window.width, &engine->window.height);
 	engine->window.aspect_ratio = engine->window.width / engine->window.height;
 	mlx_terminate(engine->mlx);
+	print_vec(engine->sphere.pos, "Sphere");
+	setup_viewport();
+	print_vec(engine->viewport.hori_axis, "Hori: ");
+    print_vec(engine->viewport.vert_axis, "Vert: ");
 	mlx_set_setting(MLX_HEADLESS, false);
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);

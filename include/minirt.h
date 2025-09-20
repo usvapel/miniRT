@@ -42,5 +42,6 @@ typedef struct s_engine
 
 void input_parsing(t_engine *engine, char **av);
 void color_background(t_engine *engine);
+t_engine *get_engine(void);
 
 #endif // MINIRT_T
