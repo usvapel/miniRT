@@ -38,7 +38,7 @@ MLX_NAME		:= libmlx42.a
 MLX_BPATH		:= MLX42/
 MLX				:= $(MLX_PATH)$(MLX_NAME)
 
-VPATH			:= $(SRC_DIR)
+VPATH			:= $(SRC_DIR):$(SRC_DIR)/primitives
 
 # Include paths and libraries
 INC				:= -I./include -I$(LIB_DIR)/MLX42/include/MLX42 -I$(LIBFT_DIR)/include
@@ -49,7 +49,7 @@ DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 # Additional flags
 LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
-					-lglfw -lXext -lX11 -lm -ldl -pthread
+					-ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
@@ -69,7 +69,9 @@ RESET			:= $(shell tput sgr0)
 SRCS_MAIN := \
 	main.c \
 	parsing.c \
-	color.c
+	color.c \
+	viewport.c \
+	vec3d.c
 
 # Combine all source files
 SRCS := \
