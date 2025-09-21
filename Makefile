@@ -71,7 +71,9 @@ SRCS_MAIN := \
 	parsing.c \
 	color.c \
 	viewport.c \
-	vec3d.c
+	vec3d.c \
+	raytracer.c \
+	sphere.c
 
 # Combine all source files
 SRCS := \
