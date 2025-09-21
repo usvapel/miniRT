@@ -18,9 +18,10 @@
 # include <math.h>
 # include <stdio.h>
 # include "libft.h"
-# include "camera.h"
-# include "geometry.h"
 # include "primitives.h"
+# include "ray.h"
+# include "geometry.h"
+# include "camera.h"
 # include "viewport.h"
 
 #define deg_to_radians(degres) ((degres) * M_PI / 180.0)
@@ -46,4 +47,5 @@ void input_parsing(t_engine *engine, char **av);
 void color_background(t_engine *engine);
 t_engine *get_engine(void);
 
+void    update_viewport(t_viewport *viewport, t_window window);
 #endif // MINIRT_T
