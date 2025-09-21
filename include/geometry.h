@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_H
 # define GEOMETRY_H
 
-# include "primitives.h"
+# include "minirt.h"
 
 typedef struct s_sphere
 {
@@ -20,5 +20,7 @@ typedef enum e_id
 	PLANE,
 	CYLINDER
 } t_id ;
+
+bool sphere_ray_hit(t_ray ray, t_sphere sphere);
 
 #endif
