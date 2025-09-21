@@ -1,7 +1,7 @@
 #ifndef VIEWPORT_H
 #define VIEWPORT_H
 
-#include "primitives.h"
+#include "minirt.h"
 
 #define FOCAL_LENGTH 1
 
@@ -18,6 +18,6 @@ typedef struct s_viewport
 } t_viewport;
 
 void    setup_viewport(void);
-void    update_viewport(t_viewport *viewport, t_window window);
+t_vec3d get_viewport_pixel(int x, int y);;
 
 #endif

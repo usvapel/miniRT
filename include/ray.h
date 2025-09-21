@@ -9,4 +9,6 @@ typedef struct s_ray
     t_vec3d udir;
 } t_ray;
 
+void    raytracer(void *engine);
+
 #endif
