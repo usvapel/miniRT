@@ -20,20 +20,16 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 void	print_values(t_engine *engine)
 {
 	printf("camera\n");
-	printf("%f ", engine->camera.pos.x);
-	printf("%f ", engine->camera.pos.y);
-	printf("%f\n", engine->camera.pos.z);
-	printf("%f ", engine->camera.dir.x);
-	printf("%f ", engine->camera.dir.y);
-	printf("%f\n", engine->camera.dir.z);
-	printf("%d\n", engine->camera.fov);
+	print_vec(engine->camera.pos, "Camera-pos: ");
+	print_vec(engine->camera.dir, "Camera-dir: ");
+	printf("Camera-fov: %d\n", engine->camera.fov);
 
 	printf("sphere\n");
-	printf("%d\n", engine->sphere.type);
-	printf("%f ", engine->sphere.pos.x);
-	printf("%f ", engine->sphere.pos.y);
-	printf("%f\n", engine->sphere.pos.z);
-	printf("%f\n", engine->sphere.r);
+
+	print_vec(engine->sphere.pos, "Sphere: ");
+	printf("%f\n", engine->camera.dir.z);
+	printf("sphere-type: %d\n", engine->sphere.type);
+	printf("sphere-r-%f\n", engine->sphere.r);
 	printf("%d ", engine->sphere.color.r);
 	printf("%d ", engine->sphere.color.g);
 	printf("%d ", engine->sphere.color.b);
@@ -62,6 +58,7 @@ int	main(int ac, char **av)
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
 	color_background(engine);
 	mlx_key_hook(engine->mlx, key_hook, engine);
+	mlx_loop_hook(engine->mlx, raytracer, engine);
 	mlx_loop(engine->mlx);
 	mlx_terminate(engine->mlx);
 	return (0);
