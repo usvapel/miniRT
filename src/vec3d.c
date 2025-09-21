@@ -1,5 +1,4 @@
-#include "primitives.h"
-#include <stdio.h>
+#include "minirt.h"
 
 t_vec3d new_vec3d(float x, float y, float z)
 {
@@ -37,4 +36,22 @@ void    print_vec(t_vec3d vec, char *id)
     if (id)
         printf("%s ", id);
 	printf("(%f, %f, %f)\n", vec.x, vec.y, vec.z);
+}
+
+float    magnitude_vec3d(t_vec3d vec)
+{
+    return (sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z)));
+}
+
+void    normlize_vec3d(t_vec3d *vec)
+{
+    float scaler;
+
+    scaler = (float) 1 / magnitude_vec3d(*vec);
+    scale_vec3d(vec, scaler);
+}
+
+float dot_vec3d(t_vec3d vec, t_vec3d vec2)
+{
+    return ((vec.x * vec2.x) + (vec.y * vec2.y) + (vec.z * vec2.z));
 }
