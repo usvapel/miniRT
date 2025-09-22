@@ -96,7 +96,24 @@ void	init_camera(t_engine *engine, char **split)
 	validate_camera(engine);
 }
 
-void	init_sp(t_engine *engine, char **split)
+
+void	init_light(t_engine *engine, char **split)
+{
+	char	**values[3];
+
+	*values = NULL;
+	puts("initializing light");
+	values[0] = safe_split(values, split[1]);
+	values[1] = safe_split(values, split[2]);
+	values[2] = safe_split(values, split[3]);
+	engine->light.type = LIGHT;
+	engine->light.pos = parse_vec3d(values[0]);
+	engine->light.brightness = ft_atof(values[1][0]);
+	engine->light.color = parse_color(values[2]);
+	free_values(values);
+}
+
+void	init_sphere(t_engine *engine, char **split)
 {
 	char	**values[3];
 
@@ -118,8 +135,10 @@ void	set_values(t_engine *engine, char **split)
 		return ;
 	if (ft_strcmp(split[0], "C") == 0)
 		return (init_camera(engine, split));
+	if (ft_strcmp(split[0], "L") == 0)
+		return (init_light(engine, split));
 	if (ft_strcmp(split[0], "sp") == 0)
-		return (init_sp(engine, split));
+		return (init_sphere(engine, split));
 	printf("invalid identifier: %s\n", split[0]);
 }
 
