@@ -23,7 +23,9 @@
 # include "geometry.h"
 # include "camera.h"
 # include "viewport.h"
+# include "light.h"
 
+// this is not allowed in the norm
 #define deg_to_radians(degres) ((degres) * M_PI / 180.0)
 
 typedef struct s_window
@@ -40,6 +42,7 @@ typedef struct s_engine
 	mlx_image_t *image;
 	t_camera camera;
 	t_sphere sphere;
+	t_light  light;
 	t_viewport viewport;
 }	t_engine;
 
