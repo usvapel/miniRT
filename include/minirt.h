@@ -18,15 +18,19 @@
 # include <math.h>
 # include <stdio.h>
 # include "libft.h"
-# include "camera.h"
-# include "geometry.h"
 # include "primitives.h"
+# include "ray.h"
+# include "geometry.h"
+# include "camera.h"
+# include "viewport.h"
+
+#define deg_to_radians(degres) ((degres) * M_PI / 180.0)
 
 typedef struct s_window
 {
 	int32_t	width;
 	int32_t height;
-	int32_t	aspect_ratio;
+	float	aspect_ratio;
 }	t_window;
 
 typedef struct s_engine
@@ -36,9 +40,12 @@ typedef struct s_engine
 	mlx_image_t *image;
 	t_camera camera;
 	t_sphere sphere;
+	t_viewport viewport;
 }	t_engine;
 
 void input_parsing(t_engine *engine, char **av);
 void color_background(t_engine *engine);
+t_engine *get_engine(void);
 
+void    update_viewport(t_viewport *viewport, t_window window);
 #endif // MINIRT_T

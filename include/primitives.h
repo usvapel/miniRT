@@ -16,4 +16,15 @@ typedef struct s_color
 	int a;
 } t_color;
 
+// vec3d
+t_vec3d new_vec3d(float x, float y, float z);
+void scale_vec3d(t_vec3d *vec, float scaler);
+void    add_vec3d(t_vec3d *vec1, t_vec3d vec2);
+void    minus_vec3d(t_vec3d *vec1, t_vec3d vec2);
+void    print_vec(t_vec3d vec, char *id);
+float    magnitude_vec3d(t_vec3d vec);
+void    normlize_vec3d(t_vec3d *vec);
+float dot_vec3d(t_vec3d vec, t_vec3d vec2);
+
+
 #endif
