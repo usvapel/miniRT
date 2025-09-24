@@ -41,7 +41,7 @@ typedef struct s_engine
 	mlx_t *mlx;
 	mlx_image_t *image;
 	t_camera camera;
-	t_sphere sphere;
+	void **objects;
 	t_light  light;
 	t_viewport viewport;
 }	t_engine;
@@ -49,6 +49,10 @@ typedef struct s_engine
 void input_parsing(t_engine *engine, char **av);
 void color_background(t_engine *engine);
 t_engine *get_engine(void);
+float sphere_ray_hit_test(t_ray ray, t_sphere sphere);
 
 void    update_viewport(t_viewport *viewport, t_window window);
+int get_rgba(int r, int g, int b, int a);
+int get_color(t_color *color);
+int scale_color(t_color *color, float brightness);
 #endif // MINIRT_T

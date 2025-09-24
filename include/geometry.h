@@ -11,6 +11,15 @@ typedef struct s_sphere
 	t_color color;
 } t_sphere;
 
+
+typedef struct s_plane
+{
+	int type;
+	t_vec3d pos;
+	t_vec3d normal;
+	t_color color;
+} t_plane;
+
 typedef enum e_id
 {
 	AMBIENT_LIGHNING,
