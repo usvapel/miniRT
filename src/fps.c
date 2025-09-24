@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 int	get_seconds(t_engine *engine)
@@ -26,6 +25,11 @@ void fps_counter(void *param)
 	if (curr_sec > prev_sec)
 	{
 		printf("fps: %d\n", fps);
+		char *title = ft_strjoin("MiniRT | fps: ", ft_itoa(fps));
+		if (!title)
+			exit(1);
+		mlx_set_window_title(engine->mlx, title);
+		free(title);
 		fps = 0;
 	}
 	fps++;
