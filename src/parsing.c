@@ -102,7 +102,6 @@ void	init_light(t_engine *engine, char **split)
 	char	**values[3];
 
 	*values = NULL;
-	puts("initializing light");
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
@@ -113,24 +112,41 @@ void	init_light(t_engine *engine, char **split)
 	free_values(values);
 }
 
-void	init_sphere(t_engine *engine, char **split)
+void	init_sphere(t_sphere **objects, char **split, int index)
 {
 	char	**values[3];
 
 	*values = NULL;
-	puts("initializing sphere");
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	engine->sphere.type = SPHERE;
-	engine->sphere.pos = parse_vec3d(values[0]);
-	engine->sphere.r = ft_atof(values[1][0]) / 2;
-	engine->sphere.color = parse_color(values[2]);
+	objects[index]->type = SPHERE;
+	objects[index]->pos = parse_vec3d(values[0]);
+	objects[index]->r = ft_atof(values[1][0]) / 2;
+	objects[index]->color = parse_color(values[2]);
+	free_values(values);
+}
+
+
+void	init_plane(t_plane **objects, char **split, int index)
+{
+	char	**values[3];
+
+	*values = NULL;
+	values[0] = safe_split(values, split[1]);
+	values[1] = safe_split(values, split[2]);
+	values[2] = safe_split(values, split[3]);
+	objects[index]->type = PLANE;
+	objects[index]->pos = parse_vec3d(values[0]);
+	objects[index]->normal = parse_vec3d(values[1]);
+	objects[index]->color = parse_color(values[2]);
 	free_values(values);
 }
 
 void	set_values(t_engine *engine, char **split)
 {
+	static int index;
+
 	if (!split[0])
 		return ;
 	if (ft_strcmp(split[0], "C") == 0)
@@ -138,7 +154,9 @@ void	set_values(t_engine *engine, char **split)
 	if (ft_strcmp(split[0], "L") == 0)
 		return (init_light(engine, split));
 	if (ft_strcmp(split[0], "sp") == 0)
-		return (init_sphere(engine, split));
+		return (init_sphere((t_sphere **)engine->objects, split, index++));
+	if (ft_strcmp(split[0], "pl") == 0)
+		return (init_plane((t_plane **)engine->objects, split, index++));
 	printf("invalid identifier: %s\n", split[0]);
 }
 
@@ -147,6 +165,11 @@ void	input_parsing(t_engine *engine, char **av)
 	char	*line;
 	char	**split;
 	int		fd;
+
+	engine->objects = ft_calloc(3, sizeof(t_sphere *));
+	engine->objects[0] = ft_calloc(1, sizeof(t_sphere));
+	engine->objects[1] = ft_calloc(1, sizeof(t_sphere));
+	engine->objects[2] = ft_calloc(1, sizeof(t_plane));
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
