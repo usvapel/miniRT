@@ -32,5 +32,6 @@ typedef enum e_id
 
 bool sphere_ray_hit(t_ray ray, t_sphere sphere);
 bool sphere_hit(t_sphere sphere, t_ray ray, t_vec3d *pos);
+bool plane_hit(t_plane plane, t_ray ray, t_vec3d *pos);
 
 #endif
