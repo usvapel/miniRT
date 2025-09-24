@@ -6,6 +6,7 @@ void    raytracer(void *eng)
 {
     t_engine *engine = (t_engine *)eng;
 	t_sphere *spheres = *engine->objects;
+    t_plane *plane = engine->objects[1];
     t_ray ray;
     int y;
     int x;
@@ -19,6 +20,8 @@ void    raytracer(void *eng)
         {
             ray = get_ray(x, y);
             float color = sphere_ray_hit_test(ray, spheres[0]) * 1000;
+            if (plane_hit(*plane, ray, &hit))
+	            mlx_put_pixel(engine->image, x, y, scale_color(&plane->color, 1));
 			if (sphere_hit(spheres[0], ray, &hit))
 	            mlx_put_pixel(engine->image, x, y, get_rgba(color,color,color,color));
 
@@ -38,4 +41,13 @@ t_ray    get_ray(int x, int y)
     minus_vec3d(&ray.udir, ray.origin);
     //normlize_vec3d(&ray.udir);
     return (ray);
+}
+
+t_vec3d get_point_on_ray(t_ray ray, float t)
+{
+    t_vec3d p;
+
+    p = ray.udir;
+    scale_vec3d(&p, t);
+    return p;
 }
