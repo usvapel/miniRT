@@ -24,18 +24,6 @@ void	print_values(t_engine *engine)
 	print_vec(engine->camera.dir, "Camera-dir: ");
 	printf("Camera-fov: %d\n", engine->camera.fov);
 
-	printf("sphere\n");
-
-	print_vec(engine->sphere.pos, "Sphere: ");
-	printf("%f\n", engine->camera.dir.z);
-	printf("sphere-type: %d\n", engine->sphere.type);
-	printf("sphere-r-%f\n", engine->sphere.r);
-	printf("%d ", engine->sphere.color.r);
-	printf("%d ", engine->sphere.color.g);
-	printf("%d ", engine->sphere.color.b);
-	printf("%d\n", engine->sphere.color.a);
-
-
 	printf("light\n");
 	printf("%f\n", engine->light.pos.x);
 	printf("%f\n", engine->light.pos.y);
@@ -61,7 +49,6 @@ int	main(int ac, char **av)
     mlx_get_monitor_size(0, &engine->window.width, &engine->window.height);
 	engine->window.aspect_ratio = (float)engine->window.width / engine->window.height;
 	mlx_terminate(engine->mlx);
-	print_vec(engine->sphere.pos, "Sphere");
 	setup_viewport();
 	mlx_set_setting(MLX_HEADLESS, false);
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT", true);

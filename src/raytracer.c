@@ -9,6 +9,7 @@ void    raytracer(void *eng)
     t_ray ray;
     int y;
     int x;
+    t_vec3d hit = {0};
 
     y = -1;
     while (++y < engine->window.height)
@@ -18,8 +19,8 @@ void    raytracer(void *eng)
         {
             ray = get_ray(x, y);
             float color = sphere_ray_hit_test(ray, spheres[0]) * 1000;
-			if (color >= 0)
-	            mlx_put_pixel(engine->image, x, y, color);
+			if (sphere_hit(spheres[0], ray, &hit))
+	            mlx_put_pixel(engine->image, x, y, get_rgba(color,color,color,color));
 
             //compute ray intersections with objects in the world
         }
