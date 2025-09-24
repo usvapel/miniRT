@@ -16,6 +16,7 @@ void    raytracer(void *eng)
     t_engine *engine = (t_engine *)eng;
 	t_sphere *spheres = *engine->objects;
 	t_light light = engine->light;
+    t_plane *plane = engine->objects[1];
     t_ray ray;
 	t_vec3d pos = {0};
     int y;
@@ -29,10 +30,11 @@ void    raytracer(void *eng)
         while (++x < engine->window.width)
         {
             ray = get_ray(x, y);
-			hit = sphere_hit(spheres[0], ray, &pos);
-			if (hit)
-			{
-				t_vec3d tmp = new_vec3d(pos.x, pos.y, pos.z);
+            if (plane_hit(*plane, ray, &hit))
+	            mlx_put_pixel(engine->image, x, y, scale_color(&plane->color, 1));
+			if (sphere_hit(spheres[0], ray, &hit))
+            {
+                t_vec3d tmp = new_vec3d(pos.x, pos.y, pos.z);
 				minus_vec3d(&pos, spheres[0].pos);
 				t_vec3d light_dir = new_vec3d(light.pos.x, light.pos.y, light.pos.z);
 				minus_vec3d(&light_dir, tmp);
@@ -40,7 +42,7 @@ void    raytracer(void *eng)
 				normlize_vec3d(&pos);
 				float d = max(dot_vec3d(pos, light_dir), 0.0f);
 				mlx_put_pixel(engine->image, x, y, scale_color(&spheres[0].color, d));
-			}
+            }
         }
     }
 }
@@ -55,4 +57,13 @@ t_ray    get_ray(int x, int y)
     ray.udir = pixel;
     minus_vec3d(&ray.udir, ray.origin);
     return (ray);
+}
+
+t_vec3d get_point_on_ray(t_ray ray, float t)
+{
+    t_vec3d p;
+
+    p = ray.udir;
+    scale_vec3d(&p, t);
+    return p;
 }
