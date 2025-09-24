@@ -75,7 +75,8 @@ SRCS_MAIN := \
 	raytracer.c \
 	sphere.c \
 	fps.c \
-	movement.c
+	movement.c \
+	plane.c
 
 # Combine all source files
 SRCS := \
