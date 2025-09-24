@@ -1,6 +1,19 @@
 
 #include "minirt.h"
 
+int scale_color(t_color *color, float brightness)
+{
+  int r = (int)(color->r * brightness);
+  int g = (int)(color->g * brightness);
+  int b = (int)(color->b * brightness);
+  return (r << 16 | g << 8 | b);
+}
+
+int get_color(t_color *color)
+{
+	return (color->r << 24 | color->g << 16 | color->b << 8 | color->a);
+}
+
 int get_rgba(int r, int g, int b, int a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
