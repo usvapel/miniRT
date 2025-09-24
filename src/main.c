@@ -7,16 +7,6 @@ t_engine *get_engine()
 	return (&engine);
 }
 
-void	key_hook(mlx_key_data_t keydata, void *param)
-{
-	t_engine	*engine;
-
-	engine = param;
-	if (keydata.action == MLX_PRESS)
-		if (keydata.key == MLX_KEY_ESCAPE)
-			mlx_close_window(engine->mlx);
-}
-
 void	print_values(t_engine *engine)
 {
 	printf("camera\n");
