@@ -6,18 +6,20 @@ void movement(mlx_key_data_t keydata, t_engine *engine)
 	if (keydata.action == MLX_PRESS)
 	{
 		if (keydata.key == MLX_KEY_W)
-			engine->camera.pos.z += 100;
+			engine->camera.pos.z += 0.1;
 		if (keydata.key == MLX_KEY_S)
-			engine->camera.pos.x += 10;
-		if (keydata.key == MLX_KEY_A)
-			engine->camera.pos.y += 10;
+			engine->camera.pos.z -= 0.1;
 		if (keydata.key == MLX_KEY_D)
-			engine->camera.pos.z -= 10;
+			engine->camera.pos.x += 0.1;
 		if (keydata.key == MLX_KEY_C)
-			engine->camera.pos.z -= 10;
+			engine->camera.pos.y -= 0.1;
 		if (keydata.key == MLX_KEY_V)
-			engine->camera.pos.z -= 10;
-		update_viewport(&engine->viewport, *(t_window *)engine->mlx->window);
+			engine->camera.pos.y += 0.1;
+		if (keydata.key == MLX_KEY_A)
+			engine->camera.pos.x -= 0.1;
+		update_viewport(&engine->viewport, engine->window);
+		ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
+		color_background(engine);
 		mlx_image_to_window(engine->mlx, engine->image, 0, 0);
 	}
 }
