@@ -59,4 +59,5 @@ int get_rgba(int r, int g, int b, int a);
 int get_color(t_color *color);
 int scale_color(t_color *color, float brightness);
 void fps_counter(void *param);
+void	key_hook(mlx_key_data_t keydata, void *param);
 #endif // MINIRT_T
