@@ -34,7 +34,7 @@ void    minus_vec3d(t_vec3d *vec1, t_vec3d vec2)
 void    print_vec(t_vec3d vec, char *id)
 {
     if (id)
-        printf("%s ", id);
+		printf("%s ", id);
 	printf("(%f, %f, %f)\n", vec.x, vec.y, vec.z);
 }
 
