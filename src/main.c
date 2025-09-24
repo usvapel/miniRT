@@ -51,6 +51,7 @@ int	main(int ac, char **av)
 	mlx_key_hook(engine->mlx, key_hook, engine);
 	mlx_loop_hook(engine->mlx, raytracer, engine);
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
+	mlx_cursor_hook(engine->mlx, cursor_hook, NULL);
 	mlx_loop(engine->mlx);
 	mlx_terminate(engine->mlx);
 	return (0);

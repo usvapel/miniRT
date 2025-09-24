@@ -34,3 +34,34 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 			mlx_close_window(engine->mlx);
 	movement(keydata, engine);
 }
+
+void mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, void *param)
+{
+	t_engine *engine = get_engine();
+	(void)engine;
+    (void)mods;
+    (void)param;
+
+    if (action == MLX_PRESS)
+    {
+        if (button == MLX_MOUSE_BUTTON_LEFT)
+            printf("Left click pressed\n");
+        else if (button == MLX_MOUSE_BUTTON_RIGHT)
+            printf("Right click pressed\n");
+        else if (button == MLX_MOUSE_BUTTON_MIDDLE)
+            printf("Middle click pressed\n");
+    }
+    else if (action == MLX_RELEASE)
+    {
+        printf("Mouse button released\n");
+    }
+}
+
+void cursor_hook(double x, double y, void *param)
+{
+	t_engine *engine = get_engine();
+	(void)param;
+
+	printf("%f %f\n", x, y);
+	mlx_mouse_hook(engine->mlx, mouse_hook, NULL);
+}

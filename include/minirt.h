@@ -60,4 +60,6 @@ int get_color(t_color *color);
 int scale_color(t_color *color, float brightness);
 void fps_counter(void *param);
 void	key_hook(mlx_key_data_t keydata, void *param);
+
+void cursor_hook(double x, double y, void *param);
 #endif // MINIRT_T
