@@ -5,6 +5,7 @@ t_ray    get_ray(int x, int y);
 void    raytracer(void *eng)
 {
     t_engine *engine = (t_engine *)eng;
+	t_sphere *spheres = *engine->objects;
     t_ray ray;
     int y;
     int x;
@@ -16,8 +17,9 @@ void    raytracer(void *eng)
         while (++x < engine->window.width)
         {
             ray = get_ray(x, y);
-            if (sphere_ray_hit(ray, engine->sphere))
-                mlx_put_pixel(engine->image, x, y, 0x43ff64d9);
+            float color = sphere_ray_hit_test(ray, spheres[0]) * 1000;
+			if (color >= 0)
+	            mlx_put_pixel(engine->image, x, y, color);
 
             //compute ray intersections with objects in the world
         }
