@@ -9,7 +9,18 @@ typedef struct s_ray
     t_vec3d udir;
 } t_ray;
 
+typedef struct s_hit
+{
+    t_vec3d pos;
+    t_color color;
+    bool prev_hit;
+} t_hit;
+
 void    raytracer(void *engine);
 t_vec3d get_point_on_ray(t_ray ray, float t);
+t_ray    get_ray(int x, int y);
+
+void    set_hit(t_vec3d pos, t_color color, t_hit *hit);
+bool closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2);
 
 #endif
