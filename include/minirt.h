@@ -24,9 +24,11 @@
 # include "camera.h"
 # include "viewport.h"
 # include "light.h"
+# include <sys/time.h>
 
 // this is not allowed in the norm
 #define deg_to_radians(degres) ((degres) * M_PI / 180.0)
+typedef struct timeval t_time;
 
 typedef struct s_window
 {
@@ -40,6 +42,7 @@ typedef struct s_engine
 	t_window window;
 	mlx_t *mlx;
 	mlx_image_t *image;
+	t_time start;
 	t_camera camera;
 	void **objects;
 	t_light  light;
@@ -54,5 +57,11 @@ float sphere_ray_hit_test(t_ray ray, t_sphere sphere);
 void    update_viewport(t_viewport *viewport, t_window window);
 int get_rgba(int r, int g, int b, int a);
 int get_color(t_color *color);
-int scale_color(t_color *color, float brightness);
+uint32_t scale_color(t_color *color, float brightness);
+void fps_counter(void *param);
+void	key_hook(mlx_key_data_t keydata, void *param);
+
+void cursor_hook(double x, double y, void *param);
+float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
+float clamp(float value, float min, float max);
 #endif // MINIRT_T

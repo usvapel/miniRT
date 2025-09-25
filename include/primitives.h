@@ -10,10 +10,10 @@ typedef struct s_vec3d
 
 typedef struct s_color
 {
-	int r;
-	int g;
-	int b;
-	int a;
+	float r;
+	float g;
+	float b;
+	float a;
 } t_color;
 
 // vec3d
