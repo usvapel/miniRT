@@ -17,14 +17,8 @@ void	print_values(t_engine *engine)
 	printf("sphere\n");
 
 	printf("light\n");
-	printf("%f\n", engine->light.pos.x);
-	printf("%f\n", engine->light.pos.y);
-	printf("%f\n", engine->light.pos.z);
+	print_vec(engine->light.pos, "light: ");
 	printf("%f\n", engine->light.brightness);
-	printf("%d\n", engine->light.color.r);
-	printf("%d\n", engine->light.color.g);
-	printf("%d\n", engine->light.color.b);
-	printf("%d\n", engine->light.color.a);
 }
 
 int	main(int ac, char **av)

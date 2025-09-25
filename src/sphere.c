@@ -1,4 +1,5 @@
 #include "minirt.h"
+#include "primitives.h"
 
 float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 
@@ -61,10 +62,13 @@ bool sphere_hit(t_sphere sphere, t_ray ray, t_vec3d *pos)
     tmp = ray.udir;
     scale_vec3d(&tmp, t1);
     add_vec3d(&hit2, tmp);
+	ft_memset(pos, 0, sizeof(t_vec3d));
     if (disc == 0 || t0 < t1)
         add_vec3d(pos, hit);
     else
-        add_vec3d(pos, hit2);
+		add_vec3d(pos, hit2);
+
+	// normlize_vec3d(pos);
     return true;
 }
 
@@ -84,11 +88,11 @@ float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1)
     scale_vec3d(&tmp, -2);
     b = dot_vec3d(tmp, ray_s_origin);
     c = dot_vec3d(ray_s_origin, ray_s_origin) - (sphere.r * sphere.r);
-    disc = (b * b) - (4 * a * c);
-    if (disc >= 0)
+    disc = (b * b) - (4.0f * a * c);
+    if (disc >= 0.0f)
     {
-        *t0 = (-b - sqrt(disc)) / (2 * a);
-        *t1 = (-b + sqrt(disc)) / (2 * a);
+        *t0 = (-b - sqrt(disc)) / (2.0f * a);
+        *t1 = (-b + sqrt(disc)) / (2.0f * a);
     }
     return ((b * b) - (4 * a * c));
 }

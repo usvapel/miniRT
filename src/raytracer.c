@@ -1,15 +1,33 @@
 #include "minirt.h"
+#include "primitives.h"
 
 t_ray    get_ray(int x, int y);
+
+float max(float val1, float val2)
+{
+	if (val1 > val2)
+		return val1;
+	if (val2 > val1)
+		return val2;
+	return val2;
+}
+
+
+float map(float value, float in_max, float out_min, float out_max)
+{
+	return (value * (out_max - out_min) / in_max + out_min);
+}
 
 void    raytracer(void *eng)
 {
     t_engine *engine = (t_engine *)eng;
 	t_sphere *spheres = *engine->objects;
+	t_light light = engine->light;
     t_ray ray;
+	t_vec3d pos = {0};
     int y;
     int x;
-    t_vec3d hit = {0};
+	bool hit;
 
     y = -1;
     while (++y < engine->window.height)
@@ -18,11 +36,18 @@ void    raytracer(void *eng)
         while (++x < engine->window.width)
         {
             ray = get_ray(x, y);
-            float color = sphere_ray_hit_test(ray, spheres[0]) * 1000;
-			if (sphere_hit(spheres[0], ray, &hit))
-	            mlx_put_pixel(engine->image, x, y, get_rgba(color,color,color,color));
-
-            //compute ray intersections with objects in the world
+			hit = sphere_hit(spheres[0], ray, &pos);
+			if (hit)
+			{
+				t_vec3d tmp = new_vec3d(pos.x, pos.y, pos.z);
+				minus_vec3d(&pos, spheres[0].pos);
+				t_vec3d light_dir = new_vec3d(light.pos.x, light.pos.y, light.pos.z);
+				minus_vec3d(&light_dir, tmp);
+				normlize_vec3d(&light_dir);
+				normlize_vec3d(&pos);
+				float d = max(dot_vec3d(pos, light_dir), 0.0f);
+				mlx_put_pixel(engine->image, x, y, scale_color(&spheres[0].color, d));
+			}
         }
     }
 }
@@ -36,6 +61,5 @@ t_ray    get_ray(int x, int y)
     ray.origin = engine->camera.pos;
     ray.udir = pixel;
     minus_vec3d(&ray.udir, ray.origin);
-    //normlize_vec3d(&ray.udir);
     return (ray);
 }
