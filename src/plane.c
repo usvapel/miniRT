@@ -6,7 +6,7 @@ Plane in normal form: n * (r-r0) = 0, n normal form, r0 known point and r is any
 --> n * (o + td -r0) = 0
 --> t = n*(r0 - o) / (d * n), if d * n == 0, ray is inside the plane,  n*(r0 - o) == 0 no solution
 */
-bool plane_hit(t_plane plane, t_ray ray, t_vec3d *pos)
+bool plane_hit(t_plane plane, t_ray ray, t_hit *hit)
 {
     const float d_dot_n = dot_vec3d(plane.normal, ray.udir);
     t_vec3d tmp;
@@ -22,6 +22,6 @@ bool plane_hit(t_plane plane, t_ray ray, t_vec3d *pos)
     t /= d_dot_n;
     if (t < 0)
         return false;
-    *pos = get_point_on_ray(ray, t);
+    set_hit(get_point_on_ray(ray, t), plane.color, hit);
     return true;
 }
