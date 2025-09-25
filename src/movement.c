@@ -20,7 +20,6 @@ void movement(mlx_key_data_t keydata, t_engine *engine)
 		update_viewport(&engine->viewport, engine->window);
 		ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
 		color_background(engine);
-		mlx_image_to_window(engine->mlx, engine->image, 0, 0);
 	}
 }
 
