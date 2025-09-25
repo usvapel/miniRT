@@ -1,5 +1,4 @@
 #include "minirt.h"
-#include "primitives.h"
 
 t_ray    get_ray(int x, int y);
 
@@ -10,12 +9,6 @@ float max(float val1, float val2)
 	if (val2 > val1)
 		return val2;
 	return val2;
-}
-
-
-float map(float value, float in_max, float out_min, float out_max)
-{
-	return (value * (out_max - out_min) / in_max + out_min);
 }
 
 void    raytracer(void *eng)

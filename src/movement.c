@@ -3,7 +3,7 @@
 
 void movement(mlx_key_data_t keydata, t_engine *engine)
 {
-	if (keydata.action == MLX_PRESS)
+	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
 		if (keydata.key == MLX_KEY_W)
 			engine->camera.pos.z += 0.1;
