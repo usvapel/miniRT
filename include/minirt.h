@@ -52,7 +52,6 @@ typedef struct s_engine
 void input_parsing(t_engine *engine, char **av);
 void color_background(t_engine *engine);
 t_engine *get_engine(void);
-float sphere_ray_hit_test(t_ray ray, t_sphere sphere);
 
 void    update_viewport(t_viewport *viewport, t_window window);
 int get_rgba(int r, int g, int b, int a);
