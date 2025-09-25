@@ -21,7 +21,7 @@ void    raytracer(void *eng)
 	t_vec3d pos = {0};
     int y;
     int x;
-	bool hit;
+    t_hit hit;
 
     y = -1;
     while (++y < engine->window.height)
@@ -29,10 +29,10 @@ void    raytracer(void *eng)
         x = -1;
         while (++x < engine->window.width)
         {
+            hit.prev_hit = false;
             ray = get_ray(x, y);
-            if (plane_hit(*plane, ray, &hit))
-	            mlx_put_pixel(engine->image, x, y, scale_color(&plane->color, 1));
-			if (sphere_hit(spheres[0], ray, &hit))
+            plane_hit(*plane, ray, &hit);
+            if (sphere_hit(spheres[0], ray, &hit))
             {
                 t_vec3d tmp = new_vec3d(pos.x, pos.y, pos.z);
 				minus_vec3d(&pos, spheres[0].pos);
@@ -43,6 +43,8 @@ void    raytracer(void *eng)
 				float d = max(dot_vec3d(pos, light_dir), 0.0f);
 				mlx_put_pixel(engine->image, x, y, scale_color(&spheres[0].color, d));
             }
+            //if (hit.prev_hit)
+	            //mlx_put_pixel(engine->image, x, y, scale_color(&hit.color, 1));
         }
     }
 }
@@ -55,7 +57,7 @@ t_ray    get_ray(int x, int y)
 
     ray.origin = engine->camera.pos;
     ray.udir = pixel;
-    minus_vec3d(&ray.udir, ray.origin);
+    minus_vec3d(&ray.udir, engine->camera.pos);
     return (ray);
 }
 
