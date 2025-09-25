@@ -42,6 +42,10 @@ float    magnitude_vec3d(t_vec3d vec)
 {
     return (sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z)));
 }
+float    pow_magnitude_vec3d(t_vec3d vec)
+{
+    return ((vec.x * vec.x) * (vec.x * vec.x) + (vec.y * vec.y) * (vec.y * vec.y) + (vec.z * vec.z) * (vec.z * vec.z));
+}
 
 void    normlize_vec3d(t_vec3d *vec)
 {
