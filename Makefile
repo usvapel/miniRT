@@ -76,7 +76,8 @@ SRCS_MAIN := \
 	sphere.c \
 	fps.c \
 	movement.c \
-	plane.c
+	plane.c \
+	hit.c
 
 # Combine all source files
 SRCS := \
