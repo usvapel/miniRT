@@ -1,18 +1,20 @@
 
 #include "minirt.h"
 
-int scale_color(t_color *color, float brightness)
+uint32_t scale_color(t_color *color, float brightness)
 {
-  int r = (int)(color->r * brightness);
-  int g = (int)(color->g * brightness);
-  int b = (int)(color->b * brightness);
-  return (r << 16 | g << 8 | b);
+	uint8_t r = (uint8_t)(color->r * brightness);
+	uint8_t g = (uint8_t)(color->g * brightness);
+	uint8_t b = (uint8_t)(color->b * brightness);
+	uint8_t a = (uint8_t)(color->a);
+	uint32_t result = (r << 24) | (g << 16) | (b << 8) | a;
+	return result;
 }
 
-int get_color(t_color *color)
-{
-	return (color->r << 24 | color->g << 16 | color->b << 8 | color->a);
-}
+// float get_color(t_color *color)
+// {
+// 	return (color->r << 24 | color->g << 16 | color->b << 8 | color->a);
+// }
 
 int get_rgba(int r, int g, int b, int a)
 {
@@ -39,7 +41,7 @@ int get_a(int rgba)
     return (rgba & 0xFF);
 }
 
-int clamp(int value, int min, int max)
+float clamp(float value, float min, float max)
 {
 	if (value > max)
 		value = max;
@@ -56,9 +58,9 @@ int lerp(float level, int start, int end)
 
 void calculate_gradient(t_engine *engine, int *color, int y)
 {
-	int r;
-	int g;
-	int b;
+	float r;
+	float g;
+	float b;
 	float level;
 
 	level = (float)y / (float)(engine->window.height - 1);

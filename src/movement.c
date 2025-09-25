@@ -61,7 +61,9 @@ void cursor_hook(double x, double y, void *param)
 {
 	t_engine *engine = get_engine();
 	(void)param;
+	(void)y;
+	(void)x;
 
-	printf("%f %f\n", x, y);
+	// printf("%f %f\n", x, y);
 	mlx_mouse_hook(engine->mlx, mouse_hook, NULL);
 }

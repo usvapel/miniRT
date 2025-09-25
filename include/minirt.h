@@ -57,9 +57,11 @@ float sphere_ray_hit_test(t_ray ray, t_sphere sphere);
 void    update_viewport(t_viewport *viewport, t_window window);
 int get_rgba(int r, int g, int b, int a);
 int get_color(t_color *color);
-int scale_color(t_color *color, float brightness);
+uint32_t scale_color(t_color *color, float brightness);
 void fps_counter(void *param);
 void	key_hook(mlx_key_data_t keydata, void *param);
 
 void cursor_hook(double x, double y, void *param);
+float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
+float clamp(float value, float min, float max);
 #endif // MINIRT_T
