@@ -1,14 +1,15 @@
 #include "minirt.h"
 
-void    set_hit(t_vec3d pos, t_color color, t_hit *hit)
+bool    set_hit(t_vec3d new_hit, t_color color, t_hit *hit)
 {
     t_camera cam = get_engine()->camera;
 
-    if (hit->prev_hit && !closest_hit(cam.pos, pos, hit->pos))
-        return;
-    hit->pos = pos;
+   if (hit->prev_hit && closest_hit(cam.pos, hit->pos, new_hit))
+       return false;
+    hit->pos = new_hit;
     hit->color = color;
     hit->prev_hit = true;
+    return true;
 }
 
 bool closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2)
