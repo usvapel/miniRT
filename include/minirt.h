@@ -57,6 +57,7 @@ void    update_viewport(t_viewport *viewport, t_window window);
 int get_rgba(int r, int g, int b, int a);
 int get_color(t_color *color);
 uint32_t scale_color(t_color *color, float brightness);
+void apply_color(t_color *color, float brightness);
 void fps_counter(void *param);
 void	key_hook(mlx_key_data_t keydata, void *param);
 
