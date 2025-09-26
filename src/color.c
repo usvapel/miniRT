@@ -1,6 +1,14 @@
 
 #include "minirt.h"
 
+void apply_color(t_color *color, float brightness)
+{
+	color->r = (color->r * brightness);
+	color->g = (color->g * brightness);
+	color->b = (color->b * brightness);
+	color->a = (color->a);
+}
+
 uint32_t scale_color(t_color *color, float brightness)
 {
 	uint8_t r = (uint8_t)(color->r * brightness);
