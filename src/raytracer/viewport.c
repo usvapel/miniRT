@@ -50,7 +50,8 @@ void set_pixal_spacing(t_viewport *viewport)
 void    set_starting_pixel(t_viewport *viewport)
 {
     const t_camera camera = get_engine()->camera;
-    const t_vec3d focal_vec = new_vec3d(0, 0, FOCAL_LENGTH);
+    normlize_vec3d((t_vec3d *)&camera.dir);
+    const t_vec3d focal_vec = camera.dir;
     t_vec3d top_left;
     t_vec3d tmp;
     // starting position
