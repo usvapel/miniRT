@@ -38,8 +38,6 @@ MLX_NAME		:= libmlx42.a
 MLX_BPATH		:= MLX42/
 MLX				:= $(MLX_PATH)$(MLX_NAME)
 
-VPATH			:= $(SRC_DIR):$(SRC_DIR)/primitives
-
 # Include paths and libraries
 INC				:= -I./include -I$(LIB_DIR)/MLX42/include/MLX42 -I$(LIBFT_DIR)/include
 
@@ -66,7 +64,12 @@ RESET			:= $(shell tput sgr0)
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SOURCE FILES ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Virtual path
-VPATH := src:src/parsing:src/premitives:src/geometry:src/MLX:src/raytracer
+VPATH	:= $(SRC_DIR): \
+	$(SRC_DIR)/parsing: \
+	$(SRC_DIR)/primitives: \
+	$(SRC_DIR)/geometry: \
+	$(SRC_DIR)/MLX: \
+	$(SRC_DIR)/raytracer
 
 # Parsing and syntax analysis
 SRCS_MAIN := \

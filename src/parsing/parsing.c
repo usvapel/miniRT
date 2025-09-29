@@ -166,10 +166,9 @@ void	input_parsing(t_engine *engine, char **av)
 	char	**split;
 	int		fd;
 
-	engine->objects = ft_calloc(3, sizeof(t_sphere *));
+	engine->objects = ft_calloc(2, sizeof(void *));
 	engine->objects[0] = ft_calloc(1, sizeof(t_sphere));
-	engine->objects[1] = ft_calloc(1, sizeof(t_sphere));
-	engine->objects[2] = ft_calloc(1, sizeof(t_plane));
+	engine->objects[1] = ft_calloc(1, sizeof(t_plane));
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)

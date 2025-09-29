@@ -40,13 +40,17 @@ int	main(int ac, char **av)
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT | fps: 0", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
-	color_background(engine);
+	// color_background(engine);
 	gettimeofday(&engine->start, NULL);
 	mlx_key_hook(engine->mlx, key_hook, engine);
-	mlx_loop_hook(engine->mlx, raytracer, engine);
+	setup_threads(engine);
+	// mlx_loop_hook(engine->mlx, raytracer, engine);
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
 	mlx_cursor_hook(engine->mlx, cursor_hook, NULL);
 	mlx_loop(engine->mlx);
 	mlx_terminate(engine->mlx);
+	for (int i = 0; i < THREAD_COUNT; i++) {
+		pthread_join(engine->threads[i].thread, NULL);
+	}
 	return (0);
 }

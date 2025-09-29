@@ -13,10 +13,10 @@ typedef struct s_hit
 {
     t_vec3d pos;
     t_color color;
-    bool prev_hit;
+    volatile bool prev_hit;
 } t_hit;
 
-void    raytracer(void *engine);
+void    *raytracer(void *engine);
 t_vec3d get_point_on_ray(t_ray ray, float t);
 t_ray    get_ray(int x, int y);
 
