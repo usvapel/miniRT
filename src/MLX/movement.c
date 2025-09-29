@@ -7,45 +7,17 @@ void movement(mlx_key_data_t keydata, t_engine *engine)
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
 		if (keydata.key == MLX_KEY_W)
-		{
-			
-			tmp = engine->camera.dir;
-			scale_vec3d(&tmp, 0.1);
-			add_vec3d(&engine->camera.pos, tmp);
-			//engine->camera.pos.z += engine->camera.dir.z;
-			//engine->camera.pos.z += 0.1;
-		}
+			engine->camera.pos.z += 0.1;
 		if (keydata.key == MLX_KEY_S)
-		{
-			tmp = engine->camera.dir;
-			scale_vec3d(&tmp, 0.1);
-			minus_vec3d(&engine->camera.pos, tmp);
-			//engine->camera.pos.z = engine->camera.dir.z;
-			//engine->camera.pos.z -= 0.1;
-		}
+			engine->camera.pos.z -= 0.1;
 		if (keydata.key == MLX_KEY_D)
 			engine->camera.pos.x += 0.1;
-		if (keydata.key == MLX_KEY_A)
-			engine->camera.pos.x -= 0.1;
 		if (keydata.key == MLX_KEY_C)
 			engine->camera.pos.y -= 0.1;
 		if (keydata.key == MLX_KEY_V)
 			engine->camera.pos.y += 0.1;
-		if (keydata.key == MLX_KEY_LEFT)
-			engine->camera.dir.x -= 0.1;
-		if (keydata.key == MLX_KEY_RIGHT)
-		{
-			// if (engine->camera.dir.x == 1.0)
-			// 	engine->camera.dir.x = -1.0;
-			engine->camera.dir.x += 0.1;
-			engine->camera.dir.y -= 0.1;
-		}
-		if (keydata.key == MLX_KEY_DOWN)
-			engine->camera.dir.y -= 0.1;
-		if (keydata.key == MLX_KEY_UP)
-		{
-			engine->camera.dir.y += 0.1;
-		}
+		if (keydata.key == MLX_KEY_A)
+			engine->camera.pos.x -= 0.1;
 		update_viewport(&engine->viewport, engine->window);
 		ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
 		color_background(engine);
