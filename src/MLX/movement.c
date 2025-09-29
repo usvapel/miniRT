@@ -3,6 +3,7 @@
 
 void movement(mlx_key_data_t keydata, t_engine *engine)
 {
+	t_vec3d tmp;
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
 		if (keydata.key == MLX_KEY_W)

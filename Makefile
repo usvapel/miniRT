@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpelline <jpelline@student.hive.fi>        +#+  +:+       +#+         #
+#    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/08/07 22:25:24 by jpelline         ###   ########.fr        #
+#    Updated: 2025/09/27 15:59:23 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,9 @@ WHITE			:= $(shell tput setaf 7)
 RESET			:= $(shell tput sgr0)
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SOURCE FILES ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
+
+# Virtual path
+VPATH := src:src/parsing:src/premitives:src/geometry:src/MLX:src/raytracer
 
 # Parsing and syntax analysis
 SRCS_MAIN := \
