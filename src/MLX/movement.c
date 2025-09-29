@@ -1,9 +1,22 @@
 
 #include "minirt.h"
 
+void wait_for_threads()
+{
+	t_engine *engine = get_engine();
+	int i = 0;
+	while (true)
+	{
+		if (engine->threads[i].done == true)
+			i++;
+		if (i == THREAD_COUNT)
+			break ;
+		usleep(100);
+	}
+}
+
 void movement(mlx_key_data_t keydata, t_engine *engine)
 {
-	// t_vec3d tmp;
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
 		if (keydata.key == MLX_KEY_W)
@@ -18,11 +31,14 @@ void movement(mlx_key_data_t keydata, t_engine *engine)
 			engine->camera.pos.y += 0.1;
 		if (keydata.key == MLX_KEY_A)
 			engine->camera.pos.x -= 0.1;
-		engine->recalculate =  true;
 		update_viewport(&engine->viewport, engine->window);
-		// ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
-		// color_background(engine);
+		engine->recalculate = true;
+		wait_for_threads();
+		mlx_image_t *tmp = engine->image;
+		engine->image->pixels = engine->image_buffer->pixels;
+		engine->image_buffer = tmp;
 		engine->recalculate = false;
+		// color_background(engine);
 	}
 }
 
