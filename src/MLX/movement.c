@@ -3,7 +3,7 @@
 
 void movement(mlx_key_data_t keydata, t_engine *engine)
 {
-	t_vec3d tmp;
+	// t_vec3d tmp;
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
 		if (keydata.key == MLX_KEY_W)
@@ -18,9 +18,11 @@ void movement(mlx_key_data_t keydata, t_engine *engine)
 			engine->camera.pos.y += 0.1;
 		if (keydata.key == MLX_KEY_A)
 			engine->camera.pos.x -= 0.1;
+		engine->recalculate =  true;
 		update_viewport(&engine->viewport, engine->window);
-		ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
-		color_background(engine);
+		// ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
+		// color_background(engine);
+		engine->recalculate = false;
 	}
 }
 

@@ -25,10 +25,28 @@
 # include "viewport.h"
 # include "light.h"
 # include <sys/time.h>
+# include <pthread.h>
 
 // this is not allowed in the norm
 #define deg_to_radians(degres) ((degres) * M_PI / 180.0)
+
 typedef struct timeval t_time;
+typedef pthread_t t_pthread;
+typedef pthread_mutex_t	t_mutex;
+
+# define THREAD_COUNT 8
+
+typedef struct s_threads
+{
+	pthread_t		thread;
+	 int	index;
+	 int	start_y;
+	 int	end_y;
+	 int	start_x;
+	 int	end_x;
+	 volatile bool	done;
+}	t_threads;
+
 
 typedef struct s_window
 {
@@ -40,6 +58,9 @@ typedef struct s_window
 typedef struct s_engine
 {
 	t_window window;
+	t_threads threads[THREAD_COUNT];
+	t_mutex lock;
+	volatile bool recalculate;
 	mlx_t *mlx;
 	mlx_image_t *image;
 	t_time start;
@@ -64,4 +85,5 @@ void	key_hook(mlx_key_data_t keydata, void *param);
 void cursor_hook(double x, double y, void *param);
 float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 float clamp(float value, float min, float max);
+void	setup_threads(void *eng);
 #endif // MINIRT_T
