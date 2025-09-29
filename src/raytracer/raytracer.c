@@ -16,6 +16,7 @@ void	setup_threads(void *eng)
 		engine->threads[i].end_y = y_step * (i + 1);
 		engine->threads[i].start_x = 0;
 		engine->threads[i].end_x = x_step;
+		engine->threads[i].done = true;
 		pthread_create(&engine->threads[i].thread, NULL, raytracer, &engine->threads[i]);
 		i++;
 	}
@@ -33,6 +34,9 @@ void	*raytracer(void *thread)
 	int y;
 	while (true)
 	{
+		while (engine->recalculate == false)
+			usleep(1000);
+		t->done = false;
 		y = t->start_y;
 		while (y < t->end_y)
 		{
@@ -44,13 +48,15 @@ void	*raytracer(void *thread)
 				plane_hit(*plane, ray, &hit);
 				sphere_hit(spheres[0], ray, &hit);
 				if (hit.prev_hit)
-					mlx_put_pixel(engine->image, x, y, scale_color(&hit.color, 1));
+					mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
 				else
-					mlx_put_pixel(engine->image, x, y, 0);
+					mlx_put_pixel(engine->image_buffer, x, y, 0);
 				x++;
 			}
 			y++;
 		}
+		t->done = true;
+		engine->recalculate = false;
 	}
 	return (NULL);
 }
