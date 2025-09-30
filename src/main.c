@@ -7,6 +7,14 @@ t_engine *get_engine()
 	return (&engine);
 }
 
+void cleanup_and_exit()
+{
+	t_engine *engine = get_engine();
+	mlx_terminate(engine->mlx);
+	thread_cleanup();
+	exit(1);
+}
+
 void	print_values(t_engine *engine)
 {
 	printf("camera\n");
@@ -49,9 +57,6 @@ int	main(int ac, char **av)
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
 	mlx_cursor_hook(engine->mlx, cursor_hook, NULL);
 	mlx_loop(engine->mlx);
-	mlx_terminate(engine->mlx);
-	for (int i = 0; i < THREAD_COUNT; i++) {
-		pthread_join(engine->threads[i].thread, NULL);
-	}
+	cleanup_and_exit();
 	return (0);
 }
