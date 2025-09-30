@@ -49,7 +49,7 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	engine = (t_engine *)param;
 	if (keydata.action == MLX_PRESS)
 		if (keydata.key == MLX_KEY_ESCAPE)
-			mlx_close_window(engine->mlx);
+			cleanup_and_exit();
 	movement(keydata, engine);
 }
 

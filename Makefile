@@ -69,7 +69,8 @@ VPATH	:= $(SRC_DIR): \
 	$(SRC_DIR)/primitives: \
 	$(SRC_DIR)/geometry: \
 	$(SRC_DIR)/MLX: \
-	$(SRC_DIR)/raytracer
+	$(SRC_DIR)/raytracer \
+	$(SRC_DIR)/threads
 
 # Parsing and syntax analysis
 SRCS_MAIN := \
@@ -83,7 +84,8 @@ SRCS_MAIN := \
 	fps.c \
 	movement.c \
 	plane.c \
-	hit.c
+	hit.c \
+	threads.c
 
 # Combine all source files
 SRCS := \
