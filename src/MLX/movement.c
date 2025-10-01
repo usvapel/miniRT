@@ -39,6 +39,7 @@ void movement(mlx_key_data_t keydata, t_engine *engine)
 		engine->image_buffer = tmp;
 		engine->recalculate = false;
 		// color_background(engine);
+		update_camera();
 	}
 }
 
@@ -77,10 +78,8 @@ void mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, void *
 void cursor_hook(double x, double y, void *param)
 {
 	t_engine *engine = get_engine();
-	(void)param;
-	(void)y;
-	(void)x;
+	(void )param;
 
-	// printf("%f %f\n", x, y);
+	orient_camera(engine, x, y);
 	mlx_mouse_hook(engine->mlx, mouse_hook, NULL);
 }
