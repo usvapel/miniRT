@@ -3,17 +3,10 @@
 
 void movement(mlx_key_data_t keydata, t_engine *engine)
 {
-	t_vec3d tmp;
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
 		move_camera(keydata, engine);
-		if (keydata.key == MLX_KEY_RIGHT)
-			rotateY_vec3d(&engine->camera.dir, 8);
-		if (keydata.key == MLX_KEY_LEFT)
-			rotateY_vec3d(&engine->camera.dir, -8);
-		update_viewport(&engine->viewport, engine->window);
-		ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
-		color_background(engine);
+		update_camera();
 	}
 }
 
@@ -53,10 +46,8 @@ void mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, void *
 void cursor_hook(double x, double y, void *param)
 {
 	t_engine *engine = get_engine();
-	(void)param;
-	(void)y;
-	(void)x;
+	(void )param;
 
-	// printf("%f %f\n", x, y);
+	orient_camera(engine, x, y);
 	mlx_mouse_hook(engine->mlx, mouse_hook, NULL);
 }
