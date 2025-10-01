@@ -25,7 +25,24 @@ void movement(t_engine *engine)
 	// color_background(engine);
 }
 
-void	key_hook(void *param)
+void movement(mlx_key_data_t keydata, t_engine *engine)
+{
+	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
+	{
+		move_camera(keydata, engine);
+	
+		update_viewport(&engine->viewport, engine->window);
+		engine->recalculate = true;
+		wait_for_threads();
+		mlx_image_t *tmp = engine->image;
+		engine->image->pixels = engine->image_buffer->pixels;
+		engine->image_buffer = tmp;
+		engine->recalculate = false;
+		// color_background(engine);
+	}
+}
+
+void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_engine	*engine;
 
