@@ -64,4 +64,6 @@ void	key_hook(mlx_key_data_t keydata, void *param);
 void cursor_hook(double x, double y, void *param);
 float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 float clamp(float value, float min, float max);
+
+void    move_camera(mlx_key_data_t keydata, t_engine *engine);
 #endif // MINIRT_T
