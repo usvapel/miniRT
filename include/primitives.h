@@ -26,9 +26,13 @@ float    magnitude_vec3d(t_vec3d vec);
 float    pow_magnitude_vec3d(t_vec3d vec);
 void    normlize_vec3d(t_vec3d *vec);
 float dot_vec3d(t_vec3d vec, t_vec3d vec2);
+t_vec3d cross_vec3d(t_vec3d a, t_vec3d b);
+
+// rotations
 void rotateX_vec3d(t_vec3d *vec, float angle);
 void rotateZ_vec3d(t_vec3d *vec, float angle);
 void rotateY_vec3d(t_vec3d *vec, float angle);
+void rotateXYZ_vec3d(t_vec3d *vec, float angle);
 
 
 #endif
