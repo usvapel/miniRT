@@ -2,48 +2,15 @@
 
 void movement(t_engine *engine)
 {
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
-		engine->camera.pos.z += 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
-		engine->camera.pos.z -= 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
-		engine->camera.pos.x += 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
-		engine->camera.pos.y -= 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_V))
-		engine->camera.pos.y += 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
-		engine->camera.pos.x -= 0.1;
-	else
-		return ;
+	move_camera(engine);
 	engine->update = true;
 	wait_for_threads();
-	update_viewport(&engine->viewport, engine->window);
+	update_camera();
 	engine->update = false;
 	engine->recalculate = true;
-	// engine->recalculate = false;
-	// color_background(engine);
 }
 
-void movement(mlx_key_data_t keydata, t_engine *engine)
-{
-	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
-	{
-		move_camera(keydata, engine);
-	
-		update_viewport(&engine->viewport, engine->window);
-		engine->recalculate = true;
-		wait_for_threads();
-		mlx_image_t *tmp = engine->image;
-		engine->image->pixels = engine->image_buffer->pixels;
-		engine->image_buffer = tmp;
-		engine->recalculate = false;
-		// color_background(engine);
-		update_camera();
-	}
-}
-
-void	key_hook(mlx_key_data_t keydata, void *param)
+void	key_hook(void *param)
 {
 	t_engine	*engine;
 
