@@ -2,30 +2,43 @@
 
 t_ray    get_ray(int x, int y);
 
-void    raytracer(void *eng)
+void	*raytracer(void *thread)
 {
-    t_engine *engine = (t_engine *)eng;
+	t_engine *engine = get_engine();
 	t_sphere *spheres = *engine->objects;
-    t_plane *plane = engine->objects[1];
-    t_ray ray;
-    int y;
-    int x;
-    t_hit hit;
-
-    y = -1;
-    while (++y < engine->window.height)
-    {
-        x = -1;
-        while (++x < engine->window.width)
-        {
-            hit.prev_hit = false;
-            ray = get_ray(x, y);
-            plane_hit(*plane, ray, &hit);
-            sphere_hit(spheres[0], ray, &hit);
-            if(hit.prev_hit)
-                mlx_put_pixel(engine->image, x, y, scale_color(&hit.color, 1));
-        }
-    }
+	t_plane *plane = engine->objects[1];
+	t_threads *t = thread;
+	t_ray ray;
+	t_hit hit;
+	int x;
+	int y;
+	while (true)
+	{
+		while (engine->recalculate == false)
+			usleep(1000);
+		t->done = false;
+		y = t->start_y;
+		while (y < t->end_y)
+		{
+			x = t->start_x;
+			while (x < t->end_x)
+			{
+				hit.prev_hit = false;
+				ray = get_ray(x, y);
+				plane_hit(*plane, ray, &hit);
+				sphere_hit(spheres[0], ray, &hit);
+				if (hit.prev_hit)
+					mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
+				else
+					mlx_put_pixel(engine->image_buffer, x, y, 0);
+				x++;
+			}
+			y++;
+		}
+		t->done = true;
+		engine->recalculate = false;
+	}
+	return (NULL);
 }
 
 t_ray    get_ray(int x, int y)
