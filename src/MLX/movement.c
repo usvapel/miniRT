@@ -28,7 +28,6 @@ void movement(t_engine *engine)
 void movement(mlx_key_data_t keydata, t_engine *engine)
 {
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
-	{
 		move_camera(keydata, engine);
 	
 		update_viewport(&engine->viewport, engine->window);

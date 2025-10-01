@@ -20,6 +20,9 @@ void    move_camera(mlx_key_data_t keydata, t_engine *engine)
         engine->camera.pos.y -= 0.1;
     if (keydata.key == MLX_KEY_V)
         engine->camera.pos.y += 0.1;
+    else
+        return;
+    update_camera();
 }
 
 void    move_left_right(t_camera *cam, int dir)
@@ -50,8 +53,13 @@ void update_camera(void)
 {
     t_engine *engine = get_engine();
     update_viewport(&engine->viewport, engine->window);
-    ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
-    color_background(engine);
+    engine->recalculate = true;
+    wait_for_threads();
+    mlx_image_t *tmp = engine->image;
+    engine->image->pixels = engine->image_buffer->pixels;
+    engine->image_buffer = tmp;
+    engine->recalculate = false;
+    //color_background(engine);
 }
 
 void    orient_camera(t_engine *engine, float nx, float ny)
