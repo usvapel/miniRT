@@ -6,18 +6,11 @@ void movement(mlx_key_data_t keydata, t_engine *engine)
 	t_vec3d tmp;
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
-		if (keydata.key == MLX_KEY_W)
-			engine->camera.pos.z += 0.1;
-		if (keydata.key == MLX_KEY_S)
-			engine->camera.pos.z -= 0.1;
-		if (keydata.key == MLX_KEY_D)
-			engine->camera.pos.x += 0.1;
-		if (keydata.key == MLX_KEY_C)
-			engine->camera.pos.y -= 0.1;
-		if (keydata.key == MLX_KEY_V)
-			engine->camera.pos.y += 0.1;
-		if (keydata.key == MLX_KEY_A)
-			engine->camera.pos.x -= 0.1;
+		move_camera(keydata, engine);
+		if (keydata.key == MLX_KEY_RIGHT)
+			rotateY_vec3d(&engine->camera.dir, 8);
+		if (keydata.key == MLX_KEY_LEFT)
+			rotateY_vec3d(&engine->camera.dir, -8);
 		update_viewport(&engine->viewport, engine->window);
 		ft_memset(engine->image->pixels, 0, engine->window.width * engine->window.height * sizeof(int));
 		color_background(engine);

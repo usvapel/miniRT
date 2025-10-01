@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 # define CAMERA_H
 
-# include "primitives.h"
+# include "minirt.h"
 
 typedef struct s_camera
 {
@@ -9,5 +9,6 @@ typedef struct s_camera
 	t_vec3d dir;
 	int fov;
 } t_camera;
+
 
 #endif

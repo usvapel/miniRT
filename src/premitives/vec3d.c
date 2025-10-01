@@ -59,3 +59,17 @@ float dot_vec3d(t_vec3d vec, t_vec3d vec2)
 {
     return ((vec.x * vec2.x) + (vec.y * vec2.y) + (vec.z * vec2.z));
 }
+
+// t_vec3d normal_vec(t_vec3d p1, t_vec3d p2)
+// {
+//     t_vec3d vec;
+//     float dx = p2.x - p1.x;
+//     float dy = p2.y - p1.y;
+
+//     vec.x = -dy;
+
+// }
+
+// If we define dx = x2 - x1 and dy = y2 - y1, then the normals are (-dy, dx) and (dy, -dx).
+
+// Note that no division is required, and so you're not risking dividing by zero.
