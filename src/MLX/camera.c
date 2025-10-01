@@ -3,26 +3,23 @@
 void    move_left_right(t_camera *cam, int dir);
 void    look_up_down(t_camera *camera, float dy);
 
-void    move_camera(mlx_key_data_t keydata, t_engine *engine)
+void    move_camera(t_engine *engine)
 {
     t_camera *camera = &engine->camera;
     t_vec3d tmp = camera->dir;
     scale_vec3d(&tmp, 0.1);
-    if (keydata.key == MLX_KEY_W)
+    if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
         add_vec3d(&camera->pos, tmp);
-    if (keydata.key == MLX_KEY_S)
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
         minus_vec3d(&camera->pos, tmp);
-    if (keydata.key == MLX_KEY_A)
-        move_left_right(camera, LEFT);
-    if (keydata.key == MLX_KEY_D)
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
         move_left_right(camera, RIGHT);
-    if (keydata.key == MLX_KEY_C)
-        engine->camera.pos.y -= 0.1;
-    if (keydata.key == MLX_KEY_V)
-        engine->camera.pos.y += 0.1;
-    else
-        return;
-    update_camera();
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
+        move_left_right(camera, LEFT);
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_V))
+		engine->camera.pos.y += 0.1;
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
+		engine->camera.pos.y -= 0.1;
 }
 
 void    move_left_right(t_camera *cam, int dir)
@@ -55,11 +52,8 @@ void update_camera(void)
     update_viewport(&engine->viewport, engine->window);
     engine->recalculate = true;
     wait_for_threads();
-    mlx_image_t *tmp = engine->image;
     engine->image->pixels = engine->image_buffer->pixels;
-    engine->image_buffer = tmp;
     engine->recalculate = false;
-    //color_background(engine);
 }
 
 void    orient_camera(t_engine *engine, float nx, float ny)
