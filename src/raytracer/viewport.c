@@ -18,21 +18,14 @@ void    update_viewport(t_viewport *viewport, t_window window)
     const float fov = engine->camera.fov;
     t_vec3d vu = new_vec3d(0,1,0);
     t_vec3d w = engine->camera.dir;
-    t_vec3d u;
-    t_vec3d v;
+    // wip
     scale_vec3d(&w, -1);
-    u = cross_vec3d(w, vu);
-    print_vec(u, "u: ");
-    v = cross_vec3d(w, u);
-    print_vec(v, "v: ");
-    engine->camera.v = v;
-    //exit(1);
+    engine->camera.u = cross_vec3d(w, vu);
+    engine->camera.v = cross_vec3d(w, engine->camera.u);
     viewport->w = 2 * tan(deg_to_radians(fov / 2));
     viewport->h = viewport->w / window.aspect_ratio;
-    printf("h: %d, w: %d\n", window.height, window.width);
-    printf("vh: %f, vw: %f\n", viewport->h, viewport->w);
-    viewport->hori_axis = u;
-    viewport->vert_axis = v;
+    viewport->hori_axis = engine->camera.u;
+    viewport->vert_axis = engine->camera.v;
     scale_vec3d(&viewport->hori_axis, viewport->w);
     scale_vec3d(&viewport->vert_axis, viewport->h);
     set_pixal_spacing(viewport);
@@ -44,7 +37,6 @@ void    update_viewport(t_viewport *viewport, t_window window)
     print_vec(viewport->start_pixel, "Starting: ");
     printf("x range: %f - %f\n", viewport->start_pixel.x, viewport->start_pixel.x + viewport->step_x.x * window.width);
     printf("y range: %f - %f\n", viewport->start_pixel.y, viewport->start_pixel.y + viewport->step_y.y * window.height);
-    //exit(1);
 }
 
 
