@@ -8,17 +8,17 @@ void    move_camera(t_engine *engine)
     t_camera *camera = &engine->camera;
     t_vec3d tmp = camera->dir;
     scale_vec3d(&tmp, 0.1);
-    if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
-        add_vec3d(&camera->pos, tmp);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
+		add_vec3d(&camera->pos, tmp);
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
         minus_vec3d(&camera->pos, tmp);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
         move_left_right(camera, RIGHT);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
         move_left_right(camera, LEFT);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_V))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
 		engine->camera.pos.y += 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
 		engine->camera.pos.y -= 0.1;
 }
 

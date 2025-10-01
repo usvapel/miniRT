@@ -71,6 +71,9 @@ typedef struct s_engine
 	t_light  light;
 	t_viewport viewport;
 	atomic_bool update;
+	double		mouse_x;
+	double		mouse_y;
+
 }	t_engine;
 
 void input_parsing(t_engine *engine, char **av);
@@ -94,5 +97,6 @@ void	thread_cleanup();
 void	cleanup_and_exit();
 void	draw_scene(void *eng);
 void wait_for_threads();
+void    move_object(t_engine *engine);
 
 #endif // MINIRT_T
