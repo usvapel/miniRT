@@ -7,6 +7,14 @@ t_engine *get_engine()
 	return (&engine);
 }
 
+void cleanup_and_exit()
+{
+	t_engine *engine = get_engine();
+	mlx_terminate(engine->mlx);
+	thread_cleanup();
+	exit(1);
+}
+
 void	print_values(t_engine *engine)
 {
 	printf("camera\n");
@@ -39,14 +47,16 @@ int	main(int ac, char **av)
 	mlx_set_setting(MLX_HEADLESS, false);
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT | fps: 0", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
+	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
-	color_background(engine);
+	// color_background(engine);
 	gettimeofday(&engine->start, NULL);
 	mlx_key_hook(engine->mlx, key_hook, engine);
-	mlx_loop_hook(engine->mlx, raytracer, engine);
+	setup_threads(engine);
+	// mlx_loop_hook(engine->mlx, raytracer, engine);
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
 	mlx_cursor_hook(engine->mlx, cursor_hook, NULL);
 	mlx_loop(engine->mlx);
-	mlx_terminate(engine->mlx);
+	cleanup_and_exit();
 	return (0);
 }
