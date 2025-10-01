@@ -2,6 +2,32 @@
 
 t_ray    get_ray(int x, int y);
 
+void wait_for_threads()
+{
+	t_engine *engine = get_engine();
+	int done_count;
+	while (true)
+	{
+		done_count = 0;
+		for (int i = 0; i < THREAD_COUNT; i++)
+			if (engine->threads[i].done == true)
+				done_count++;
+		if (done_count == THREAD_COUNT)
+			return;
+		usleep(10);
+	}
+}
+
+void	draw_scene(void *eng)
+{
+	t_engine *engine = eng;
+	usleep(1000);
+	wait_for_threads();
+	while (engine->update == true)
+		usleep(10);
+	engine->image->pixels = engine->image_buffer->pixels;
+}
+
 void	*raytracer(void *thread)
 {
 	t_engine *engine = get_engine();
@@ -15,7 +41,7 @@ void	*raytracer(void *thread)
 	while (true)
 	{
 		while (engine->recalculate == false)
-			usleep(1000);
+			usleep(10);
 		t->done = false;
 		y = t->start_y;
 		while (y < t->end_y)

@@ -51,9 +51,9 @@ int	main(int ac, char **av)
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
 	// color_background(engine);
 	gettimeofday(&engine->start, NULL);
-	mlx_key_hook(engine->mlx, key_hook, engine);
 	setup_threads(engine);
-	// mlx_loop_hook(engine->mlx, raytracer, engine);
+	mlx_loop_hook(engine->mlx, key_hook, engine);
+	mlx_loop_hook(engine->mlx, draw_scene, engine);
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
 	mlx_cursor_hook(engine->mlx, cursor_hook, NULL);
 	mlx_loop(engine->mlx);
