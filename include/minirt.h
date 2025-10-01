@@ -68,6 +68,7 @@ typedef struct s_engine
 	t_time start;
 	t_camera camera;
 	void **objects;
+	int	object_count;
 	t_light  light;
 	t_viewport viewport;
 	atomic_bool update;
@@ -97,6 +98,7 @@ void	thread_cleanup();
 void	cleanup_and_exit();
 void	draw_scene(void *eng);
 void wait_for_threads();
-void    move_object(t_engine *engine);
+void    scale_object(t_engine *engine);
+t_sphere *inside_object(double x, double y);
 
 #endif // MINIRT_T

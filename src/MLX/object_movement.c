@@ -1,43 +1,65 @@
 
 #include "minirt.h"
 
-bool inside_object(double x, double y)
+t_sphere *inside_object(double x, double y)
 {
 	t_engine *engine = get_engine();
-	t_sphere *sphere = engine->objects[0];
+	t_sphere *sphere;
 	t_ray ray = get_ray(x, y);
 	t_hit hit;
+	int i = 0;
 
-	hit.prev_hit = false;
-	sphere_hit(*sphere, ray, &hit);
+	printf("%d\n", engine->object_count);
+	while (i < engine->object_count)
+	{
+		sphere = engine->objects[i];
+		hit.prev_hit = false;
+		sphere_hit(*sphere, ray, &hit);
+		if (hit.prev_hit)
+			break ;
+		i++;
+	}
 	if (hit.prev_hit)
-		return (true);
+		return (sphere);
 	else
-		return (false);
+		return (NULL);
 }
 
-void update_pos(float d)
+static void scale_by_factor(float d)
 {
 	t_engine *engine = get_engine();
 	t_sphere *sphere = engine->objects[0];
-	sphere->r += 0.01 * d;
+	if (sphere->r >= 0.05f)
+		sphere->r += 0.01f * d;
+	if (sphere->r <= 0.05f)
+		sphere->r = 0.05f;
 }
 
-void    move_object(t_engine *engine)
+void    scale_object(t_engine *engine)
 {
-	static double previous_length;
-	static t_vec3d previous_mouse;
-	double current_length;
-	t_vec3d current_mouse;
+	static double	previous_length;
+	double			current_length;
+	static t_vec3d	previous_mouse;
+	t_vec3d			current_mouse;
+
 	current_mouse = new_vec3d(engine->mouse_x, engine->mouse_y, 0);
 	previous_length = pow_magnitude_vec3d(previous_mouse);
 	current_length = pow_magnitude_vec3d(current_mouse);
-	if (previous_length < current_length)
-		update_pos(1);
-	if (previous_length > current_length)
-		update_pos(-1);
-	// if (inside_object(engine->mouse_x, engine->mouse_y))
-	// 	update_pos();
+	if (previous_length <= current_length)
+		scale_by_factor(1);
+	if (previous_length >= current_length)
+		scale_by_factor(-1);
 	previous_mouse = new_vec3d(engine->mouse_x, engine->mouse_y, 0);
 	previous_length = current_length;
 }
+
+// void	move_object(t_engine *engine)
+// {
+// 	// if (inside_object(engine->mouse_x, engine->mouse_y))
+// 	// 	update_pos();
+// }
+//
+// void	rotate_object(t_engine *engine)
+// {
+//
+// }
