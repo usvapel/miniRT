@@ -14,14 +14,27 @@ void    setup_viewport(void)
 
 void    update_viewport(t_viewport *viewport, t_window window)
 {	
-    const t_engine *engine = get_engine();
+    t_engine *engine = get_engine();
     const float fov = engine->camera.fov;
+    t_vec3d vu = new_vec3d(0,1,0);
+    t_vec3d w = engine->camera.dir;
+    t_vec3d u;
+    t_vec3d v;
+    scale_vec3d(&w, -1);
+    u = cross_vec3d(w, vu);
+    print_vec(u, "u: ");
+    v = cross_vec3d(w, u);
+    print_vec(v, "v: ");
+    engine->camera.v = v;
+    //exit(1);
     viewport->w = 2 * tan(deg_to_radians(fov / 2));
     viewport->h = viewport->w / window.aspect_ratio;
     printf("h: %d, w: %d\n", window.height, window.width);
     printf("vh: %f, vw: %f\n", viewport->h, viewport->w);
-    viewport->hori_axis = new_vec3d(viewport->w, 0, 0);
-    viewport->vert_axis = new_vec3d(0, -viewport->h, 0);
+    viewport->hori_axis = u;
+    viewport->vert_axis = v;
+    scale_vec3d(&viewport->hori_axis, viewport->w);
+    scale_vec3d(&viewport->vert_axis, viewport->h);
     set_pixal_spacing(viewport);
     set_starting_pixel(viewport);
     print_vec(viewport->hori_axis, "Hori");
@@ -50,7 +63,7 @@ void set_pixal_spacing(t_viewport *viewport)
 void    set_starting_pixel(t_viewport *viewport)
 {
     const t_camera camera = get_engine()->camera;
-    normlize_vec3d((t_vec3d *)&camera.dir);
+    //normlize_vec3d((t_vec3d *)&camera.dir);
     const t_vec3d focal_vec = camera.dir;
     t_vec3d top_left;
     t_vec3d tmp;
@@ -61,6 +74,7 @@ void    set_starting_pixel(t_viewport *viewport)
     tmp = viewport->hori_axis;
     scale_vec3d(&tmp, 0.5);
     minus_vec3d(&top_left, tmp);
+    print_vec(top_left, "T: ");
     // move upwards half the distance of viewport's vertical axis
     tmp = viewport->vert_axis;
     scale_vec3d(&tmp, 0.5);
