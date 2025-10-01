@@ -49,8 +49,16 @@ void cursor_hook(double x, double y, void *param)
 	engine->mouse_x = x;
 	engine->mouse_y = y;
 
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_C) && mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
-		move_object(engine);
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
+	{
+		if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
+		{
+			t_sphere *sphere = inside_object(x, y);
+			if (!sphere)
+				return ;
+			scale_object(engine);
+		}
+	}
 	else
 		orient_camera(engine, x, y);
 	// mlx_mouse_hook(engine->mlx, mouse_hook, NULL);

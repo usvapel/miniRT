@@ -147,6 +147,7 @@ void	set_values(t_engine *engine, char **split)
 {
 	static int index;
 
+	engine->object_count = index;
 	if (!split[0])
 		return ;
 	if (ft_strcmp(split[0], "C") == 0)
