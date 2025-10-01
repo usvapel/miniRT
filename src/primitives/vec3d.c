@@ -59,3 +59,13 @@ float dot_vec3d(t_vec3d vec, t_vec3d vec2)
 {
     return ((vec.x * vec2.x) + (vec.y * vec2.y) + (vec.z * vec2.z));
 }
+
+t_vec3d cross_vec3d(t_vec3d a, t_vec3d b)
+{
+    t_vec3d cross;
+
+    cross.x = a.y * b.z - a.z * b.y;
+    cross.y = -(a.x * b.z - a.z * b.x);
+    cross.z = a.x * b.y - a.y * b.x;
+    return cross;
+}

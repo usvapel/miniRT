@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/09/27 15:59:23 by zfarah           ###   ########.fr        #
+#    Updated: 2025/10/01 15:04:23 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,7 @@ DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 # Additional flags
 LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
-					-lglfw -lXext -lX11 -lm -ldl -pthread
-
+-lglfw -lXext -lX11 -lm -ldl -pthread
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Terminal colors for build output
@@ -85,7 +84,9 @@ SRCS_MAIN := \
 	movement.c \
 	plane.c \
 	hit.c \
-	threads.c
+	threads.c \
+	rotation.c \
+	camera.c
 
 # Combine all source files
 SRCS := \

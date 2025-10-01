@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpelline <jpelline@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/09/19 13:19:34 by jpelline         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:02:35 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	cursor_hook(double x, double y, void *param);
 float	solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 float	clamp(float value, float min, float max);
 void	setup_threads(void *eng);
+void wait_for_threads();
 void	thread_cleanup();
 void	cleanup_and_exit();
 void	draw_scene(void *eng);

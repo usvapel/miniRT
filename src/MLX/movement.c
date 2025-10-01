@@ -2,27 +2,12 @@
 
 void movement(t_engine *engine)
 {
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
-		engine->camera.pos.z += 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
-		engine->camera.pos.z -= 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
-		engine->camera.pos.x += 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
-		engine->camera.pos.y -= 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_V))
-		engine->camera.pos.y += 0.1;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
-		engine->camera.pos.x -= 0.1;
-	else
-		return ;
+	move_camera(engine);
 	engine->update = true;
 	wait_for_threads();
-	update_viewport(&engine->viewport, engine->window);
+	update_camera();
 	engine->update = false;
 	engine->recalculate = true;
-	// engine->recalculate = false;
-	// color_background(engine);
 }
 
 void	key_hook(void *param)
@@ -60,10 +45,8 @@ void mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, void *
 void cursor_hook(double x, double y, void *param)
 {
 	t_engine *engine = get_engine();
-	(void)param;
-	(void)y;
-	(void)x;
+	(void )param;
 
-	// printf("%f %f\n", x, y);
+	orient_camera(engine, x, y);
 	mlx_mouse_hook(engine->mlx, mouse_hook, NULL);
 }
