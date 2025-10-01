@@ -47,7 +47,7 @@ DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 # Additional flags
 LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
--lglfw -lXext -lX11 -lm -ldl -pthread
+				-lglfw -lXext -lX11 -lm -ldl -pthread
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Terminal colors for build output
@@ -86,7 +86,8 @@ SRCS_MAIN := \
 	hit.c \
 	threads.c \
 	rotation.c \
-	camera.c
+	camera.c \
+	object_movement.c
 
 # Combine all source files
 SRCS := \
