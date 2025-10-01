@@ -45,7 +45,7 @@ typedef struct s_threads
 	int	end_y;
 	int	start_x;
 	int	end_x;
-	volatile bool	done;
+	atomic_bool	done;
 }	t_threads;
 
 
@@ -61,7 +61,7 @@ typedef struct s_engine
 	t_window window;
 	t_threads threads[THREAD_COUNT];
 	t_mutex lock;
-	volatile bool recalculate;
+	atomic_bool recalculate;
 	mlx_t *mlx;
 	mlx_image_t *image;
 	mlx_image_t *image_buffer;
@@ -70,6 +70,7 @@ typedef struct s_engine
 	void **objects;
 	t_light  light;
 	t_viewport viewport;
+	atomic_bool update;
 }	t_engine;
 
 void input_parsing(t_engine *engine, char **av);
@@ -82,7 +83,7 @@ int get_color(t_color *color);
 uint32_t scale_color(t_color *color, float brightness);
 void apply_color(t_color *color, float brightness);
 void fps_counter(void *param);
-void	key_hook(mlx_key_data_t keydata, void *param);
+void	key_hook(void *param);
 
 void	cursor_hook(double x, double y, void *param);
 float	solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
@@ -90,5 +91,7 @@ float	clamp(float value, float min, float max);
 void	setup_threads(void *eng);
 void	thread_cleanup();
 void	cleanup_and_exit();
+void	draw_scene(void *eng);
+void wait_for_threads();
 
 #endif // MINIRT_T
