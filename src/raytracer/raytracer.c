@@ -26,6 +26,7 @@ void	draw_scene(void *eng)
 	while (engine->update == true)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
+	engine->fps++;
 }
 
 void	*raytracer(void *thread)
