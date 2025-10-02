@@ -36,6 +36,9 @@ int	main(int ac, char **av)
 	if (ac < 2)
 		return (0);
 	engine = get_engine();
+	engine->mouse.prev_pos.x = 0;
+	engine->mouse.prev_pos.y = 0;
+	engine->mouse.prev_pos.z = 0;
 	input_parsing(engine, av);
 	print_values(engine);
 	mlx_set_setting(MLX_HEADLESS, true);
@@ -55,7 +58,6 @@ int	main(int ac, char **av)
 	mlx_loop_hook(engine->mlx, key_hook, engine);
 	mlx_loop_hook(engine->mlx, draw_scene, engine);
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
-	mlx_cursor_hook(engine->mlx, cursor_hook, NULL);
 	mlx_loop(engine->mlx);
 	cleanup_and_exit();
 	return (0);

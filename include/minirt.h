@@ -35,7 +35,7 @@ typedef struct timeval t_time;
 typedef pthread_t t_pthread;
 typedef pthread_mutex_t	t_mutex;
 
-# define THREAD_COUNT 8
+# define THREAD_COUNT 12
 
 typedef struct s_threads
 {
@@ -56,6 +56,12 @@ typedef struct s_window
 	float	aspect_ratio;
 }	t_window;
 
+typedef struct s_mouse
+{
+	t_vec3d pos;
+	t_vec3d	prev_pos;
+}	t_mouse;
+
 typedef struct s_engine
 {
 	t_window window;
@@ -72,33 +78,33 @@ typedef struct s_engine
 	t_light  light;
 	t_viewport viewport;
 	atomic_bool update;
-	double		mouse_x;
-	double		mouse_y;
-
+	int fps;
+	t_mouse mouse;
 }	t_engine;
+
 
 void input_parsing(t_engine *engine, char **av);
 void color_background(t_engine *engine);
 t_engine *get_engine(void);
 
 void    update_viewport(t_viewport *viewport, t_window window);
-int get_rgba(int r, int g, int b, int a);
-int get_color(t_color *color);
+int		get_rgba(int r, int g, int b, int a);
+int		get_color(t_color *color);
 uint32_t scale_color(t_color *color, float brightness);
-void apply_color(t_color *color, float brightness);
-void fps_counter(void *param);
+void	apply_color(t_color *color, float brightness);
+void	fps_counter(void *param);
 void	key_hook(void *param);
 
 void	cursor_hook(double x, double y, void *param);
 float	solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 float	clamp(float value, float min, float max);
 void	setup_threads(void *eng);
-void wait_for_threads();
+void	wait_for_threads();
 void	thread_cleanup();
 void	cleanup_and_exit();
 void	draw_scene(void *eng);
-void wait_for_threads();
-void    scale_object(t_engine *engine);
+void	wait_for_threads();
+void    scale_object(double x, double y);
 t_sphere *inside_object(double x, double y);
 
 #endif // MINIRT_T

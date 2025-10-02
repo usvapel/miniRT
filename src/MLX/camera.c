@@ -3,23 +3,33 @@
 void    move_left_right(t_camera *cam, int dir);
 void    look_up_down(t_camera *camera, float dy);
 
-void    move_camera(t_engine *engine)
+bool    move_camera(t_engine *engine)
 {
     t_camera *camera = &engine->camera;
     t_vec3d tmp = camera->dir;
+	float dy;
+	float dx;
+	bool moved;
+
+	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
+	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
     scale_vec3d(&tmp, 0.1);
+	moved = orient_camera(engine, dx, dy);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
 		add_vec3d(&camera->pos, tmp);
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
         minus_vec3d(&camera->pos, tmp);
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
         move_left_right(camera, RIGHT);
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
         move_left_right(camera, LEFT);
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
 		engine->camera.pos.y += 0.1;
-	if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
 		engine->camera.pos.y -= 0.1;
+	else if (!moved)
+		return false;
+	return true;
 }
 
 void    move_left_right(t_camera *cam, int dir)
@@ -41,7 +51,7 @@ void    look_up_down(t_camera *camera, float dy)
 {
     t_vec3d tmp;
     tmp = camera->v;
-    scale_vec3d(&tmp, dy * 0.001);
+    scale_vec3d(&tmp, -dy * 0.001);
     add_vec3d(&camera->dir, tmp);
     normlize_vec3d(&camera->dir);
 }
@@ -49,23 +59,17 @@ void    look_up_down(t_camera *camera, float dy)
 void update_camera(void)
 {
     t_engine *engine = get_engine();
+	engine->update = true;
     update_viewport(&engine->viewport, engine->window);
-    engine->recalculate = true;
-    wait_for_threads();
-    engine->image->pixels = engine->image_buffer->pixels;
-    engine->recalculate = false;
+	engine->update = false;
+	engine->recalculate = true;
 }
 
-void    orient_camera(t_engine *engine, float nx, float ny)
+bool    orient_camera(t_engine *engine, float dx, float dy)
 {
-	static t_vec3d prev_pos;
-	float dx = nx - prev_pos.x;
-	float dy = ny - prev_pos.y;
-	prev_pos.x = nx;
-	prev_pos.y = ny;
     if (!mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
-        return;
-    rotateY_vec3d(&engine->camera.dir, 0.1 * dx);
+		return false;
+    rotateY_vec3d(&engine->camera.dir, 0.1 * -dx);
     look_up_down(&engine->camera, dy);
-    update_camera();
+	return true;
 }

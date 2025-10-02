@@ -1,65 +1,44 @@
-#include "MLX42.h"
 #include "minirt.h"
 
 void movement(t_engine *engine)
 {
-	move_camera(engine);
-	engine->update = true;
+	if (!move_camera(engine))
+		return ;
 	wait_for_threads();
 	update_camera();
-	engine->update = false;
-	engine->recalculate = true;
+}
+
+void scale_objects(t_engine *engine)
+{
+	if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
+	{
+		t_sphere *sphere = inside_object(engine->mouse.pos.x, engine->mouse.pos.y);
+		if (!sphere)
+			return ;
+		scale_object(engine->mouse.pos.x, engine->mouse.pos.y);
+		update_camera();
+	}
 }
 
 void	key_hook(void *param)
 {
 	t_engine	*engine;
+	int x; int y;
 
 	engine = (t_engine *)param;
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_ESCAPE))
 		cleanup_and_exit();
-	movement(engine);
-}
 
-// void mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, void *param)
-// {
-// 	t_engine *engine = get_engine();
-// 	(void)engine;
-//     (void)mods;
-//     (void)param;
-//
-//     if (action == MLX_PRESS)
-//     {
-//         if (button == MLX_MOUSE_BUTTON_LEFT)
-// 		{
-// 			move_object(engine);
-// 		}
-//
-//     }
-//     else if (action == MLX_RELEASE)
-//     {
-//         printf("Mouse button released\n");
-//     }
-// }
-
-void cursor_hook(double x, double y, void *param)
-{
-	t_engine *engine = get_engine();
-	(void )param;
-	engine->mouse_x = x;
-	engine->mouse_y = y;
-
+	mlx_get_mouse_pos(engine->mlx, &x, &y);
+	engine->mouse.prev_pos = engine->mouse.pos;
+	engine->mouse.pos.x = x;
+	engine->mouse.pos.y = y;
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
-	{
-		if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
-		{
-			t_sphere *sphere = inside_object(x, y);
-			if (!sphere)
-				return ;
-			scale_object(engine);
-		}
-	}
+		scale_objects(engine);
+	// else if (mlx_is_key_down(engine->mlx, MLX_KEY_X))
+	// 	asdasd();
+	// else if (mlx_is_key_down(engine->mlx, MLX_KEY_Z))
+	// 	asdasd();
 	else
-		orient_camera(engine, x, y);
-	// mlx_mouse_hook(engine->mlx, mouse_hook, NULL);
+		movement(engine);
 }
