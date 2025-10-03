@@ -1,4 +1,5 @@
 #include "minirt.h"
+#include "primitives.h"
 
 void movement(t_engine *engine)
 {
@@ -36,7 +37,7 @@ void scale_objects(t_engine *engine)
 
 void move_objects(t_engine *engine)
 {
-	t_ray ray;
+	static t_ray ray;
 	static t_sphere *sphere = NULL;
 	static bool grabbed = false;
 
@@ -56,6 +57,11 @@ void move_objects(t_engine *engine)
 				return ;
 			grabbed = true;
 		}
+		t_vec3d tmp = sphere->pos;
+		minus_vec3d(&tmp, ray.origin);
+		printf("%f\n", magnitude_vec3d(tmp));
+		dy *= magnitude_vec3d(tmp) * 0.4;
+		dx *= magnitude_vec3d(tmp) * 0.4;
 		move_pos_left_right(&engine->camera, &sphere->pos, dx);
 		scale_vec3d(&b, dy);
 		add_vec3d(&sphere->pos, b);
