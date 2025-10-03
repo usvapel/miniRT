@@ -13,6 +13,17 @@ int	get_seconds(t_engine *engine)
 	return ((int)ms);
 }
 
+bool	timer(int prev_sec, int stop)
+{
+	t_engine *engine = get_engine();
+	int curr_sec;
+
+	curr_sec = get_seconds(engine);
+	if (curr_sec > (prev_sec + stop))
+		return (true);
+	return (false);
+}
+
 void add_fps(char *title, int fps)
 {
 	int i = 0;

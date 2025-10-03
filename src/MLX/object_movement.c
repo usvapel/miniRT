@@ -1,11 +1,10 @@
-
 #include "minirt.h"
 
-t_sphere *inside_object(double x, double y)
+t_sphere *inside_object(t_ray *ray, double x, double y)
 {
 	t_engine *engine = get_engine();
 	t_sphere *sphere;
-	t_ray ray = get_ray(x, y);
+	*ray = get_ray(x, y);
 	t_hit hit;
 	int i = 0;
 
@@ -13,7 +12,7 @@ t_sphere *inside_object(double x, double y)
 	{
 		sphere = engine->objects[i];
 		hit.prev_hit = false;
-		sphere_hit(*sphere, ray, &hit);
+		sphere_hit(*sphere, *ray, &hit);
 		if (hit.prev_hit)
 			break ;
 		i++;
@@ -51,14 +50,3 @@ void    scale_object(double x, double y)
 	previous_mouse = new_vec3d(x, y, 0);
 	previous_length = current_length;
 }
-
-// void	move_object(t_engine *engine)
-// {
-// 	// if (inside_object(engine->mouse_x, engine->mouse_y))
-// 	// 	update_pos();
-// }
-//
-// void	rotate_object(t_engine *engine)
-// {
-//
-// }

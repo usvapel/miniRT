@@ -10,14 +10,59 @@ void movement(t_engine *engine)
 
 void scale_objects(t_engine *engine)
 {
+	t_ray ray;
 	if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
-		t_sphere *sphere = inside_object(engine->mouse.pos.x, engine->mouse.pos.y);
+		t_sphere *sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y);
 		if (!sphere)
 			return ;
 		scale_object(engine->mouse.pos.x, engine->mouse.pos.y);
 		update_camera();
 	}
+}
+
+// void rotate_objects(t_engine *engine)
+// {
+// 	if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
+// 	{
+// 		t_sphere *sphere = inside_object(engine->mouse.pos.x, engine->mouse.pos.y);
+// 		if (!sphere)
+// 			return ;
+// 		rotate_object(engine->mouse.pos.x, engine->mouse.pos.y);
+// 		update_camera();
+// 	}
+// }
+
+
+void move_objects(t_engine *engine)
+{
+	t_ray ray;
+	static t_sphere *sphere = NULL;
+	static bool grabbed = false;
+
+	float dy;
+	float dx;
+	t_vec3d b = {0,0.001,0};
+
+	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
+	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
+
+	if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
+	{
+		if (grabbed == false)
+		{
+			sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y);
+			if (!sphere)
+				return ;
+			grabbed = true;
+		}
+		move_pos_left_right(&engine->camera, &sphere->pos, dx);
+		scale_vec3d(&b, dy);
+		add_vec3d(&sphere->pos, b);
+		update_camera();
+	}
+	else
+		grabbed = false;
 }
 
 void	key_hook(void *param)
@@ -36,9 +81,9 @@ void	key_hook(void *param)
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
 		scale_objects(engine);
 	// else if (mlx_is_key_down(engine->mlx, MLX_KEY_X))
-	// 	asdasd();
-	// else if (mlx_is_key_down(engine->mlx, MLX_KEY_Z))
-	// 	asdasd();
+	// 	rotate_objects();
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_Z))
+		move_objects(engine);
 	else
 		movement(engine);
 }
