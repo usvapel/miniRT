@@ -47,6 +47,19 @@ void    move_left_right(t_camera *cam, int dir)
     add_vec3d(&cam->pos, norm);
 }
 
+void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d)
+{
+    t_vec3d norm;
+    float dz = cam->dir.z;
+    float dx = cam->dir.x;
+    norm.y = 0;
+    norm.x = -dz;
+    norm.z = dx;
+    scale_vec3d(&norm, 0.001 * d);
+    add_vec3d(pos, norm);
+}
+
+
 void    look_up_down(t_camera *camera, float dy)
 {
     t_vec3d tmp;
