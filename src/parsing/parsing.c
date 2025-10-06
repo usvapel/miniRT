@@ -112,34 +112,38 @@ void	init_light(t_engine *engine, char **split)
 	free_values(values);
 }
 
-void	init_sphere(t_sphere **objects, char **split, int index)
+void	init_sphere(t_vector *objects, char **split)
 {
 	char	**values[3];
+	t_sphere *sphere = malloc(sizeof(t_sphere));
 
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	objects[index]->type = SPHERE;
-	objects[index]->pos = parse_vec3d(values[0]);
-	objects[index]->r = ft_atof(values[1][0]) / 2;
-	objects[index]->color = parse_color(values[2]);
+	sphere->type = SPHERE;
+	sphere->pos = parse_vec3d(values[0]);
+	sphere->r = ft_atof(values[1][0]) / 2;
+	sphere->color = parse_color(values[2]);
+	add_elem(objects, sphere);
 	free_values(values);
 }
 
 
-void	init_plane(t_plane **objects, char **split, int index)
+void	init_plane(t_vector *objects, char **split)
 {
 	char	**values[3];
+	t_plane *plane = malloc(sizeof(t_plane));
 
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	objects[index]->type = PLANE;
-	objects[index]->pos = parse_vec3d(values[0]);
-	objects[index]->normal = parse_vec3d(values[1]);
-	objects[index]->color = parse_color(values[2]);
+	plane->type = PLANE;
+	plane->pos = parse_vec3d(values[0]);
+	plane->normal = parse_vec3d(values[1]);
+	plane->color = parse_color(values[2]);
+	add_elem(objects, plane);
 	free_values(values);
 }
 
@@ -155,9 +159,15 @@ void	set_values(t_engine *engine, char **split)
 	if (ft_strcmp(split[0], "L") == 0)
 		return (init_light(engine, split));
 	if (ft_strcmp(split[0], "sp") == 0)
-		return (init_sphere((t_sphere **)engine->objects, split, index++));
+	{
+		index++;
+		return (init_sphere(engine->objects, split));
+	}
 	if (ft_strcmp(split[0], "pl") == 0)
-		return (init_plane((t_plane **)engine->objects, split, index++));
+	{
+		index++;
+		return (init_plane(engine->objects, split));
+	}
 	printf("invalid identifier: %s\n", split[0]);
 }
 
@@ -167,9 +177,7 @@ void	input_parsing(t_engine *engine, char **av)
 	char	**split;
 	int		fd;
 
-	engine->objects = ft_calloc(2, sizeof(void *));
-	engine->objects[0] = ft_calloc(1, sizeof(t_sphere));
-	engine->objects[1] = ft_calloc(1, sizeof(t_plane));
+	engine->objects = new_vector(1);
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)

@@ -32,11 +32,9 @@ void	draw_scene(void *eng)
 void	*raytracer(void *thread)
 {
 	t_engine *engine = get_engine();
-	t_sphere *spheres = *engine->objects;
-	t_plane *plane = engine->objects[1];
 	t_threads *t = thread;
 	t_ray ray;
-	t_hit hit;
+	t_hit hit = {0};
 	int x;
 	int y;
 	while (true)
@@ -52,8 +50,15 @@ void	*raytracer(void *thread)
 			{
 				hit.prev_hit = false;
 				ray = get_ray(x, y);
-				plane_hit(*plane, ray, &hit);
-				sphere_hit(spheres[0], ray, &hit);
+				plane_hit(*((t_plane *)engine->objects->data[2]), ray, &hit);
+				for (int i = 0; i < engine->object_count; i++)
+				{
+					int type = *(int *)(engine->objects->data[i]);
+					// if (engine->objects[i]->type == PLANE)
+					// 	plane_hit(*((t_plane *)engine->objects[i]->object), ray, &hit);
+					if (type == SPHERE)
+						sphere_hit(*((t_sphere *)engine->objects->data[i]), ray, &hit);
+				}
 				if (hit.prev_hit)
 					mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
 				else
