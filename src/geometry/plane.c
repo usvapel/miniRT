@@ -1,5 +1,4 @@
 #include "minirt.h"
-
 /*
 Point in ray: p = o + td, o is origin, d ray direction and t distance from origin
 Plane in normal form: n * (r-r0) = 0, n normal form, r0 known point and r is any point in the plane, r == p
@@ -25,6 +24,9 @@ bool plane_hit(t_plane plane, t_ray ray, t_hit *hit)
 		return false;
 	pos = get_point_on_ray(ray, t);
 	if (!hit->prev_hit || closest_hit(ray.origin, hit->pos, pos))
+	{
 		set_hit(pos, plane.color, hit);
+		hit->color = checker_board(hit);
+	}
     return true;
 }

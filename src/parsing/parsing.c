@@ -72,6 +72,10 @@ char	**safe_split(char **values[3], char *line)
 	char	**splitted;
 
 	splitted = ft_split(line, ',');
+	puts("here");
+	for (int i = 0; splitted[i]; i++)
+		printf("%s ", splitted[i]);
+	printf("\n");
 	if (!splitted)
 	{
 		free_values(values);
@@ -84,8 +88,8 @@ void	init_camera(t_engine *engine, char **split)
 {
 	char	**values[3];
 
+	printf("initializing camera\n");
 	*values = NULL;
-	puts("initializing camera");
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
@@ -97,18 +101,21 @@ void	init_camera(t_engine *engine, char **split)
 }
 
 
-void	init_light(t_engine *engine, char **split)
+void	init_light(t_vector *lights, char **split)
 {
 	char	**values[3];
+	t_light *light = malloc(sizeof(t_light));
 
+	printf("initializing light\n");
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	engine->light.type = LIGHT;
-	engine->light.pos = parse_vec3d(values[0]);
-	engine->light.brightness = ft_atof(values[1][0]);
-	engine->light.color = parse_color(values[2]);
+	light->type = LIGHT;
+	light->pos = parse_vec3d(values[0]);
+	light->brightness = ft_atof(values[1][0]);
+	light->color = parse_color(values[2]);
+	add_elem(lights, light);
 	free_values(values);
 }
 
@@ -117,13 +124,14 @@ void	init_sphere(t_vector *objects, char **split)
 	char	**values[3];
 	t_sphere *sphere = malloc(sizeof(t_sphere));
 
+	printf("initializing sphere\n");
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
 	sphere->type = SPHERE;
 	sphere->pos = parse_vec3d(values[0]);
-	sphere->r = ft_atof(values[1][0]) / 2;
+	sphere->r = ft_atof(values[1][0]) / 2.0f;
 	sphere->color = parse_color(values[2]);
 	add_elem(objects, sphere);
 	free_values(values);
@@ -149,23 +157,23 @@ void	init_plane(t_vector *objects, char **split)
 
 void	set_values(t_engine *engine, char **split)
 {
-	static int index;
-
-	engine->object_count = index;
 	if (!split[0])
 		return ;
 	if (ft_strcmp(split[0], "C") == 0)
 		return (init_camera(engine, split));
 	if (ft_strcmp(split[0], "L") == 0)
-		return (init_light(engine, split));
+	{
+		engine->light_count++;
+		return (init_light(engine->lights, split));
+	}
 	if (ft_strcmp(split[0], "sp") == 0)
 	{
-		index++;
+		engine->object_count++;
 		return (init_sphere(engine->objects, split));
 	}
 	if (ft_strcmp(split[0], "pl") == 0)
 	{
-		index++;
+		engine->object_count++;
 		return (init_plane(engine->objects, split));
 	}
 	printf("invalid identifier: %s\n", split[0]);
@@ -178,6 +186,7 @@ void	input_parsing(t_engine *engine, char **av)
 	int		fd;
 
 	engine->objects = new_vector(1);
+	engine->lights = new_vector(1);
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)

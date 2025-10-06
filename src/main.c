@@ -21,12 +21,6 @@ void	print_values(t_engine *engine)
 	print_vec(engine->camera.pos, "Camera-pos: ");
 	print_vec(engine->camera.dir, "Camera-dir: ");
 	printf("Camera-fov: %d\n", engine->camera.fov);
-
-	printf("sphere\n");
-
-	printf("light\n");
-	print_vec(engine->light.pos, "light: ");
-	printf("%f\n", engine->light.brightness);
 }
 
 int	main(int ac, char **av)
@@ -36,9 +30,6 @@ int	main(int ac, char **av)
 	if (ac < 2)
 		return (0);
 	engine = get_engine();
-	engine->mouse.prev_pos.x = 0;
-	engine->mouse.prev_pos.y = 0;
-	engine->mouse.prev_pos.z = 0;
 	input_parsing(engine, av);
 	print_values(engine);
 	mlx_set_setting(MLX_HEADLESS, true);
@@ -52,7 +43,6 @@ int	main(int ac, char **av)
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
-	// color_background(engine);
 	gettimeofday(&engine->start, NULL);
 	setup_threads(engine);
 	mlx_loop_hook(engine->mlx, key_hook, engine);

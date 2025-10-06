@@ -76,7 +76,8 @@ typedef struct s_engine
 	t_camera camera;
 	t_vector *objects;
 	int	object_count;
-	t_light  light;
+	int light_count;
+	t_vector  *lights;
 	t_viewport viewport;
 	atomic_bool update;
 	int fps;
@@ -111,5 +112,6 @@ t_sphere *inside_object(t_ray *ray, double x, double y);
 void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
 int		get_seconds(t_engine *engine);
+t_color checker_board(t_hit *hit);
 
 #endif // MINIRT_T

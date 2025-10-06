@@ -44,7 +44,6 @@ float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1)
     float c;
     float disc;
 
-
     ray_s_origin = sphere.pos;
     minus_vec3d(&ray_s_origin, ray.origin);
     tmp = ray.udir;
@@ -62,11 +61,11 @@ float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1)
 
 void    set_sphere_color(t_sphere sphere, t_hit *hit)
 {
-    const t_light light = get_engine()->light;
+    t_light *light = get_engine()->lights->data[0];
     
     t_vec3d tmp = new_vec3d(hit->pos.x, hit->pos.y, hit->pos.z);
     minus_vec3d(&hit->pos, sphere.pos);
-    t_vec3d light_dir = new_vec3d(light.pos.x, light.pos.y, light.pos.z);
+    t_vec3d light_dir = new_vec3d(light->pos.x, light->pos.y, light->pos.z);
     minus_vec3d(&light_dir, tmp);
     normlize_vec3d(&light_dir);
     normlize_vec3d(&hit->pos);
