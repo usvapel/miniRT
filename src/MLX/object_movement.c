@@ -3,22 +3,25 @@
 t_sphere *inside_object(t_ray *ray, double x, double y)
 {
 	t_engine *engine = get_engine();
-	t_sphere *sphere;
+	void *object;
 	*ray = get_ray(x, y);
 	t_hit hit;
 	int i = 0;
 
 	while (i < engine->object_count)
 	{
-		sphere = engine->objects[i];
+		object = engine->objects->data[i];
 		hit.prev_hit = false;
-		sphere_hit(*sphere, *ray, &hit);
+		if (*(int *)engine->objects->data[i] == SPHERE)
+			sphere_hit(*((t_sphere *)object), *ray, &hit);
+		if (*(int *)engine->objects->data[i] == PLANE)
+			plane_hit(*((t_plane *)object), *ray, &hit);
 		if (hit.prev_hit)
 			break ;
 		i++;
 	}
 	if (hit.prev_hit)
-		return (sphere);
+		return (object);
 	else
 		return (NULL);
 }
@@ -26,7 +29,7 @@ t_sphere *inside_object(t_ray *ray, double x, double y)
 static void scale_by_factor(float d)
 {
 	t_engine *engine = get_engine();
-	t_sphere *sphere = engine->objects[0];
+	t_sphere *sphere = engine->objects->data[0];
 	if (sphere->r >= 0.05f)
 		sphere->r += 0.01f * d;
 	if (sphere->r <= 0.05f)

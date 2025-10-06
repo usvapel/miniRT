@@ -1,7 +1,8 @@
 #ifndef CAMERA_H
 # define CAMERA_H
 
-# include "minirt.h"
+#include "primitives.h"
+#include "stdbool.h"
 
 # define LEFT 0
 # define RIGHT 1

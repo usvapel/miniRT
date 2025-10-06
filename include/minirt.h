@@ -20,10 +20,11 @@
 # include "libft.h"
 # include "primitives.h"
 # include "ray.h"
-# include "geometry.h"
 # include "camera.h"
 # include "viewport.h"
 # include "light.h"
+# include "geometry.h"
+# include "vector.h"
 # include <sys/time.h>
 # include <pthread.h>
 # include <stdatomic.h>
@@ -73,7 +74,7 @@ typedef struct s_engine
 	mlx_image_t *image_buffer;
 	t_time start;
 	t_camera camera;
-	void **objects;
+	t_vector *objects;
 	int	object_count;
 	t_light  light;
 	t_viewport viewport;
@@ -109,6 +110,6 @@ void    move_object(t_sphere *sphere, double x, double y);
 t_sphere *inside_object(t_ray *ray, double x, double y);
 void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
-int	get_seconds(t_engine *engine);
+int		get_seconds(t_engine *engine);
 
 #endif // MINIRT_T

@@ -11,17 +11,20 @@ bool plane_hit(t_plane plane, t_ray ray, t_hit *hit)
     const float d_dot_n = dot_vec3d(plane.normal, ray.udir);
     t_vec3d tmp;
     float t;
+	t_vec3d pos;
 
-    if (d_dot_n == 0)
+    if (d_dot_n == 0.0f)
         return false;
     tmp = plane.pos; 
     minus_vec3d(&tmp, ray.origin);
     t = dot_vec3d(plane.normal, tmp);
-    if (t == 0)
+    if (t == 0.0f)
         return false;
     t /= d_dot_n;
-    if (t < 0)
-        return false;
-    set_hit(get_point_on_ray(ray, t), plane.color, hit);
+    if (t < 0.0f)
+		return false;
+	pos = get_point_on_ray(ray, t);
+	if (!hit->prev_hit || closest_hit(ray.origin, hit->pos, pos))
+		set_hit(pos, plane.color, hit);
     return true;
 }
