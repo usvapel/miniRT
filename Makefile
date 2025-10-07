@@ -89,7 +89,10 @@ SRCS_MAIN := \
 	camera.c \
 	object_movement.c \
 	vector.c \
-	light.c
+	light.c \
+	cylinder.c \
+	circle.c \
+	orthonormal_basis.c
 
 # Combine all source files
 SRCS := \
