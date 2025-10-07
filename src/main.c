@@ -26,7 +26,14 @@ void	print_values(t_engine *engine)
 
 	printf("light\n");
 	print_vec(engine->light.pos, "light: ");
+	printf("Cylinder\n");
+	t_cylinder *cy = engine->objects[2];
+	print_vec(cy->pos, "C: ");
+	print_vec(cy->axis, "Axis: ");
+	printf("Col: %f %f %f %f\n", cy->color.a, cy->color.b, cy->color.g, cy->color.a);
+	printf("r: %f, h: %f\n", cy->r, cy->h);
 	printf("%f\n", engine->light.brightness);
+	print_vec(project_vec3d(new_vec3d(9, 1,1), new_vec3d(9, 0, 1)), "Projected: ");
 }
 
 int	main(int ac, char **av)

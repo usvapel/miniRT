@@ -127,6 +127,25 @@ void	init_sphere(t_sphere **objects, char **split, int index)
 	free_values(values);
 }
 
+void	init_cylinder(t_cylinder **objects, char **split, int index)
+{
+	char	**values[5];
+
+	*values = NULL;
+	values[0] = safe_split(values, split[1]);
+	values[1] = safe_split(values, split[2]);
+	values[2] = safe_split(values, split[3]);
+	values[3] = safe_split(values, split[4]);
+	values[4] = safe_split(values, split[5]);
+	objects[index]->type = CYLINDER;
+	objects[index]->pos = parse_vec3d(values[0]);
+	objects[index]->axis = parse_vec3d(values[1]);
+	objects[index]->r = ft_atof(values[2][0]) / 2;
+	objects[index]->h = ft_atof(values[3][0]);
+	objects[index]->color = parse_color(values[4]);
+	normlize_vec3d(&objects[index]->axis);
+	free_values(values);
+}
 
 void	init_plane(t_plane **objects, char **split, int index)
 {
@@ -157,6 +176,11 @@ void	set_values(t_engine *engine, char **split)
 		return (init_sphere((t_sphere **)engine->objects, split, index++));
 	if (ft_strcmp(split[0], "pl") == 0)
 		return (init_plane((t_plane **)engine->objects, split, index++));
+	if (ft_strcmp(split[0], "cy") == 0)
+	{
+		printf("Reached here\n");
+		return (init_cylinder((t_cylinder **)engine->objects, split, index++));
+	}
 	printf("invalid identifier: %s\n", split[0]);
 }
 
@@ -166,9 +190,10 @@ void	input_parsing(t_engine *engine, char **av)
 	char	**split;
 	int		fd;
 
-	engine->objects = ft_calloc(2, sizeof(void *));
+	engine->objects = ft_calloc(3, sizeof(void *));
 	engine->objects[0] = ft_calloc(1, sizeof(t_sphere));
 	engine->objects[1] = ft_calloc(1, sizeof(t_plane));
+	engine->objects[2] = ft_calloc(1, sizeof(t_cylinder));
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
