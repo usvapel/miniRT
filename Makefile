@@ -86,7 +86,10 @@ SRCS_MAIN := \
 	hit.c \
 	threads.c \
 	rotation.c \
-	camera.c
+	camera.c \
+	cylinder.c \
+	circle.c \
+	orthonormal_basis.c
 
 # Combine all source files
 SRCS := \
