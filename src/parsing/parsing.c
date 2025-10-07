@@ -137,6 +137,27 @@ void	init_sphere(t_vector *objects, char **split)
 	free_values(values);
 }
 
+void	init_cylinder(t_vector *objects, char **split)
+{
+	char	**values[5];
+	t_cylinder *cylinder = malloc(sizeof(t_cylinder));
+
+	printf("initializing cylinder\n");
+	*values = NULL;
+	values[0] = safe_split(values, split[1]);
+	values[1] = safe_split(values, split[2]);
+	values[2] = safe_split(values, split[3]);
+	values[3] = safe_split(values, split[4]);
+	values[4] = safe_split(values, split[5]);
+	cylinder->type = CYLINDER;
+	cylinder->pos = parse_vec3d(values[0]);
+	cylinder->axis = parse_vec3d(values[1]);
+	cylinder->r = ft_atof(values[2][0]) / 2;
+	cylinder->h = ft_atof(values[3][0]);
+	cylinder->color = parse_color(values[4]);
+	normlize_vec3d(&cylinder->axis);
+	free_values(values);
+}
 
 void	init_plane(t_vector *objects, char **split)
 {
@@ -175,6 +196,10 @@ void	set_values(t_engine *engine, char **split)
 	{
 		engine->object_count++;
 		return (init_plane(engine->objects, split));
+	if (ft_strcmp(split[0], "cy") == 0)
+	{
+		engine->object_count++;
+		return (init_cylinder(engine->objects, split));
 	}
 	printf("invalid identifier: %s\n", split[0]);
 }
