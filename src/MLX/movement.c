@@ -11,9 +11,10 @@ void movement(t_engine *engine)
 void scale_objects(t_engine *engine)
 {
 	t_ray ray;
+	int type;
 	if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
-		t_sphere *sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y);
+		t_sphere *sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
 		if (!sphere)
 			return ;
 		scale_object(engine->mouse.pos.x, engine->mouse.pos.y);
@@ -42,6 +43,7 @@ void move_objects(t_engine *engine)
 
 	float dy;
 	float dx;
+	int type;
 	t_vec3d b = {0,0.001,0};
 
 	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
@@ -51,7 +53,7 @@ void move_objects(t_engine *engine)
 	{
 		if (grabbed == false)
 		{
-			sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y);
+			sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
 			if (!sphere)
 				return ;
 			grabbed = true;
