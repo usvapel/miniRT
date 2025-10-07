@@ -60,7 +60,7 @@ float max(float val1, float val2)
 }
 void    set_sphere_color(t_sphere sphere, t_hit *hit)
 {
-    const t_light light = get_engine()->light;
+    t_light *light = get_engine()->objects->data[5];
     
     t_vec3d tmp = new_vec3d(hit->pos.x, hit->pos.y, hit->pos.z);
     minus_vec3d(&hit->pos, sphere.pos);
