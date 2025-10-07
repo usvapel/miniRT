@@ -81,6 +81,7 @@ typedef struct s_engine
 	t_viewport viewport;
 	atomic_bool update;
 	atomic_bool moving;
+	atomic_int  last_move_time;
 	int fps;
 	t_mouse mouse;
 }	t_engine;
