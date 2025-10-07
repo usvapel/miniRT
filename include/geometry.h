@@ -1,7 +1,9 @@
 #ifndef GEOMETRY_H
 # define GEOMETRY_H
 
-# include "minirt.h"
+# include "primitives.h"
+# include "stdbool.h"
+# include "ray.h"
 
 typedef struct s_sphere
 {
