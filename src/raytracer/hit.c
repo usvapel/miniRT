@@ -27,3 +27,13 @@ bool closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2)
     pow_mag2 = pow_magnitude_vec3d(tmp);
     return pow_mag1 < pow_mag2;    
 }
+
+float nearest_t(float t0, float t1)
+{
+    if (t0 > 0 && t1 > 0)
+        return fminf(t0, t1);
+    else if (t0 > 0)
+        return t0;
+    else
+        return t1;
+}
