@@ -1,5 +1,35 @@
 #include "minirt.h" 
 /*
+Builds an orthonormal basis from a given axis vector `up`.
+The resulting basis uses:
+  up      → normalized given axis (local Y-axis), u = (ux, uy, uz)
+  right   → perpendicular to up, computed from a temporary vector, r = (rx, uy, uz)
+  forward → perpendicular to both up and right, f = (fx, fy, fz)
+This basis forms the 3x3 matrix:
+    | rx ux fx |
+B = | ry uy fy |
+    | rz uz fz |
+which can be used for coordinate transformations.
+*/
+t_basis3d build_local_basis(t_vec3d up)
+{
+    t_basis3d basis;
+    t_vec3d tmp;
+    
+    basis.up = up;
+    normlize_vec3d(&basis.up);
+    if (fabsf(basis.up.x) > 0.9f) 
+        tmp = new_vec3d(0, 0, 1);
+    else
+        tmp = new_vec3d(1, 0, 0);
+    basis.right = cross_vec3d(tmp, up);
+    normlize_vec3d(&basis.right);
+    basis.forward = cross_vec3d(up, basis.right);
+    normlize_vec3d(&basis.forward);
+    return basis;
+}
+
+/*
 Converts a vector v from standard basis (world space) into given orthonormal basis (local).
 vl = B^(-1)v, where B^(-1) is the inverse matrix of basis transformation matrix, v world vector
 vl = B^(T)v, the inverse matrix B^(-1) is same as the transpose of B since as basis vectors are orthonormals
@@ -43,32 +73,4 @@ t_vec3d point_from_basis(t_vec3d vec, t_basis3d basis, t_vec3d origin)
     p.z = origin.z + vec.x * basis.right.z + vec.y * basis.up.z + vec.z * basis.forward.z;
     return p;
 }
-/*
-Builds an orthonormal basis from a given axis vector `up`.
-The resulting basis uses:
-  up      → normalized given axis (local Y-axis), u = (ux, uy, uz)
-  right   → perpendicular to up, computed from a temporary vector, r = (rx, uy, uz)
-  forward → perpendicular to both up and right, f = (fx, fy, fz)
-This basis forms the 3x3 matrix:
-    | rx ux fx |
-B = | ry uy fy |
-    | rz uz fz |
-which can be used for coordinate transformations.
-*/
-t_basis3d build_local_basis(t_vec3d up)
-{
-    t_basis3d basis;
-    t_vec3d tmp;
-    
-    basis.up = up;
-    normlize_vec3d(&basis.up);
-    if (fabsf(basis.up.x) > 0.9f) 
-        tmp = new_vec3d(0, 0, 1);
-    else
-        tmp = new_vec3d(1, 0, 0);
-    basis.right = cross_vec3d(tmp, up);
-    normlize_vec3d(&basis.right);
-    basis.forward = cross_vec3d(up, basis.right);
-    normlize_vec3d(&basis.forward);
-    return basis;
-}
+
