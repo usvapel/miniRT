@@ -13,6 +13,16 @@ int	get_seconds(t_engine *engine)
 	return ((int)ms);
 }
 
+bool	timer(int prev_sec, int stop)
+{
+	t_engine *engine = get_engine();
+	int curr_sec;
+
+	curr_sec = get_seconds(engine);
+	if (curr_sec > (prev_sec + stop))
+		return (true);
+	return (false);
+}
 
 void add_fps(char *title, int fps)
 {
@@ -44,7 +54,6 @@ void add_fps(char *title, int fps)
 void fps_counter(void *param)
 {
 	t_engine *engine;
-	static int fps;
 	static int prev_sec;
 	int curr_sec;
 	char title[20] = "MiniRT | fps: ";
@@ -53,11 +62,9 @@ void fps_counter(void *param)
 	curr_sec = get_seconds(engine);
 	if (curr_sec > prev_sec)
 	{
-		add_fps(title, fps);
+		add_fps(title, engine->fps);
 		mlx_set_window_title(engine->mlx, title);
-		fps = 0;
+		engine->fps = 0;
 	}
-	fps++;
 	prev_sec = curr_sec;
-
 }
