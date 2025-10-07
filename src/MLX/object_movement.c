@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-t_sphere *inside_object(t_ray *ray, double x, double y)
+void *inside_object(t_ray *ray, double x, double y, int *type)
 {
 	t_engine *engine = get_engine();
 	void *object;
@@ -13,9 +13,20 @@ t_sphere *inside_object(t_ray *ray, double x, double y)
 		object = engine->objects->data[i];
 		hit.prev_hit = false;
 		if (*(int *)engine->objects->data[i] == SPHERE)
+		{
+			*type = SPHERE;
 			sphere_hit(*((t_sphere *)object), *ray, &hit);
+		}
+		if (*(int *)engine->objects->data[i] == LIGHT)
+		{
+			*type = LIGHT;
+			light_hit(*((t_light *)object), *ray, &hit);
+		}
 		if (*(int *)engine->objects->data[i] == PLANE)
+		{
+			*type = PLANE;
 			plane_hit(*((t_plane *)object), *ray, &hit);
+		}
 		if (hit.prev_hit)
 			break ;
 		i++;
@@ -29,15 +40,26 @@ t_sphere *inside_object(t_ray *ray, double x, double y)
 static void scale_by_factor(float d)
 {
 	static t_ray ray;
+	int type;
 	t_engine *engine = get_engine();
 
-	t_sphere *sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y);
-	if (!sphere)
+	void *object = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
+	if (!object)
 		return ;
-	if (sphere->r >= 0.05f)
-		sphere->r += 0.01f * d;
-	if (sphere->r <= 0.05f)
-		sphere->r = 0.05f;
+	if (type == SPHERE)
+	{
+		if ((*(t_sphere *)object).r >= 0.05f)
+			(*(t_sphere *)object).r += 0.01f * d;
+		if ((*(t_sphere *)object).r <= 0.05f)
+			(*(t_sphere *)object).r = 0.05f;
+	}
+	if (type == LIGHT)
+	{
+		if ((*(t_light *)object).r >= 0.05f)
+			(*(t_light *)object).r += 0.01f * d;
+		if ((*(t_light *)object).r <= 0.05f)
+			(*(t_light *)object).r = 0.05f;
+	}
 }
 
 void    scale_object(double x, double y)
