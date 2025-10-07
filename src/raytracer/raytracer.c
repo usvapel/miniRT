@@ -28,6 +28,8 @@ void	draw_scene(void *eng)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
 	engine->fps++;
+	engine->recalculate = true;
+	engine->moving = false;
 }
 
 void	*raytracer(void *thread)
@@ -46,6 +48,7 @@ void	*raytracer(void *thread)
 		while (engine->recalculate == false)
 			usleep(10);
 		t->done = false;
+		last_move = timer(engine->last_move_time, 1);
 		y = t->start_y;
 		while (y < t->end_y)
 		{

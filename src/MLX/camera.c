@@ -76,6 +76,7 @@ void update_camera(void)
     update_viewport(&engine->viewport, engine->window);
 	engine->update = false;
 	engine->moving = true;
+	engine->last_move_time = get_seconds(engine);
 	engine->recalculate = true;
 }
 
