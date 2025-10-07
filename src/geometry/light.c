@@ -15,7 +15,7 @@ float solve_for_light_hit(t_ray ray, t_light light, float *t0, float *t1)
     tmp = ray.udir;
     scale_vec3d(&tmp, -2);
     b = dot_vec3d(tmp, ray_s_origin);
-    c = dot_vec3d(ray_s_origin, ray_s_origin) - 0.01f;
+    c = dot_vec3d(ray_s_origin, ray_s_origin) - (light.r * light.r);
 	disc = (b * b) - (4.0f * a * c);
     if (disc >= 0.0f)
     {

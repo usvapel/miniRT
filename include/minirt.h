@@ -110,7 +110,7 @@ void	draw_scene(void *eng);
 void	wait_for_threads();
 void    scale_object(double x, double y);
 void    move_object(t_sphere *sphere, double x, double y);
-t_sphere *inside_object(t_ray *ray, double x, double y);
+void *inside_object(t_ray *ray, double x, double y, int *type);
 void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
 int		get_seconds(t_engine *engine);

@@ -114,6 +114,7 @@ void	init_light(t_vector *objects, char **split)
 	light->pos = parse_vec3d(values[0]);
 	light->brightness = ft_atof(values[1][0]);
 	light->color = parse_color(values[2]);
+	light->r = 0.1f;
 	add_elem(objects, light);
 	free_values(values);
 }
