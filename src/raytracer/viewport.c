@@ -30,13 +30,13 @@ void    update_viewport(t_viewport *viewport, t_window window)
     scale_vec3d(&viewport->vert_axis, viewport->h);
     set_pixal_spacing(viewport);
     set_starting_pixel(viewport);
-    print_vec(viewport->hori_axis, "Hori");
-    print_vec(viewport->vert_axis, "verti");
-    print_vec(viewport->step_x, "Step-x: ");
-    print_vec(viewport->step_y, "Step-y: ");
-    print_vec(viewport->start_pixel, "Starting: ");
-    printf("x range: %f - %f\n", viewport->start_pixel.x, viewport->start_pixel.x + viewport->step_x.x * window.width);
-    printf("y range: %f - %f\n", viewport->start_pixel.y, viewport->start_pixel.y + viewport->step_y.y * window.height);
+    // print_vec(viewport->hori_axis, "Hori");
+    // print_vec(viewport->vert_axis, "verti");
+    // print_vec(viewport->step_x, "Step-x: ");
+    // print_vec(viewport->step_y, "Step-y: ");
+    // print_vec(viewport->start_pixel, "Starting: ");
+    // printf("x range: %f - %f\n", viewport->start_pixel.x, viewport->start_pixel.x + viewport->step_x.x * window.width);
+    // printf("y range: %f - %f\n", viewport->start_pixel.y, viewport->start_pixel.y + viewport->step_y.y * window.height);
 }
 
 
@@ -66,13 +66,13 @@ void    set_starting_pixel(t_viewport *viewport)
     tmp = viewport->hori_axis;
     scale_vec3d(&tmp, 0.5);
     minus_vec3d(&top_left, tmp);
-    print_vec(top_left, "T: ");
+    // print_vec(top_left, "T: ");
     // move upwards half the distance of viewport's vertical axis
     tmp = viewport->vert_axis;
     scale_vec3d(&tmp, 0.5);
     minus_vec3d(&top_left, tmp);
     // from top left position move half the distance of the horizental pixal spacing to the right
-    print_vec(top_left, "top_left: ");
+    // print_vec(top_left, "top_left: ");
     viewport->start_pixel = top_left;
     tmp = viewport->step_x;
     scale_vec3d(&tmp, 0.5);

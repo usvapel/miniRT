@@ -1,6 +1,23 @@
 
 #include "minirt.h"
 
+t_color checker_board(t_hit *hit)
+{
+	float checker_size = 0.1f;
+	t_color color1 = {225, 224, 220, 255};
+	t_color color2 = {121, 121, 121, 255};
+	t_color color3 = {0,0,0,0};
+
+	int x = (int)floorf(hit->pos.x / checker_size);
+	int z = (int)floorf(hit->pos.z / checker_size);
+
+	t_color color = ((x + z) % 2 == 0) ? color1 : color2;
+	if (x > 100 || z > 100 || x < -100 || z < -100)
+		return color3;
+	return (color);
+}
+
+
 void apply_color(t_color *color, float brightness)
 {
 	color->r = (color->r * brightness);
