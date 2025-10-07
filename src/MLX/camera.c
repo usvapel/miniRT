@@ -50,10 +50,10 @@ void update_camera(void)
 {
     t_engine *engine = get_engine();
     update_viewport(&engine->viewport, engine->window);
-    engine->recalculate = true;
-    wait_for_threads();
-    engine->image->pixels = engine->image_buffer->pixels;
-    engine->recalculate = false;
+	engine->update = false;
+	engine->moving = true;
+	engine->last_move_time = get_seconds(engine);
+	engine->recalculate = true;
 }
 
 void    orient_camera(t_engine *engine, float nx, float ny)
