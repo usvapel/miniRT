@@ -30,3 +30,21 @@ bool plane_hit(t_plane plane, t_ray ray, t_hit *hit)
 	}
     return true;
 }
+
+bool solve_plane_hit(t_plane plane, t_ray ray, float *t)
+{
+    const float d_dot_n = dot_vec3d(plane.normal, ray.udir);
+    t_vec3d tmp;
+
+    if (d_dot_n == 0)
+        return false;
+    tmp = plane.pos; 
+    minus_vec3d(&tmp, ray.origin);
+    *t = dot_vec3d(plane.normal, tmp);
+    if (*t == 0)
+        return false;
+    *t /= d_dot_n;
+    if (t < 0)
+        return false;
+    return true;
+}
