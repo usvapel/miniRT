@@ -16,6 +16,7 @@ void wait_for_threads()
 			return;
 		usleep(10);
 	}
+	engine->moving = false;
 }
 
 void	draw_scene(void *eng)
@@ -26,16 +27,15 @@ void	draw_scene(void *eng)
 	while (engine->update == true)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
+	engine->fps++;
 }
 
 void	*raytracer(void *thread)
 {
 	t_engine *engine = get_engine();
-	t_sphere *spheres = *engine->objects;
-	t_plane *plane = engine->objects[1];
 	t_threads *t = thread;
 	t_ray ray;
-	t_hit hit;
+	t_hit hit = {0};
 	int x;
 	int y;
 	int i = 0;

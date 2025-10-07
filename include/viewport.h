@@ -1,9 +1,9 @@
 #ifndef VIEWPORT_H
-#define VIEWPORT_H
+# define VIEWPORT_H
 
-#include "minirt.h"
+# include "primitives.h"
 
-#define FOCAL_LENGTH 1
+# define FOCAL_LENGTH 1
 
 typedef struct s_viewport
 {

@@ -87,8 +87,8 @@ void	init_camera(t_engine *engine, char **split)
 {
 	char	**values[3];
 
+	printf("initializing camera\n");
 	*values = NULL;
-	puts("initializing camera");
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
@@ -103,7 +103,9 @@ void	init_camera(t_engine *engine, char **split)
 void	init_light(t_vector *objects, char **split)
 {
 	char	**values[3];
+	t_light *light = malloc(sizeof(t_light));
 
+	printf("initializing light\n");
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
@@ -116,41 +118,44 @@ void	init_light(t_vector *objects, char **split)
 	free_values(values);
 }
 
-void	init_sphere(t_sphere **objects, char **split, int index)
+void	init_sphere(t_vector *objects, char **split)
 {
 	char	**values[3];
+	t_sphere *sphere = malloc(sizeof(t_sphere));
 
+	printf("initializing sphere\n");
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	objects[index]->type = SPHERE;
-	objects[index]->pos = parse_vec3d(values[0]);
-	objects[index]->r = ft_atof(values[1][0]) / 2;
-	objects[index]->color = parse_color(values[2]);
+	sphere->type = SPHERE;
+	sphere->pos = parse_vec3d(values[0]);
+	sphere->r = ft_atof(values[1][0]) / 2.0f;
+	sphere->color = parse_color(values[2]);
+	add_elem(objects, sphere);
 	free_values(values);
 }
 
 
-void	init_plane(t_plane **objects, char **split, int index)
+void	init_plane(t_vector *objects, char **split)
 {
 	char	**values[3];
+	t_plane *plane = malloc(sizeof(t_plane));
 
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	objects[index]->type = PLANE;
-	objects[index]->pos = parse_vec3d(values[0]);
-	objects[index]->normal = parse_vec3d(values[1]);
-	objects[index]->color = parse_color(values[2]);
+	plane->type = PLANE;
+	plane->pos = parse_vec3d(values[0]);
+	plane->normal = parse_vec3d(values[1]);
+	plane->color = parse_color(values[2]);
+	add_elem(objects, plane);
 	free_values(values);
 }
 
 void	set_values(t_engine *engine, char **split)
 {
-	static int index;
-
 	if (!split[0])
 		return ;
 	if (ft_strcmp(split[0], "C") == 0)
@@ -161,9 +166,15 @@ void	set_values(t_engine *engine, char **split)
 		return (init_light(engine->objects, split));
 	}
 	if (ft_strcmp(split[0], "sp") == 0)
-		return (init_sphere((t_sphere **)engine->objects, split, index++));
+	{
+		engine->object_count++;
+		return (init_sphere(engine->objects, split));
+	}
 	if (ft_strcmp(split[0], "pl") == 0)
-		return (init_plane((t_plane **)engine->objects, split, index++));
+	{
+		engine->object_count++;
+		return (init_plane(engine->objects, split));
+	}
 	printf("invalid identifier: %s\n", split[0]);
 }
 

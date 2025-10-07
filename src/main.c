@@ -21,12 +21,6 @@ void	print_values(t_engine *engine)
 	print_vec(engine->camera.pos, "Camera-pos: ");
 	print_vec(engine->camera.dir, "Camera-dir: ");
 	printf("Camera-fov: %d\n", engine->camera.fov);
-
-	printf("sphere\n");
-
-	printf("light\n");
-	print_vec(engine->light.pos, "light: ");
-	printf("%f\n", engine->light.brightness);
 }
 
 int	main(int ac, char **av)
@@ -48,14 +42,13 @@ int	main(int ac, char **av)
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT | fps: 0", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
+	engine->moving = false;
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
-	// color_background(engine);
 	gettimeofday(&engine->start, NULL);
 	setup_threads(engine);
 	mlx_loop_hook(engine->mlx, key_hook, engine);
 	mlx_loop_hook(engine->mlx, draw_scene, engine);
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
-	mlx_cursor_hook(engine->mlx, cursor_hook, NULL);
 	mlx_loop(engine->mlx);
 	cleanup_and_exit();
 	return (0);
