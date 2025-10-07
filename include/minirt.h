@@ -76,7 +76,7 @@ typedef struct s_engine
 	t_camera camera;
 	t_vector *objects;
 	int	object_count;
-	t_vector  *lights;
+	// t_vector  *lights;
 	int light_count;
 	t_viewport viewport;
 	atomic_bool update;
