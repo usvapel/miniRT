@@ -16,6 +16,7 @@ void wait_for_threads()
 			return;
 		usleep(10);
 	}
+	engine->moving = false;
 }
 
 void	draw_scene(void *eng)
@@ -26,18 +27,19 @@ void	draw_scene(void *eng)
 	while (engine->update == true)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
+	engine->fps++;
 }
 
 void	*raytracer(void *thread)
 {
 	t_engine *engine = get_engine();
-	t_sphere *spheres = *engine->objects;
-	t_plane *plane = engine->objects[1];
 	t_threads *t = thread;
 	t_ray ray;
-	t_hit hit;
+	t_hit hit = {0};
 	int x;
 	int y;
+	int i = 0;
+	const int r_steps = 6;
 	while (true)
 	{
 		while (engine->recalculate == false)
@@ -51,13 +53,29 @@ void	*raytracer(void *thread)
 			{
 				hit.prev_hit = false;
 				ray = get_ray(x, y);
-				plane_hit(*plane, ray, &hit);
-				sphere_hit(spheres[0], ray, &hit);
-				if (hit.prev_hit)
-					mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
-				else
-					mlx_put_pixel(engine->image_buffer, x, y, 0);
-				x++;
+				plane_hit(*((t_plane *)engine->objects->data[4]), ray, &hit);
+				i = 0;
+				while (i < engine->object_count)
+				{
+					int type = *(int *)(engine->objects->data[i]);
+					// if (engine->objects[i]->type == PLANE)
+					// 	plane_hit(*((t_plane *)engine->objects[i]->object), ray, &hit);
+					if (type == SPHERE)
+						sphere_hit(*((t_sphere *)engine->objects->data[i]), ray, &hit);
+					i++;
+				}
+				i = 0;
+				while (i < r_steps)
+				{
+					if (hit.prev_hit)
+						mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
+					else
+						mlx_put_pixel(engine->image_buffer, x, y, 0);
+					x++;
+					i++;
+					if (x == t->end_x)
+						break ;
+				}
 			}
 			y++;
 		}
