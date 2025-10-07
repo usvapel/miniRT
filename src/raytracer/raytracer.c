@@ -28,6 +28,8 @@ void	draw_scene(void *eng)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
 	engine->fps++;
+	engine->recalculate = true;
+	engine->moving = false;
 }
 
 void	*raytracer(void *thread)
@@ -39,12 +41,14 @@ void	*raytracer(void *thread)
 	int x;
 	int y;
 	int i = 0;
-	const int r_steps = 6;
+	bool last_move = false;
+	static int r_steps = 10;
 	while (true)
 	{
 		while (engine->recalculate == false)
 			usleep(10);
 		t->done = false;
+		last_move = timer(engine->last_move_time, 1);
 		y = t->start_y;
 		while (y < t->end_y)
 		{
@@ -73,8 +77,11 @@ void	*raytracer(void *thread)
 						mlx_put_pixel(engine->image_buffer, x, y, 0);
 					x++;
 					i++;
-					if (x == t->end_x)
-						break ;
+					if (engine->moving == false && last_move == true)
+						if (r_steps > 1)
+							r_steps--;
+					if (r_steps == 1 && engine->moving == true)
+						r_steps = 10;
 				}
 			}
 			y++;
