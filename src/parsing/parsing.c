@@ -156,6 +156,7 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->h = ft_atof(values[3][0]);
 	cylinder->color = parse_color(values[4]);
 	normlize_vec3d(&cylinder->axis);
+	add_elem(objects, cylinder);
 	free_values(values);
 }
 
@@ -196,11 +197,12 @@ void	set_values(t_engine *engine, char **split)
 	{
 		engine->object_count++;
 		return (init_plane(engine->objects, split));
-	if (ft_strcmp(split[0], "cy") == 0)
-	{
-		engine->object_count++;
-		return (init_cylinder(engine->objects, split));
 	}
+	// if (ft_strcmp(split[0], "cy") == 0)
+	// {
+	// 	engine->object_count++;
+	// 	return (init_cylinder(engine->objects, split));
+	// }
 	printf("invalid identifier: %s\n", split[0]);
 }
 
