@@ -38,6 +38,7 @@ void	*raytracer(void *thread)
 	t_hit hit = {0};
 	int x;
 	int y;
+	int i = 0;
 	const int r_steps = 6;
 	while (true)
 	{
@@ -53,22 +54,26 @@ void	*raytracer(void *thread)
 				hit.prev_hit = false;
 				ray = get_ray(x, y);
 				plane_hit(*((t_plane *)engine->objects->data[4]), ray, &hit);
-				for (int i = 0; i < engine->object_count; i++)
+				i = 0;
+				while (i < engine->object_count)
 				{
 					int type = *(int *)(engine->objects->data[i]);
 					// if (engine->objects[i]->type == PLANE)
 					// 	plane_hit(*((t_plane *)engine->objects[i]->object), ray, &hit);
 					if (type == SPHERE)
 						sphere_hit(*((t_sphere *)engine->objects->data[i]), ray, &hit);
+					i++;
 				}
-				for (int i = 0; i < r_steps; i++)
+				i = 0;
+				while (i < r_steps)
 				{
 					if (hit.prev_hit)
 						mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
 					else
 						mlx_put_pixel(engine->image_buffer, x, y, 0);
 					x++;
-					if (x == t->end_x || engine->moving == false)
+					i++;
+					if (x == t->end_x)
 						break ;
 				}
 			}

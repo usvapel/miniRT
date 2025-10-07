@@ -28,8 +28,12 @@ t_sphere *inside_object(t_ray *ray, double x, double y)
 
 static void scale_by_factor(float d)
 {
+	static t_ray ray;
 	t_engine *engine = get_engine();
-	t_sphere *sphere = engine->objects->data[0];
+
+	t_sphere *sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y);
+	if (!sphere)
+		return ;
 	if (sphere->r >= 0.05f)
 		sphere->r += 0.01f * d;
 	if (sphere->r <= 0.05f)
