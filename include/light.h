@@ -10,6 +10,7 @@ typedef struct s_light
 {
 	int		type;
 	t_vec3d pos;
+	float r;
 	float	brightness;
 	t_color color;
 } t_light;
