@@ -88,7 +88,8 @@ SRCS_MAIN := \
 	rotation.c \
 	camera.c \
 	object_movement.c \
-	vector.c
+	vector.c \
+	light.c
 
 # Combine all source files
 SRCS := \
