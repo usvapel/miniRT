@@ -75,6 +75,7 @@ void update_camera(void)
 	engine->update = true;
     update_viewport(&engine->viewport, engine->window);
 	engine->update = false;
+	engine->moving = true;
 	engine->recalculate = true;
 }
 

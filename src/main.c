@@ -42,6 +42,7 @@ int	main(int ac, char **av)
 	engine->mlx = mlx_init(engine->window.width, engine->window.height, "miniRT | fps: 0", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
+	engine->moving = false;
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
 	gettimeofday(&engine->start, NULL);
 	setup_threads(engine);

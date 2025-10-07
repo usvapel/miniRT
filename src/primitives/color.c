@@ -12,7 +12,7 @@ t_color checker_board(t_hit *hit)
 	int z = (int)floorf(hit->pos.z / checker_size);
 
 	t_color color = ((x + z) % 2 == 0) ? color1 : color2;
-	if (x > 10 || z > 10 || x < -10 || z < -10)
+	if (x > 100 || z > 100 || x < -100 || z < -100)
 		return color3;
 	return (color);
 }

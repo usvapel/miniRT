@@ -76,10 +76,11 @@ typedef struct s_engine
 	t_camera camera;
 	t_vector *objects;
 	int	object_count;
-	int light_count;
 	t_vector  *lights;
+	int light_count;
 	t_viewport viewport;
 	atomic_bool update;
+	atomic_bool moving;
 	int fps;
 	t_mouse mouse;
 }	t_engine;
