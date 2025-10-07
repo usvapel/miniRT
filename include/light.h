@@ -2,7 +2,9 @@
 #ifndef LIGHT_H
 # define LIGHT_H
 
-# include "minirt.h"
+# include "primitives.h"
+# include <stdbool.h>
+# include "ray.h"
 
 typedef struct s_light
 {
@@ -11,5 +13,7 @@ typedef struct s_light
 	float	brightness;
 	t_color color;
 } t_light;
+
+bool light_hit(t_light light, t_ray ray, t_hit *hit);
 
 #endif

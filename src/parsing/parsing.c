@@ -72,6 +72,9 @@ char	**safe_split(char **values[3], char *line)
 	char	**splitted;
 
 	splitted = ft_split(line, ',');
+	for (int i = 0; splitted[i]; i++)
+		printf("%s ", splitted[i]);
+	printf("\n");
 	if (!splitted)
 	{
 		free_values(values);
@@ -97,7 +100,7 @@ void	init_camera(t_engine *engine, char **split)
 }
 
 
-void	init_light(t_engine *engine, char **split)
+void	init_light(t_vector *objects, char **split)
 {
 	char	**values[3];
 
@@ -105,10 +108,11 @@ void	init_light(t_engine *engine, char **split)
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	engine->light.type = LIGHT;
-	engine->light.pos = parse_vec3d(values[0]);
-	engine->light.brightness = ft_atof(values[1][0]);
-	engine->light.color = parse_color(values[2]);
+	light->type = LIGHT;
+	light->pos = parse_vec3d(values[0]);
+	light->brightness = ft_atof(values[1][0]);
+	light->color = parse_color(values[2]);
+	add_elem(objects, light);
 	free_values(values);
 }
 
@@ -152,7 +156,10 @@ void	set_values(t_engine *engine, char **split)
 	if (ft_strcmp(split[0], "C") == 0)
 		return (init_camera(engine, split));
 	if (ft_strcmp(split[0], "L") == 0)
-		return (init_light(engine, split));
+	{
+		engine->object_count++;
+		return (init_light(engine->objects, split));
+	}
 	if (ft_strcmp(split[0], "sp") == 0)
 		return (init_sphere((t_sphere **)engine->objects, split, index++));
 	if (ft_strcmp(split[0], "pl") == 0)
@@ -166,9 +173,8 @@ void	input_parsing(t_engine *engine, char **av)
 	char	**split;
 	int		fd;
 
-	engine->objects = ft_calloc(2, sizeof(void *));
-	engine->objects[0] = ft_calloc(1, sizeof(t_sphere));
-	engine->objects[1] = ft_calloc(1, sizeof(t_plane));
+	engine->objects = new_vector(1);
+	// engine->lights = new_vector(1);
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)

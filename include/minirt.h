@@ -67,8 +67,10 @@ typedef struct s_engine
 	mlx_image_t *image_buffer;
 	t_time start;
 	t_camera camera;
-	void **objects;
-	t_light  light;
+	t_vector *objects;
+	int	object_count;
+	// t_vector  *lights;
+	int light_count;
 	t_viewport viewport;
 	atomic_bool update;
 }	t_engine;
