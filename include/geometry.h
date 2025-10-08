@@ -49,8 +49,9 @@ typedef enum e_id
 	CYLINDER
 } t_id ;
 
+t_sphere new_sphere(t_vec3d pos, float r);
 bool sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit);
-float solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
+float solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 bool plane_hit(t_plane plane, t_ray ray, t_hit *hit);
 bool solve_plane_hit(t_plane plane, t_ray ray, float *t);
 void    cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit);
