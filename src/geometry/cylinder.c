@@ -31,6 +31,8 @@ bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top)
     add_vec3d(&p.pos, cy.axis);
     if (!solve_plane_hit(p, ray, &t))
         return false;
+    if (t < 0)
+        return false;
     lhit = get_point_on_ray(ray, t);
     tmp = lhit;
     minus_vec3d(&tmp, p.pos);
