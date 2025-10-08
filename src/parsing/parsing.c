@@ -165,6 +165,7 @@ void	init_plane(t_vector *objects, char **split)
 	char	**values[3];
 	t_plane *plane = malloc(sizeof(t_plane));
 
+	printf("initializing plane\n");
 	*values = NULL;
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
@@ -198,11 +199,11 @@ void	set_values(t_engine *engine, char **split)
 		engine->object_count++;
 		return (init_plane(engine->objects, split));
 	}
-	// if (ft_strcmp(split[0], "cy") == 0)
-	// {
-	// 	engine->object_count++;
-	// 	return (init_cylinder(engine->objects, split));
-	// }
+	if (ft_strcmp(split[0], "cy") == 0)
+	{
+		engine->object_count++;
+		return (init_cylinder(engine->objects, split));
+	}
 	printf("invalid identifier: %s\n", split[0]);
 }
 
