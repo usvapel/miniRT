@@ -14,17 +14,12 @@ bool    set_hit(t_vec3d new_hit, t_color color, t_hit *hit)
 
 bool closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2)
 {
-    t_vec3d tmp;
     float pow_mag1;
     float pow_mag2;
 
-    tmp = hit1;
-    minus_vec3d(&tmp, pos);
-    pow_mag1 = magnitude_vec3d(tmp);
+    pow_mag1 = pow_magnitude_vec3d(sub_vec3d(hit1, pos));
 
-    tmp = hit2;
-    minus_vec3d(&tmp, pos);
-    pow_mag2 = magnitude_vec3d(tmp);
+    pow_mag2 = pow_magnitude_vec3d(sub_vec3d(hit2, pos));
     return pow_mag1 < pow_mag2;    
 }
 
