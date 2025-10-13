@@ -105,6 +105,7 @@ t_ray    get_ray(int x, int y)
     ray.origin = engine->camera.pos;
     ray.udir = pixel;
     minus_vec3d(&ray.udir, engine->camera.pos);
+	normlize_vec3d(&ray.udir);
     return (ray);
 }
 
