@@ -20,7 +20,7 @@ bool sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit)
 	bool is_set = {0};
 
 	disc = solve_sphere_hit(ray, sphere, &t0, &t1);
-	if (disc < 0.0f || (t0 < 0 && t1 < 0))
+	if (disc < 0.0f || (t0 < 0.0f && t1 < 0.0f))
 		return false;
 	n_hit_pos = get_point_on_ray(ray, nearest_t(t0, t1));
 	is_set = set_hit(n_hit_pos, sphere.color, hit);
@@ -58,14 +58,15 @@ float solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1)
 void    set_sphere_color(t_sphere sphere, t_hit *hit)
 {
     t_light *light = get_engine()->objects->data[5];
-    
     t_vec3d tmp = new_vec3d(hit->pos.x, hit->pos.y, hit->pos.z);
-    minus_vec3d(&hit->pos, sphere.pos);
+    t_vec3d tmp_pos = hit->pos;
+    
+    minus_vec3d(&tmp_pos, sphere.pos);
     t_vec3d light_dir = new_vec3d(light->pos.x, light->pos.y, light->pos.z);
     minus_vec3d(&light_dir, tmp);
     normlize_vec3d(&light_dir);
-    normlize_vec3d(&hit->pos);
-    float d = max(dot_vec3d(hit->pos, light_dir), 0.0f);
+    normlize_vec3d(&tmp_pos);
+    float d = max(dot_vec3d(tmp_pos, light_dir), 0.0f);
     apply_color(&hit->color, d);
 }
 
