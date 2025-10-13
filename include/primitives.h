@@ -33,6 +33,7 @@ void    print_vec(t_vec3d vec, char *id);
 float    magnitude_vec3d(t_vec3d vec);
 float    pow_magnitude_vec3d(t_vec3d vec);
 void    normlize_vec3d(t_vec3d *vec);
+t_vec3d normalize_vec3d(t_vec3d vec);
 float dot_vec3d(t_vec3d vec, t_vec3d vec2);
 t_vec3d cross_vec3d(t_vec3d a, t_vec3d b);
 t_vec3d project_vec3d(t_vec3d vec, t_vec3d to);
