@@ -1,7 +1,7 @@
 #include "minirt.h"
-#include "primitives.h"
 
 t_ray    get_ray(int x, int y);
+
 
 void wait_for_threads()
 {
@@ -84,7 +84,7 @@ void phong_model(t_hit *hit)
 	t_vec3d light_dir = sub_vec3d(light->pos, hit->pos);
 	normlize_vec3d(&light_dir);
 
-	t_vec3d normal =  hit->normal;
+	t_vec3d normal = hit->normal;
 	normlize_vec3d(&normal);
 
 	// Diffuse
@@ -98,15 +98,39 @@ void phong_model(t_hit *hit)
 	t_vec3d reflect_dir = reflect(nscale_vec3d(light_dir, -1.0f), normal);
 	normlize_vec3d(&reflect_dir);
 
-	float specular_strength = powf(max(0.0f, dot_vec3d(view_dir, reflect_dir)), 32.0f);
+	float specular_strength = powf(max(0.0f, dot_vec3d(view_dir, reflect_dir)), 10.0f);
 	t_vec3d specular = nscale_vec3d(light_color, specular_strength);
 
+	scale_vec3d(&specular, 0.08f);
 	if (hit->type == PLANE)
 		scale_vec3d(&specular, 0.0f);
+
 	// Final color
 	t_vec3d final_color = add2_vec3d(ambient, add2_vec3d(diffuse, specular));
 
 	hit->color = vec3d_to_color(final_color);
+}
+
+int check_object_type(t_engine *engine, t_ray *ray, t_hit *hit)
+{
+	int type;
+	int i = 0;
+
+	plane_hit(*((t_plane *)engine->objects->data[4]), *ray, hit);
+	while (i < engine->object_count)
+	{
+		type = *(int *)(engine->objects->data[i]);
+		// if (type == PLANE)
+		// 	plane_hit(*((t_plane *)engine->objects->data[i]), ray, &hit);
+		if (type == SPHERE)
+			sphere_hit(*((t_sphere *)engine->objects->data[i]), *ray, hit);
+		else if (type == CYLINDER)
+			cylinder_hit(*((t_cylinder *)engine->objects->data[i]), *ray, hit);	
+		else if (type == LIGHT)
+			light_hit(*((t_light *)engine->objects->data[i]), *ray, hit);
+		i++;
+	}
+	return type;
 }
 
 void	*raytracer(void *thread)
@@ -117,9 +141,10 @@ void	*raytracer(void *thread)
 	t_hit hit = {0};
 	int x;
 	int y;
-	int i = 0;
+	int block_size = 10;
 	bool last_move = false;
-	int r_steps = 10;
+	t->done = true;
+	wait_for_threads();
 	while (true)
 	{
 		while (engine->recalculate == false)
@@ -132,43 +157,56 @@ void	*raytracer(void *thread)
 			x = t->start_x;
 			while (x < t->end_x)
 			{
+				int sample_x = x + block_size / 2;
+				int sample_y = y + block_size / 2;
+
+				if (sample_x >= t->end_x)
+					sample_x = t->end_x - 1;
+				if (sample_y >= t->end_y)
+					sample_y = t->end_y - 1;
+
 				hit.prev_hit = false;
-				ray = get_ray(x, y);
-				plane_hit(*((t_plane *)engine->objects->data[4]), ray, &hit);
-				int type;
-				i = 0;
-				while (i < engine->object_count)
-				{
-					type = *(int *)(engine->objects->data[i]);
-					// if (type == PLANE)
-					// 	plane_hit(*((t_plane *)engine->objects->data[i]), ray, &hit);
-					if (type == SPHERE)
-						sphere_hit(*((t_sphere *)engine->objects->data[i]), ray, &hit);
-					else if (type == CYLINDER)
-						cylinder_hit(*((t_cylinder *)engine->objects->data[i]), ray, &hit);	
-					else if (type == LIGHT)
-						light_hit(*((t_light *)engine->objects->data[i]), ray, &hit);
-					i++;
-				}
+				ray = get_ray(sample_x, sample_y);
+
+				(void)check_object_type(engine, &ray, &hit);
+
 				phong_model(&hit);
-				i = 0;
-				while (i < r_steps)
+
+				uint32_t color;
+				if (hit.prev_hit)
+					color = scale_color(&hit.color, 1);
+				else
+					color = 255;
+
+				int block_end_y = 0;
+				int block_end_x = 0;
+
+				if (y + block_size < t->end_y)
+					block_end_y = y + block_size;
+				else
+					block_end_y = t->end_y;
+
+				if (x + block_size < t->end_x)
+					block_end_x = x + block_size;
+				else
+					block_end_x = t->end_x;
+
+				int block_y = y - 1;
+				while (++block_y < block_end_y)
 				{
-					if (hit.prev_hit)
-						mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
-					else
-						mlx_put_pixel(engine->image_buffer, x, y, 255);
-					x++;
-					i++;
-					if (engine->moving == false && last_move == true)
-						if (r_steps > 1)
-							r_steps--;
-					if (r_steps == 1 && engine->moving == true)
-						r_steps = 10;
+					int block_x = x - 1;
+					while (++block_x < block_end_x)
+						mlx_put_pixel(engine->image_buffer, block_x, block_y, color);
 				}
+				x += block_size;
 			}
-			y++;
+			y += block_size;
 		}
+		if (engine->moving == false && last_move == true)
+			if (block_size > 1)
+				block_size--;
+		if (block_size == 1 && engine->moving == true)
+			block_size = 10;
 		t->done = true;
 		engine->recalculate = false;
 	}
