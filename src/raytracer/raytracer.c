@@ -70,6 +70,8 @@ void	*raytracer(void *thread)
 						cylinder_hit(*((t_cylinder *)engine->objects->data[i]), ray, &hit);	
 					if (type == LIGHT)
 						light_hit(*((t_light *)engine->objects->data[i]), ray, &hit);
+					if (type == PARABOLOID)
+						paraboloid_hit(*((t_paraboloid *)engine->objects->data[i]), ray, &hit);
 					i++;
 				}
 				i = 0;
