@@ -49,7 +49,7 @@ void    print_vec(t_vec3d vec, char *id)
 
 float    magnitude_vec3d(t_vec3d vec)
 {
-    return (sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z)));
+    return (sqrt(dot_vec3d(vec, vec)));
 }
 float    pow_magnitude_vec3d(t_vec3d vec)
 {
