@@ -27,6 +27,7 @@ bool plane_hit(t_plane plane, t_ray ray, t_hit *hit)
 	{
 		set_hit(pos, plane.color, hit);
 		hit->normal = plane.normal;
+		hit->type = PLANE;
 		// hit->color = checker_board(hit);
 	}
     return true;
