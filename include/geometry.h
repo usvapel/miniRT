@@ -38,6 +38,14 @@ typedef struct s_circle
 	float r;
 } t_circle;
 
+typedef struct s_paraboloid
+{
+	int type;
+	t_vec3d pos;
+	t_vec3d axis;
+	float	focal;
+	t_color color;
+} t_paraboloid;
 
 typedef enum e_id
 {
@@ -46,7 +54,8 @@ typedef enum e_id
 	LIGHT,
 	SPHERE,
 	PLANE,
-	CYLINDER
+	CYLINDER, 
+	PARABOLOID
 } t_id ;
 
 t_sphere new_sphere(t_vec3d pos, float r);
@@ -60,4 +69,6 @@ void cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit);
 t_circle new_circle(t_vec3d pos, float r);
 bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 
+
+bool paraboloid_hit(t_paraboloid para, t_ray ray, t_hit *hit);
 #endif
