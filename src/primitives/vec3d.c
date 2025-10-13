@@ -1,4 +1,5 @@
 #include "minirt.h"
+#include "primitives.h"
 
 t_vec3d new_vec3d(float x, float y, float z)
 {
@@ -54,6 +55,16 @@ float    magnitude_vec3d(t_vec3d vec)
 float    pow_magnitude_vec3d(t_vec3d vec)
 {
     return (dot_vec3d(vec, vec));
+}
+
+t_vec3d normalize_vec3d(t_vec3d vec)
+{
+	t_vec3d norm;
+	float scaler;
+
+    scaler = (float) 1 / magnitude_vec3d(vec);
+    norm = nscale_vec3d(vec, scaler);
+	return norm;
 }
 
 void    normlize_vec3d(t_vec3d *vec)

@@ -1,4 +1,5 @@
 #include "minirt.h"
+#include "primitives.h"
 
 t_ray    get_ray(int x, int y);
 
@@ -32,11 +33,84 @@ void	draw_scene(void *eng)
 	engine->moving = false;
 }
 
+t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two)
+{
+	t_vec3d new = {0};
+	new.x = one.x * two.x;
+	new.y = one.y * two.y;
+	new.z = one.z * two.z;
+	return new;
+}
+
+t_color vec3d_to_color(t_vec3d v) {
+	t_color c;
+	c.r = (unsigned char)(fmin(fmax(v.x, 0.0), 1.0) * 255.0);
+	c.g = (unsigned char)(fmin(fmax(v.y, 0.0), 1.0) * 255.0);
+	c.b = (unsigned char)(fmin(fmax(v.z, 0.0), 1.0) * 255.0);
+	c.a = 255;
+	return c;
+}
+
+t_vec3d color_to_vec3d(t_color c) {
+	t_vec3d v;
+	v.x = (float)c.r / 255.0f;
+	v.y = (float)c.g / 255.0f;
+	v.z = (float)c.b / 255.0f;
+	return v;
+}
+
+t_vec3d reflect(t_vec3d direction, t_vec3d normal)
+{
+	float dot = dot_vec3d(direction, normal);
+	t_vec3d tmp = nscale_vec3d(normal, dot);
+	scale_vec3d(&tmp, 2);
+	minus_vec3d(&tmp, direction);
+	return tmp;
+}
+
+void phong_model(t_hit *hit)
+{
+	if (hit->type == LIGHT)
+		return ;
+	t_engine *engine    = get_engine();
+	t_light *light      = engine->objects->data[5];
+	t_vec3d ambient     = {0.5, 0.5, 0.5};
+	t_vec3d model_color = color_to_vec3d(hit->color);
+	t_vec3d lighting    = {0.0, 0.0, 0.0};
+	// loop light sources
+	t_vec3d light_color = color_to_vec3d(light->color);
+	t_vec3d lightSource = light->pos;
+	normlize_vec3d(&hit->normal);
+
+	//specular
+	t_vec3d cameraSource = engine->camera.pos;
+	t_vec3d viewSource = normalize_vec3d(cameraSource);
+	t_vec3d reflectSource = normalize_vec3d(reflect(nscale_vec3d(lightSource, -1.0f), hit->normal));
+	float specular_strength = max(0.0, dot_vec3d(viewSource, reflectSource));
+	specular_strength = pow(specular_strength, 32.0); // gloss value
+	t_vec3d specular = nscale_vec3d(light_color, specular_strength);
+
+	t_vec3d light_dir = sub_vec3d(lightSource, hit->pos);
+	normlize_vec3d(&light_dir);
+
+	float diffuse_strength = max(0.0, dot_vec3d(light_dir, hit->normal));
+	t_vec3d diffuse = nscale_vec3d(light_color, diffuse_strength);
+
+	scale_vec3d(&diffuse, 0.5f);
+	scale_vec3d(&specular, 0.5f);
+	lighting = add2_vec3d(ambient, diffuse);
+	lighting = add2_vec3d(lighting, specular);
+
+	t_vec3d color = multiply_vec3d(model_color, lighting);
+
+	hit->color = vec3d_to_color(color);
+}
+
 void	*raytracer(void *thread)
 {
 	t_engine *engine = get_engine();
 	t_threads *t = thread;
-	t_ray ray;
+	t_ray ray = {0};
 	t_hit hit = {0};
 	int x;
 	int y;
@@ -58,27 +132,29 @@ void	*raytracer(void *thread)
 				hit.prev_hit = false;
 				ray = get_ray(x, y);
 				plane_hit(*((t_plane *)engine->objects->data[4]), ray, &hit);
+				int type;
 				i = 0;
 				while (i < engine->object_count)
 				{
-					int type = *(int *)(engine->objects->data[i]);
+					type = *(int *)(engine->objects->data[i]);
 					// if (type == PLANE)
 					// 	plane_hit(*((t_plane *)engine->objects->data[i]), ray, &hit);
 					if (type == SPHERE)
 						sphere_hit(*((t_sphere *)engine->objects->data[i]), ray, &hit);
-					if (type == CYLINDER)
+					else if (type == CYLINDER)
 						cylinder_hit(*((t_cylinder *)engine->objects->data[i]), ray, &hit);	
-					if (type == LIGHT)
+					else if (type == LIGHT)
 						light_hit(*((t_light *)engine->objects->data[i]), ray, &hit);
 					i++;
 				}
+				phong_model(&hit);
 				i = 0;
 				while (i < r_steps)
 				{
 					if (hit.prev_hit)
 						mlx_put_pixel(engine->image_buffer, x, y, scale_color(&hit.color, 1));
 					else
-						mlx_put_pixel(engine->image_buffer, x, y, 0);
+						mlx_put_pixel(engine->image_buffer, x, y, 255);
 					x++;
 					i++;
 					if (engine->moving == false && last_move == true)

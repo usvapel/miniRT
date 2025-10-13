@@ -1,3 +1,4 @@
+#include "geometry.h"
 #include "minirt.h"
 #include "math.h"
 bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top);
@@ -40,6 +41,7 @@ bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top)
     if (magni <= cy.r)
     {
         set_hit(lhit, cy.color, hit);
+		hit->type = CYLINDER;
         return true;   
     }
     return false;
@@ -70,6 +72,7 @@ bool cylinder_body_hit(t_cylinder cy, t_ray ray, t_hit *hit)
         return false;
     pos = point_from_basis(pos, cy_local, origin);
     hit->pos = pos;
+	hit->type = CYLINDER;
     return true; 
 }
 

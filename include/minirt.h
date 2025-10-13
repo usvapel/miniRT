@@ -115,5 +115,6 @@ void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
 int		get_seconds(t_engine *engine);
 t_color checker_board(t_hit *hit);
+float max(float val1, float val2);
 
 #endif // MINIRT_T

@@ -26,7 +26,8 @@ bool plane_hit(t_plane plane, t_ray ray, t_hit *hit)
 	if (!hit->prev_hit || closest_hit(ray.origin, hit->pos, pos))
 	{
 		set_hit(pos, plane.color, hit);
-		hit->color = checker_board(hit);
+		hit->normal = plane.normal;
+		// hit->color = checker_board(hit);
 	}
     return true;
 }

@@ -2,6 +2,7 @@
 #define RAY_H
 
 #include "primitives.h"
+#include <stdbool.h>
 
 typedef struct s_ray
 {
@@ -14,6 +15,8 @@ typedef struct s_hit
     t_vec3d pos;
     t_color color;
     bool prev_hit;
+	t_vec3d normal;
+	int type;
 } t_hit;
 
 void    *raytracer(void *engine);
