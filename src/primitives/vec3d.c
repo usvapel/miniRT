@@ -16,7 +16,16 @@ void scale_vec3d(t_vec3d *vec, float scaler)
     vec->y *= scaler;
     vec->z *= scaler;
 }
+t_vec3d nscale_vec3d(t_vec3d vec, float scaler)
+{
+    t_vec3d scaled;
 
+    scaled = vec;
+    scaled.x *= scaler;
+    scaled.y *= scaler;
+    scaled.z *= scaler;
+    return scaled;
+}
 void    add_vec3d(t_vec3d *vec1, t_vec3d vec2)
 {
     vec1->x += vec2.x;
@@ -40,11 +49,11 @@ void    print_vec(t_vec3d vec, char *id)
 
 float    magnitude_vec3d(t_vec3d vec)
 {
-    return (sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z)));
+    return (sqrt(dot_vec3d(vec, vec)));
 }
 float    pow_magnitude_vec3d(t_vec3d vec)
 {
-    return ((vec.x * vec.x) * (vec.x * vec.x) + (vec.y * vec.y) * (vec.y * vec.y) + (vec.z * vec.z) * (vec.z * vec.z));
+    return (dot_vec3d(vec, vec));
 }
 
 void    normlize_vec3d(t_vec3d *vec)
@@ -68,4 +77,33 @@ t_vec3d cross_vec3d(t_vec3d a, t_vec3d b)
     cross.y = -(a.x * b.z - a.z * b.x);
     cross.z = a.x * b.y - a.y * b.x;
     return cross;
+}
+
+t_vec3d project_vec3d(t_vec3d vec, t_vec3d to)
+{
+    t_vec3d tmp;
+    float scale;
+
+    tmp = to;
+    scale = dot_vec3d(vec, to) / dot_vec3d(to, to);
+    scale_vec3d(&tmp, scale);
+   return tmp; 
+}
+
+t_vec3d sub_vec3d(t_vec3d vec, t_vec3d vec2)
+{
+    t_vec3d res;
+
+    res = vec;
+    minus_vec3d(&res, vec2);
+    return res;
+}
+
+t_vec3d add2_vec3d(t_vec3d vec, t_vec3d vec2)
+{
+    t_vec3d res;
+
+    res = vec;
+    add_vec3d(&res, vec2);
+    return res;
 }

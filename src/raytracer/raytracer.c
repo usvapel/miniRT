@@ -62,10 +62,12 @@ void	*raytracer(void *thread)
 				while (i < engine->object_count)
 				{
 					int type = *(int *)(engine->objects->data[i]);
-					// if (engine->objects[i]->type == PLANE)
-					// 	plane_hit(*((t_plane *)engine->objects[i]->object), ray, &hit);
+					// if (type == PLANE)
+					// 	plane_hit(*((t_plane *)engine->objects->data[i]), ray, &hit);
 					if (type == SPHERE)
 						sphere_hit(*((t_sphere *)engine->objects->data[i]), ray, &hit);
+					if (type == CYLINDER)
+						cylinder_hit(*((t_cylinder *)engine->objects->data[i]), ray, &hit);	
 					if (type == LIGHT)
 						light_hit(*((t_light *)engine->objects->data[i]), ray, &hit);
 					i++;
@@ -103,6 +105,7 @@ t_ray    get_ray(int x, int y)
     ray.origin = engine->camera.pos;
     ray.udir = pixel;
     minus_vec3d(&ray.udir, engine->camera.pos);
+	normlize_vec3d(&ray.udir);
     return (ray);
 }
 
