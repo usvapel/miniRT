@@ -25,6 +25,7 @@ void	setup_threads(void *eng)
 		engine->threads[i].end_y = y_step * (i + 1);
 		engine->threads[i].start_x = 0;
 		engine->threads[i].end_x = x_step;
+		engine->threads[i].done = false;
 		pthread_create(&engine->threads[i].thread, NULL, raytracer, &engine->threads[i]);
 		i++;
 	}
