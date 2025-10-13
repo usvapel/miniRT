@@ -9,7 +9,7 @@ float max(float val1, float val2)
 		return val1;
 	if (val2 > val1)
 		return val2;
-	return val2;
+	return val1;
 }
 
 bool sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit)

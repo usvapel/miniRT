@@ -64,46 +64,49 @@ t_vec3d reflect(t_vec3d direction, t_vec3d normal)
 	float dot = dot_vec3d(direction, normal);
 	t_vec3d tmp = nscale_vec3d(normal, dot);
 	scale_vec3d(&tmp, 2);
-	minus_vec3d(&tmp, direction);
-	return tmp;
+	minus_vec3d(&direction, tmp);
+	return direction;
 }
 
 void phong_model(t_hit *hit)
 {
 	if (hit->type == LIGHT)
 		return ;
-	t_engine *engine    = get_engine();
-	t_light *light      = engine->objects->data[5];
-	t_vec3d ambient     = {0.5, 0.5, 0.5};
+	t_engine *engine = get_engine();
+	t_light *light = engine->objects->data[5];
+
 	t_vec3d model_color = color_to_vec3d(hit->color);
-	t_vec3d lighting    = {0.0, 0.0, 0.0};
-	// loop light sources
+
+	t_vec3d ambient = nscale_vec3d(model_color, 0.1);
+
 	t_vec3d light_color = color_to_vec3d(light->color);
-	t_vec3d lightSource = light->pos;
-	normlize_vec3d(&hit->normal);
 
-	//specular
-	t_vec3d cameraSource = engine->camera.pos;
-	t_vec3d viewSource = normalize_vec3d(cameraSource);
-	t_vec3d reflectSource = normalize_vec3d(reflect(nscale_vec3d(lightSource, -1.0f), hit->normal));
-	float specular_strength = max(0.0, dot_vec3d(viewSource, reflectSource));
-	specular_strength = pow(specular_strength, 32.0); // gloss value
-	t_vec3d specular = nscale_vec3d(light_color, specular_strength);
-
-	t_vec3d light_dir = sub_vec3d(lightSource, hit->pos);
+	t_vec3d light_dir = sub_vec3d(light->pos, hit->pos);
 	normlize_vec3d(&light_dir);
 
-	float diffuse_strength = max(0.0, dot_vec3d(light_dir, hit->normal));
-	t_vec3d diffuse = nscale_vec3d(light_color, diffuse_strength);
+	t_vec3d normal =  hit->normal;
+	normlize_vec3d(&normal);
 
-	scale_vec3d(&diffuse, 0.5f);
-	scale_vec3d(&specular, 0.5f);
-	lighting = add2_vec3d(ambient, diffuse);
-	lighting = add2_vec3d(lighting, specular);
+	// Diffuse
+	float diffuse_strength = max(0.0, dot_vec3d(normal, light_dir));
+	t_vec3d diffuse = nscale_vec3d(multiply_vec3d(light_color, model_color), diffuse_strength);
 
-	t_vec3d color = multiply_vec3d(model_color, lighting);
+	// Specular
+	t_vec3d view_dir = sub_vec3d(engine->camera.pos, hit->pos);
+	normlize_vec3d(&view_dir);
 
-	hit->color = vec3d_to_color(color);
+	t_vec3d reflect_dir = reflect(nscale_vec3d(light_dir, -1.0f), normal);
+	normlize_vec3d(&reflect_dir);
+
+	float specular_strength = powf(max(0.0f, dot_vec3d(view_dir, reflect_dir)), 32.0f);
+	t_vec3d specular = nscale_vec3d(light_color, specular_strength);
+
+	if (hit->type == PLANE)
+		scale_vec3d(&specular, 0.0f);
+	// Final color
+	t_vec3d final_color = add2_vec3d(ambient, add2_vec3d(diffuse, specular));
+
+	hit->color = vec3d_to_color(final_color);
 }
 
 void	*raytracer(void *thread)
