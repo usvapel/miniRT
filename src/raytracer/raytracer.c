@@ -2,7 +2,6 @@
 
 t_ray    get_ray(int x, int y);
 
-
 void wait_for_threads()
 {
 	t_engine *engine = get_engine();
@@ -31,84 +30,6 @@ void	draw_scene(void *eng)
 	engine->fps++;
 	engine->recalculate = true;
 	engine->moving = false;
-}
-
-t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two)
-{
-	t_vec3d new = {0};
-	new.x = one.x * two.x;
-	new.y = one.y * two.y;
-	new.z = one.z * two.z;
-	return new;
-}
-
-t_color vec3d_to_color(t_vec3d v) {
-	t_color c;
-	c.r = (unsigned char)(fmin(fmax(v.x, 0.0), 1.0) * 255.0);
-	c.g = (unsigned char)(fmin(fmax(v.y, 0.0), 1.0) * 255.0);
-	c.b = (unsigned char)(fmin(fmax(v.z, 0.0), 1.0) * 255.0);
-	c.a = 255;
-	return c;
-}
-
-t_vec3d color_to_vec3d(t_color c) {
-	t_vec3d v;
-	v.x = (float)c.r / 255.0f;
-	v.y = (float)c.g / 255.0f;
-	v.z = (float)c.b / 255.0f;
-	return v;
-}
-
-t_vec3d reflect(t_vec3d direction, t_vec3d normal)
-{
-	float dot = dot_vec3d(direction, normal);
-	t_vec3d tmp = nscale_vec3d(normal, dot);
-	scale_vec3d(&tmp, 2);
-	minus_vec3d(&direction, tmp);
-	return direction;
-}
-
-void phong_model(t_hit *hit)
-{
-	if (hit->type == LIGHT)
-		return ;
-	t_engine *engine = get_engine();
-	t_light *light = engine->objects->data[5];
-
-	t_vec3d model_color = color_to_vec3d(hit->color);
-
-	t_vec3d ambient = nscale_vec3d(model_color, 0.1);
-
-	t_vec3d light_color = color_to_vec3d(light->color);
-
-	t_vec3d light_dir = sub_vec3d(light->pos, hit->pos);
-	normlize_vec3d(&light_dir);
-
-	t_vec3d normal = hit->normal;
-	normlize_vec3d(&normal);
-
-	// Diffuse
-	float diffuse_strength = max(0.0, dot_vec3d(normal, light_dir));
-	t_vec3d diffuse = nscale_vec3d(multiply_vec3d(light_color, model_color), diffuse_strength);
-
-	// Specular
-	t_vec3d view_dir = sub_vec3d(engine->camera.pos, hit->pos);
-	normlize_vec3d(&view_dir);
-
-	t_vec3d reflect_dir = reflect(nscale_vec3d(light_dir, -1.0f), normal);
-	normlize_vec3d(&reflect_dir);
-
-	float specular_strength = powf(max(0.0f, dot_vec3d(view_dir, reflect_dir)), 10.0f);
-	t_vec3d specular = nscale_vec3d(light_color, specular_strength);
-
-	scale_vec3d(&specular, 0.08f);
-	if (hit->type == PLANE)
-		scale_vec3d(&specular, 0.0f);
-
-	// Final color
-	t_vec3d final_color = add2_vec3d(ambient, add2_vec3d(diffuse, specular));
-
-	hit->color = vec3d_to_color(final_color);
 }
 
 int check_object_type(t_engine *engine, t_ray *ray, t_hit *hit)
@@ -170,7 +91,7 @@ void	*raytracer(void *thread)
 
 				(void)check_object_type(engine, &ray, &hit);
 
-				phong_model(&hit);
+				phong_model(engine, &hit);
 
 				uint32_t color;
 				if (hit.prev_hit)

@@ -104,6 +104,7 @@ void	init_light(t_vector *objects, char **split)
 {
 	char	**values[3];
 	t_light *light = malloc(sizeof(t_light));
+	t_engine *engine = get_engine();
 
 	printf("initializing light\n");
 	*values = NULL;
@@ -116,6 +117,8 @@ void	init_light(t_vector *objects, char **split)
 	light->color = parse_color(values[2]);
 	light->r = 0.1f;
 	add_elem(objects, light);
+	add_elem(engine->lights, light);
+	engine->light_count++;
 	free_values(values);
 }
 
@@ -214,7 +217,7 @@ void	input_parsing(t_engine *engine, char **av)
 	int		fd;
 
 	engine->objects = new_vector(1);
-	// engine->lights = new_vector(1);
+	engine->lights = new_vector(1);
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)

@@ -3,6 +3,7 @@
 
 #include "primitives.h"
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef struct s_ray
 {
@@ -17,6 +18,7 @@ typedef struct s_hit
     bool prev_hit;
 	t_vec3d normal;
 	int type;
+	float distance;
 } t_hit;
 
 void    *raytracer(void *engine);

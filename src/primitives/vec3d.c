@@ -1,5 +1,13 @@
 #include "minirt.h"
-#include "primitives.h"
+
+t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two)
+{
+	t_vec3d new = {0};
+	new.x = one.x * two.x;
+	new.y = one.y * two.y;
+	new.z = one.z * two.z;
+	return new;
+}
 
 t_vec3d new_vec3d(float x, float y, float z)
 {
@@ -52,6 +60,7 @@ float    magnitude_vec3d(t_vec3d vec)
 {
     return (sqrt(dot_vec3d(vec, vec)));
 }
+
 float    pow_magnitude_vec3d(t_vec3d vec)
 {
     return (dot_vec3d(vec, vec));
@@ -67,11 +76,22 @@ t_vec3d normalize_vec3d(t_vec3d vec)
 	return norm;
 }
 
-void    normlize_vec3d(t_vec3d *vec)
+void normlize_vec3d(t_vec3d *vec)
 {
-    float scaler;
-
-    scaler = (float) 1 / magnitude_vec3d(*vec);
+    float magnitude = magnitude_vec3d(*vec);
+    if (isnan(magnitude) || magnitude <= 0.000001f) {
+        vec->x = 0.0f;
+        vec->y = 1.0f;
+        vec->z = 0.0f;
+        return;
+    }
+    float scaler = 1.0f / magnitude;
+    if (isnan(scaler) || isinf(scaler)) {
+        vec->x = 0.0f;
+        vec->y = 1.0f;
+        vec->z = 0.0f;
+        return;
+    }
     scale_vec3d(vec, scaler);
 }
 
