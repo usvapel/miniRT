@@ -1,6 +1,26 @@
 
 #include "minirt.h"
 
+
+t_color vec3d_to_color(t_vec3d v)
+{
+	t_color c;
+	c.r = (unsigned char)(fmin(fmax(v.x, 0.0), 1.0) * 255.0);
+	c.g = (unsigned char)(fmin(fmax(v.y, 0.0), 1.0) * 255.0);
+	c.b = (unsigned char)(fmin(fmax(v.z, 0.0), 1.0) * 255.0);
+	c.a = 255;
+	return c;
+}
+
+t_vec3d color_to_vec3d(t_color c)
+{
+	t_vec3d v;
+	v.x = (float)c.r / 255.0f;
+	v.y = (float)c.g / 255.0f;
+	v.z = (float)c.b / 255.0f;
+	return v;
+}
+
 t_color checker_board(t_hit *hit)
 {
 	float checker_size = 0.1f;

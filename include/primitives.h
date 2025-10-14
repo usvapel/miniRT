@@ -52,4 +52,5 @@ t_vec3d point_in_basis(t_vec3d vec, t_basis3d basis, t_vec3d origin);
 t_vec3d point_from_basis(t_vec3d vec, t_basis3d basis, t_vec3d origin);
 t_basis3d build_local_basis(t_vec3d up);
 
+t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two);
 #endif
