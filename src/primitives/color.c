@@ -98,42 +98,27 @@ float clamp(float value, float min, float max)
 // linear interpolation
 int lerp(float level, int start, int end)
 {
-	return (int)((1.0f - level) * start + level * end);
+    return (int)(start + level * (end - start));
 }
 
-void calculate_gradient(t_engine *engine, int *color, int y)
+int calculate_gradient(t_engine *engine, int y)
 {
 	float r;
 	float g;
 	float b;
 	float level;
+	int color;
 
 	level = (float)y / (float)(engine->window.height - 1);
-	r = lerp(level, 255, 127);
-	g = lerp(level, 255, 179);
-	b = lerp(level, 255, 255);
+
+	r = lerp(level, 135, 255);  // 135 to 255 (light blue to white)
+	g = lerp(level, 206, 255);  // 206 to 255
+	b = lerp(level, 250, 255);  // 250 to 255 (keep it blue-ish)
+
 	r = clamp(r, 0, 255);
 	g = clamp(g, 0, 255);
 	b = clamp(b, 0, 255);
-	*color = get_rgba(r, g, b, 255);
-}
 
-void color_background(t_engine *engine)
-{
-	int x;
-	int y;
-	int color;
-
-	x = 0;
-	while (x < engine->window.width)
-	{
-		y = 0;
-		while (y < engine->window.height)
-		{
-			calculate_gradient(engine, &color, y);
-			mlx_put_pixel(engine->image, x, y, color);
-			y++;
-		}
-		x++;
-	}
+	color = get_rgba((int)r, (int)g, (int)b, 255);
+	return color;
 }

@@ -105,7 +105,7 @@ typedef struct s_engine
 
 
 void input_parsing(t_engine *engine, char **av);
-void color_background(t_engine *engine);
+int calculate_gradient(t_engine *engine, int y);
 t_engine *get_engine(void);
 
 void    update_viewport(t_viewport *viewport, t_window window);
@@ -136,5 +136,5 @@ float max(float val1, float val2);
 t_color vec3d_to_color(t_vec3d v);
 t_vec3d color_to_vec3d(t_color c);
 void phong_model(t_engine *engine, t_hit *hit);
-int check_object_type(t_engine *engine, t_ray *ray, t_hit *hit);
+int object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 #endif // MINIRT_T
