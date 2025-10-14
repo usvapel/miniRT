@@ -32,7 +32,7 @@ void	draw_scene(void *eng)
 	engine->moving = false;
 }
 
-int check_object_type(t_engine *engine, t_ray *ray, t_hit *hit)
+int object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 {
 	int type;
 	int i = 0;
@@ -52,6 +52,11 @@ int check_object_type(t_engine *engine, t_ray *ray, t_hit *hit)
 		i++;
 	}
 	return type;
+}
+
+float random_float()
+{
+	return (float)rand() / ((float)RAND_MAX + 1.0f);
 }
 
 void	*raytracer(void *thread)
@@ -78,26 +83,25 @@ void	*raytracer(void *thread)
 			x = t->start_x;
 			while (x < t->end_x)
 			{
-				int sample_x = x + block_size / 2;
-				int sample_y = y + block_size / 2;
+				hit.prev_hit = false;
+				int color;
+
+				float sample_x = x + block_size / 2.0f;
+				float sample_y = y + block_size / 2.0f;
 
 				if (sample_x >= t->end_x)
 					sample_x = t->end_x - 1;
 				if (sample_y >= t->end_y)
 					sample_y = t->end_y - 1;
 
-				hit.prev_hit = false;
 				ray = get_ray(sample_x, sample_y);
-
-				(void)check_object_type(engine, &ray, &hit);
+				(void)object_intersection(engine, &ray, &hit);
 
 				phong_model(engine, &hit);
-
-				uint32_t color;
 				if (hit.prev_hit)
 					color = scale_color(&hit.color, 1);
 				else
-					color = 255;
+					color = calculate_gradient(engine, y);
 
 				int block_end_y = 0;
 				int block_end_x = 0;
