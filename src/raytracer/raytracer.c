@@ -89,10 +89,15 @@ void	*raytracer(void *thread)
 	t = thread;
 	t->done = true;
 	wait_for_threads();
-	while (true)
+	printf("thread %d end\n", t->index);
+	while (!t->end)
 	{
 		while (engine->recalculate == false)
+		{
+			if (t->end)
+				return (NULL);
 			usleep(10);
+		}
 		t->done = false;
 		last_move = timer(engine->last_move_time, 1);
 		y = t->start_y;
@@ -136,6 +141,7 @@ void	*raytracer(void *thread)
 		t->done = true;
 		engine->recalculate = false;
 	}
+	printf("thread %d end\n", t->index);
 	return (NULL);
 }
 

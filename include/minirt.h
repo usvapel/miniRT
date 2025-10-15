@@ -64,6 +64,7 @@ typedef struct s_threads
 	int	start_x;
 	int	end_x;
 	atomic_bool	done;
+	atomic_bool end;
 }	t_threads;
 
 
