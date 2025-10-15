@@ -1,3 +1,4 @@
+#include "MLX42.h"
 #include "minirt.h"
 
 t_engine *get_engine()
@@ -10,8 +11,15 @@ t_engine *get_engine()
 void cleanup_and_exit()
 {
 	t_engine *engine = get_engine();
-	mlx_terminate(engine->mlx);
+	static bool cleanup_done = false;
+	if (cleanup_done)
+		exit(1);
+	cleanup_done = true;
 	thread_cleanup();
+	free_vector(engine->objects);
+	free_vector(engine->lights);
+	// mlx_delete_image(engine->mlx, engine->image);
+	// mlx_delete_image(engine->mlx, engine->image_buffer);
 	exit(1);
 }
 
@@ -51,5 +59,6 @@ int	main(int ac, char **av)
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
 	mlx_loop(engine->mlx);
 	cleanup_and_exit();
+	mlx_terminate(engine->mlx);
 	return (0);
 }

@@ -9,6 +9,14 @@ void thread_cleanup()
 	i = 0;
 	while (i < THREAD_COUNT)
 	{
+		puts("end");
+		engine->threads[i].end = true;
+		i++;
+	}
+	i = 0;
+	while (i < THREAD_COUNT)
+	{
+		puts("join");
 		pthread_join(engine->threads[i].thread, NULL);
 		i++;
 	}
@@ -34,6 +42,7 @@ void	setup_threads(void *eng)
 		engine->threads[i].start_x = 0;
 		engine->threads[i].end_x = x_step;
 		engine->threads[i].done = false;
+		engine->threads[i].end = false;
 		pthread_create(&engine->threads[i].thread, NULL, raytracer, &engine->threads[i]);
 		i++;
 	}
