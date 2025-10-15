@@ -40,9 +40,10 @@ typedef struct s_circle
 typedef struct s_paraboloid
 {
 	int type;
+	float	focal;
+	float	h;
 	t_vec3d pos;
 	t_vec3d axis;
-	float	focal;
 	t_color color;
 } t_paraboloid;
 
