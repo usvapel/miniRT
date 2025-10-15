@@ -2,10 +2,21 @@
 
 void thread_cleanup()
 {
-	t_engine *engine = get_engine();
-	int i = 0;
+	t_engine	*engine;
+	int			i;
+
+	engine = get_engine();
+	i = 0;
 	while (i < THREAD_COUNT)
 	{
+		puts("end");
+		engine->threads[i].end = true;
+		i++;
+	}
+	i = 0;
+	while (i < THREAD_COUNT)
+	{
+		puts("join");
 		pthread_join(engine->threads[i].thread, NULL);
 		i++;
 	}
@@ -13,11 +24,16 @@ void thread_cleanup()
 
 void	setup_threads(void *eng)
 {
-    t_engine *engine = (t_engine *)eng;
-	int y_step = engine->window.height / THREAD_COUNT;
-	int x_step = engine->window.width;
+    t_engine	*engine;
+	int			y_step;
+	int			x_step;
+	int			i;
+
+	engine = eng;
+	y_step = engine->window.height / THREAD_COUNT;
+	x_step = engine->window.width;
 	engine->recalculate = true;
-	int i = 0;
+	i = 0;
 	while (i < THREAD_COUNT)
 	{
 		engine->threads[i].index = i;
@@ -25,6 +41,8 @@ void	setup_threads(void *eng)
 		engine->threads[i].end_y = y_step * (i + 1);
 		engine->threads[i].start_x = 0;
 		engine->threads[i].end_x = x_step;
+		engine->threads[i].done = false;
+		engine->threads[i].end = false;
 		pthread_create(&engine->threads[i].thread, NULL, raytracer, &engine->threads[i]);
 		i++;
 	}

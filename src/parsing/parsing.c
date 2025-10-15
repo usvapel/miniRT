@@ -1,4 +1,5 @@
 
+#include "light.h"
 #include "minirt.h"
 
 void	runtime_error(char *s)
@@ -58,12 +59,12 @@ void	validate_camera(t_engine *engine)
 		runtime_error("Invalid orientation z value");
 }
 
-void	free_values(char **values[3])
+void	free_values(char **values[3], int count)
 {
 	int	i;
 
 	i = 0;
-	while (i < 3)
+	while (i < count)
 		free_array((void *)values[i++]);
 }
 
@@ -77,7 +78,7 @@ char	**safe_split(char **values[3], char *line)
 	printf("\n");
 	if (!splitted)
 	{
-		free_values(values);
+		free_values(values, 3);
 		runtime_error("failure during memory allocation");
 	}
 	return (splitted);
@@ -95,7 +96,7 @@ void	init_camera(t_engine *engine, char **split)
 	engine->camera.pos = parse_vec3d(values[0]);
 	engine->camera.dir = parse_vec3d(values[1]);
 	engine->camera.fov = ft_atof(values[2][0]);
-	free_values(values);
+	free_values(values, 3);
 	validate_camera(engine);
 }
 
@@ -104,6 +105,7 @@ void	init_light(t_vector *objects, char **split)
 {
 	char	**values[3];
 	t_light *light = malloc(sizeof(t_light));
+	t_engine *engine = get_engine();
 
 	printf("initializing light\n");
 	*values = NULL;
@@ -116,7 +118,11 @@ void	init_light(t_vector *objects, char **split)
 	light->color = parse_color(values[2]);
 	light->r = 0.1f;
 	add_elem(objects, light);
-	free_values(values);
+	t_light *tmp = malloc(sizeof(t_light));
+	ft_memcpy(tmp, light, sizeof(t_light));
+	add_elem(engine->lights, tmp);
+	engine->light_count++;
+	free_values(values, 3);
 }
 
 void	init_sphere(t_vector *objects, char **split)
@@ -134,7 +140,7 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->r = ft_atof(values[1][0]) / 2.0f;
 	sphere->color = parse_color(values[2]);
 	add_elem(objects, sphere);
-	free_values(values);
+	free_values(values, 3);
 }
 
 void	init_cylinder(t_vector *objects, char **split)
@@ -157,7 +163,7 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->color = parse_color(values[4]);
 	normlize_vec3d(&cylinder->axis);
 	add_elem(objects, cylinder);
-	free_values(values);
+	free_values(values, 5);
 }
 
 void	init_plane(t_vector *objects, char **split)
@@ -175,7 +181,7 @@ void	init_plane(t_vector *objects, char **split)
 	plane->normal = parse_vec3d(values[1]);
 	plane->color = parse_color(values[2]);
 	add_elem(objects, plane);
-	free_values(values);
+	free_values(values, 3);
 }
 
 void	set_values(t_engine *engine, char **split)
@@ -214,7 +220,7 @@ void	input_parsing(t_engine *engine, char **av)
 	int		fd;
 
 	engine->objects = new_vector(1);
-	// engine->lights = new_vector(1);
+	engine->lights = new_vector(1);
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)

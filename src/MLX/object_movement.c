@@ -27,6 +27,11 @@ void *inside_object(t_ray *ray, double x, double y, int *type)
 			*type = PLANE;
 			plane_hit(*((t_plane *)object), *ray, &hit);
 		}
+		if (*(int *)engine->objects->data[i] == CYLINDER)
+		{
+			*type = CYLINDER;
+			cylinder_hit(*((t_cylinder *)object), *ray, &hit);
+		}
 		if (hit.prev_hit)
 			break ;
 		i++;
@@ -52,6 +57,13 @@ static void scale_by_factor(float d)
 			(*(t_sphere *)object).r += 0.01f * d;
 		if ((*(t_sphere *)object).r <= 0.05f)
 			(*(t_sphere *)object).r = 0.05f;
+	}
+	if (type == CYLINDER)
+	{
+		if ((*(t_cylinder *)object).r >= 0.05f)
+			(*(t_cylinder *)object).r += 0.01f * d;
+		if ((*(t_cylinder *)object).r <= 0.05f)
+			(*(t_cylinder *)object).r = 0.05f;
 	}
 	if (type == LIGHT)
 	{

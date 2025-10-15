@@ -54,7 +54,7 @@ bool sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit);
 float solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 bool plane_hit(t_plane plane, t_ray ray, t_hit *hit);
 bool solve_plane_hit(t_plane plane, t_ray ray, float *t);
-void    cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit);
+void cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit);
 
 
 t_circle new_circle(t_vec3d pos, float r);

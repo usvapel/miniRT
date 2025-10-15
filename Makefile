@@ -92,7 +92,8 @@ SRCS_MAIN := \
 	light.c \
 	cylinder.c \
 	circle.c \
-	orthonormal_basis.c
+	orthonormal_basis.c \
+	phong.c
 
 # Combine all source files
 SRCS := \
