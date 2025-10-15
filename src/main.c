@@ -1,4 +1,3 @@
-#include "MLX42.h"
 #include "minirt.h"
 
 t_engine *get_engine()
@@ -23,14 +22,6 @@ void cleanup_and_exit()
 	exit(1);
 }
 
-void	print_values(t_engine *engine)
-{
-	printf("camera\n");
-	print_vec(engine->camera.pos, "Camera-pos: ");
-	print_vec(engine->camera.dir, "Camera-dir: ");
-	printf("Camera-fov: %d\n", engine->camera.fov);
-}
-
 int	main(int ac, char **av)
 {
 	t_engine	*engine;
@@ -39,7 +30,6 @@ int	main(int ac, char **av)
 		return (0);
 	engine = get_engine();
 	input_parsing(engine, av);
-	print_values(engine);
 	mlx_set_setting(MLX_HEADLESS, true);
 	engine->mlx = mlx_init(10, 10, "miniRT | fps: 0", true);
     mlx_get_monitor_size(0, &engine->window.width, &engine->window.height);
