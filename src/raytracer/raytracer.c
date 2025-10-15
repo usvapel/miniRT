@@ -60,7 +60,7 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 			light_hit(*((t_light *)engine->objects->data[i]), *ray, hit);
 		i++;
 	}
-	return type;
+	return (type);
 }
 
 // float	random_float()
@@ -141,9 +141,9 @@ void	*raytracer(void *thread)
 
 t_ray    get_ray(int x, int y)
 {
-    const t_engine *engine = get_engine();
-    const t_vec3d pixel = get_viewport_pixel(x, y);
-    t_ray ray;
+    const t_engine	*engine = get_engine();
+    const t_vec3d	pixel = get_viewport_pixel(x, y);
+    t_ray			ray;
 
     ray.origin = engine->camera.pos;
     ray.udir = pixel;
@@ -152,14 +152,14 @@ t_ray    get_ray(int x, int y)
     return (ray);
 }
 
-t_vec3d get_point_on_ray(t_ray ray, float t)
+t_vec3d	get_point_on_ray(t_ray ray, float t)
 {
-    t_vec3d p;
-    t_vec3d tmp;
+    t_vec3d	p;
+    t_vec3d	tmp;
 
     p = ray.origin;
     tmp = ray.udir;
     scale_vec3d(&tmp, t);
     add_vec3d(&p, tmp);
-    return p;
+    return (p);
 }
