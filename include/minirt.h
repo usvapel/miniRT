@@ -38,6 +38,7 @@ typedef pthread_t t_pthread;
 typedef pthread_mutex_t	t_mutex;
 
 # define THREAD_COUNT 12
+# define SHADOW_BIAS 0.001f
 
 typedef struct s_phong
 {
