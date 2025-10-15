@@ -9,14 +9,12 @@ void thread_cleanup()
 	i = 0;
 	while (i < THREAD_COUNT)
 	{
-		puts("end");
 		engine->threads[i].end = true;
 		i++;
 	}
 	i = 0;
 	while (i < THREAD_COUNT)
 	{
-		puts("join");
 		pthread_join(engine->threads[i].thread, NULL);
 		i++;
 	}

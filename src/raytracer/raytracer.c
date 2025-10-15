@@ -89,7 +89,6 @@ void	*raytracer(void *thread)
 	t = thread;
 	t->done = true;
 	wait_for_threads();
-	printf("thread %d end\n", t->index);
 	while (!t->end)
 	{
 		while (engine->recalculate == false)
@@ -141,7 +140,6 @@ void	*raytracer(void *thread)
 		t->done = true;
 		engine->recalculate = false;
 	}
-	printf("thread %d end\n", t->index);
 	return (NULL);
 }
 
