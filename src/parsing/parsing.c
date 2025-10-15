@@ -145,7 +145,7 @@ void	init_sphere(t_vector *objects, char **split)
 
 void	init_paraboloid(t_vector *objects, char **split)
 {
-	char	**values[4];
+	char	**values[5];
 	t_paraboloid *para = malloc(sizeof(t_paraboloid));
 
 	printf("initializing paraboloid\n");
@@ -157,8 +157,9 @@ void	init_paraboloid(t_vector *objects, char **split)
 	para->type = PARABOLOID;
 	para->pos = parse_vec3d(values[0]);
 	para->axis = parse_vec3d(values[1]);
-	para->focal = ft_atof(values[2][0]) / 2;
-	para->color = parse_color(values[3]);
+	para->focal = ft_atof(values[2][0]);
+	para->h = ft_atof(values[3][0]);
+	para->color = parse_color(values[4]);
 	normlize_vec3d(&para->axis);
 	add_elem(objects, para);
 	free_values(values);
