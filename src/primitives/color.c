@@ -101,7 +101,7 @@ int lerp(float level, int start, int end)
     return (int)(start + level * (end - start));
 }
 
-int calculate_gradient(t_engine *engine, int y)
+int color_gradient(t_engine *engine, int y)
 {
 	float r;
 	float g;
