@@ -106,7 +106,7 @@ typedef struct s_engine
 
 
 void input_parsing(t_engine *engine, char **av);
-int calculate_gradient(t_engine *engine, int y);
+int color_gradient(t_engine *engine, int y);
 t_engine *get_engine(void);
 
 void    update_viewport(t_viewport *viewport, t_window window);
