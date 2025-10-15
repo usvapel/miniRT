@@ -27,6 +27,7 @@
 # include "vector.h"
 # include <sys/time.h>
 # include <pthread.h>
+#include <float.h>
 # include <stdatomic.h>
 
 // this is not allowed in the norm
@@ -37,6 +38,22 @@ typedef pthread_t t_pthread;
 typedef pthread_mutex_t	t_mutex;
 
 # define THREAD_COUNT 12
+# define SHADOW_BIAS 0.001f
+
+typedef struct s_phong
+{
+	t_vec3d model_color;
+	t_vec3d ambient;
+	t_vec3d light_color;
+	t_vec3d light_dir;
+	t_vec3d normal;
+	t_vec3d diffuse;
+	t_vec3d specular;
+	t_vec3d final_color;
+	t_vec3d view_dir;
+	t_vec3d reflect_dir;
+	float diffuse_strength;
+}	t_phong;
 
 typedef struct s_threads
 {
@@ -47,6 +64,7 @@ typedef struct s_threads
 	int	start_x;
 	int	end_x;
 	atomic_bool	done;
+	atomic_bool end;
 }	t_threads;
 
 
@@ -75,8 +93,8 @@ typedef struct s_engine
 	t_time start;
 	t_camera camera;
 	t_vector *objects;
+	t_vector  *lights;
 	int	object_count;
-	// t_vector  *lights;
 	int light_count;
 	t_viewport viewport;
 	atomic_bool update;
@@ -84,11 +102,12 @@ typedef struct s_engine
 	atomic_int  last_move_time;
 	int fps;
 	t_mouse mouse;
+	t_phong p;
 }	t_engine;
 
 
 void input_parsing(t_engine *engine, char **av);
-void color_background(t_engine *engine);
+int color_gradient(t_engine *engine, int y);
 t_engine *get_engine(void);
 
 void    update_viewport(t_viewport *viewport, t_window window);
@@ -115,5 +134,9 @@ void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
 int		get_seconds(t_engine *engine);
 t_color checker_board(t_hit *hit);
-
+float max(float val1, float val2);
+t_color vec3d_to_color(t_vec3d v);
+t_vec3d color_to_vec3d(t_color c);
+void phong_model(t_engine *engine, t_hit *hit);
+int object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 #endif // MINIRT_T

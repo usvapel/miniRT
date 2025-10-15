@@ -33,6 +33,7 @@ void    print_vec(t_vec3d vec, char *id);
 float    magnitude_vec3d(t_vec3d vec);
 float    pow_magnitude_vec3d(t_vec3d vec);
 void    normlize_vec3d(t_vec3d *vec);
+t_vec3d normalize_vec3d(t_vec3d vec);
 float dot_vec3d(t_vec3d vec, t_vec3d vec2);
 t_vec3d cross_vec3d(t_vec3d a, t_vec3d b);
 t_vec3d project_vec3d(t_vec3d vec, t_vec3d to);
@@ -51,4 +52,5 @@ t_vec3d point_in_basis(t_vec3d vec, t_basis3d basis, t_vec3d origin);
 t_vec3d point_from_basis(t_vec3d vec, t_basis3d basis, t_vec3d origin);
 t_basis3d build_local_basis(t_vec3d up);
 
+t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two);
 #endif
