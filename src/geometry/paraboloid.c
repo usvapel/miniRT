@@ -1,5 +1,8 @@
 #include "minirt.h"
 float solve_paraboloid_hit(t_ray ray, t_paraboloid para, float *t0, float *t1);
+t_paraboloid new_paraboloid(t_vec3d pos, t_vec3d axis, float focal);
+bool valid_params(float h, t_ray ray, float t0, float t1);
+float get_valid_param(float h, t_ray ray, float t0, float t1);
 
 bool paraboloid_hit(t_paraboloid para, t_ray ray, t_hit *hit)
 {
@@ -7,23 +10,35 @@ bool paraboloid_hit(t_paraboloid para, t_ray ray, t_hit *hit)
 	float t1;
 	float disc;
 	t_vec3d n_hit_pos;
+    t_basis3d p = build_local_basis(para.axis); // builds new coords along para axis, para.pos is the origin in world space
+    t_ray r; // ray in new coords
+    float t;
 
-	disc = solve_paraboloid_hit(ray, para, &t0, &t1);
+    r.origin = point_in_basis(ray.origin, p, para.pos);
+    r.udir = vec_in_basis(ray.udir, p);
+	disc = solve_paraboloid_hit(r, new_paraboloid(new_vec3d(0, 0, 0), p.up, para.focal), &t0, &t1);
 	if (disc < 0.0f || (t0 < 0.0f && t1 < 0.0f))
 		return false;
-	n_hit_pos = get_point_on_ray(ray, nearest_t(t0, t1));
-	set_hit(n_hit_pos, para.color, hit);
+    if (!valid_params(para.h, r, t0, t1))
+        return false;
+    t = get_valid_param(para.h, r, t0, t1);
+    n_hit_pos = get_point_on_ray(r, t); // hit in the object coords
+    if (n_hit_pos.y > para.h) // check for height
+        return false;
+    n_hit_pos = point_from_basis(n_hit_pos, p, para.pos); // convert from object to world point
+    set_hit(n_hit_pos, para.color, hit);
     return true;
 }
 
 float solve_paraboloid_hit(t_ray ray, t_paraboloid para, float *t0, float *t1)
 {
     t_vec3d o = ray.origin;
-    minus_vec3d(&o, para.pos);
-    const t_vec3d r = ray.udir;
-    const float a = ray.udir.z * ray.udir.z + ray.udir.x * ray.udir.x;
-    float b = 2 * (o.z * r.z + o.x * r.z) - r.y * para.focal;
-    float c = o.z * o.z + o.x * o.x - o.y * para.focal;
+    t_vec3d r = ray.udir;
+    normlize_vec3d(&r);
+    (void) para;
+    const float a = (r.z * r.z + r.x * r.x);
+    float b = 2 * (o.z * r.z + o.x * r.x) - r.y;
+    float c = (o.z * o.z + o.x * o.x) - o.y;
     float disc = (b * b) - (4.0f * a * c);
     float sqrt_disc;
     if (disc >= 0.0f)
@@ -33,4 +48,78 @@ float solve_paraboloid_hit(t_ray ray, t_paraboloid para, float *t0, float *t1)
         *t1 = (-b + sqrt_disc) / (2.0f * a);
     }
     return (disc);
+}
+
+t_paraboloid new_paraboloid(t_vec3d pos, t_vec3d axis, float focal)
+{
+    t_paraboloid para;
+    para.pos = pos;
+    para.axis = axis;
+    para.focal = focal;
+    return para;
+}
+
+bool valid_params(float h, t_ray ray, float t0, float t1)
+{
+    t_vec3d pos = get_point_on_ray(ray, t0);
+    t_vec3d pos2 = get_point_on_ray(ray, t1);
+
+    if (pos.y > h && pos2.y > h)
+        return false;
+    if (t0 > 0.0f && t1 > 0.0f)
+    {
+        pos = get_point_on_ray(ray, fminf(t0, t1));
+        pos2 = get_point_on_ray(ray, fmaxf(t0, t1));
+        if (pos.y < h)
+            return true;
+        if (pos.y > h && pos2.y < h)
+            return true;
+        return false;
+    }
+    if (t0 > 0)
+    {
+       pos = get_point_on_ray(ray, t0);
+        if (pos.y > h)
+            return false;
+        return true;
+    }
+    pos = get_point_on_ray(ray, t1);
+    if (pos.y > h)
+        return false;
+    return true;
+}
+
+float get_valid_param(float h, t_ray ray, float t0, float t1)
+{
+    t_vec3d pos = get_point_on_ray(ray, t0);
+    t_vec3d pos2 = get_point_on_ray(ray, t1);
+    float t;
+    float t2;
+
+    if (t0 > 0.0f && t1 > 0.0f)
+    {
+        t = fminf(t0, t1);
+        t2 = fmaxf(t0, t1);
+        pos = get_point_on_ray(ray, t);
+        pos2 = get_point_on_ray(ray, t2);
+        if (pos.y < h)
+            return t;
+        if (pos.y > h && pos2.y < h)
+            return t2;
+    }
+    if (t0 > 0)
+        return t0;
+    return t1;
+}
+
+/*
+    n = ▽F / |▽F|, where ▽F is 2x + 2z - 1 = 0 gradiant of the paraboloid equation x^2+z^2=y
+*/
+t_vec3d surface_normal(t_vec3d hit)
+{
+    t_vec3d n;
+
+    n = new_vec3d(2 * hit.x, -1.0f, 2 * hit.z);
+    normlize_vec3d(&n);
+    return n;
 }
