@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/01 16:02:35 by zfarah           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -145,4 +133,5 @@ void phong_model(t_engine *engine, t_hit *hit);
 int object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 t_vec3d	get_point_on_ray(t_ray ray, float t);
 t_ray    get_ray(int x, int y);
+
 #endif // MINIRT_T

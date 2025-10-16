@@ -1,5 +1,7 @@
+#ifndef VECTOR_H
+# define VECTOR_H
 
-#include <stdlib.h>
+# include <stdlib.h>
 
 typedef struct s_vector
 {
@@ -12,3 +14,5 @@ typedef struct s_vector
 t_vector	*new_vector(size_t elem);
 void	add_elem(t_vector *vector, void *elem);
 void	free_vector(t_vector *vector);
+
+#endif // VECTOR_H

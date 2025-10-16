@@ -60,4 +60,4 @@ void cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit);
 t_circle new_circle(t_vec3d pos, float r);
 bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 
-#endif
+#endif // GEOMETRY_H

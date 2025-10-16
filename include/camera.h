@@ -24,4 +24,4 @@ void    look_up_down(t_camera *camera, float dy);
 bool    orient_camera(t_engine *engine, float nx, float ny);
 bool    move_camera(t_engine *engine);
 
-#endif
+#endif // CAMERA_H
