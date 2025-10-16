@@ -1,5 +1,4 @@
 #include "minirt.h"
-#include <stdint.h>
 
 t_color	vec3d_to_color(t_vec3d v)
 {
@@ -14,7 +13,7 @@ t_color	vec3d_to_color(t_vec3d v)
 
 t_vec3d	color_to_vec3d(t_color c)
 {
-	t_vec3d v;
+	t_vec3d	v;
 
 	v.x = (float)c.r / 255.0f;
 	v.y = (float)c.g / 255.0f;
