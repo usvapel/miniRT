@@ -1,9 +1,8 @@
 #ifndef RAY_H
-#define RAY_H
+# define RAY_H
 
-#include "primitives.h"
-#include <stdbool.h>
-#include <stdlib.h>
+# include "primitives.h"
+# include <stdbool.h>
 
 typedef struct s_ray
 {
@@ -29,4 +28,4 @@ bool    set_hit(t_vec3d pos, t_color color, t_hit *hit);
 bool closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2);
 float nearest_t(float t0, float t1);
 
-#endif
+#endif // RAY_H

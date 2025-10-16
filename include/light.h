@@ -1,4 +1,3 @@
-
 #ifndef LIGHT_H
 # define LIGHT_H
 
@@ -17,4 +16,4 @@ typedef struct s_light
 
 bool light_hit(t_light light, t_ray ray, t_hit *hit);
 
-#endif
+#endif // LIGHT_H
