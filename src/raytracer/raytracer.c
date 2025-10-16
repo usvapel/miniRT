@@ -2,6 +2,11 @@
 
 t_ray    get_ray(int x, int y);
 
+// float	random_float()
+// {
+// 	return (float)rand() / ((float)RAND_MAX + 1.0f);
+// }
+
 void	wait_for_threads()
 {
 	t_engine	*engine = get_engine();
@@ -63,28 +68,69 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 	return (type);
 }
 
-// float	random_float()
-// {
-// 	return (float)rand() / ((float)RAND_MAX + 1.0f);
-// }
+static float	get_sample(int value, t_threads *t, int axis)
+{
+	float	result = value + t->block_size / 2.0f;
+	if (result >= t->end_x && axis == X_AXIS)
+		result = t->end_x - 1;
+	if (result >= t->end_y && axis == Y_AXIS)
+		result = t->end_y - 1;
+	return (result);
+}
+
+static void	draw_to_buffer(t_threads *t, int x, int y, int color)
+{
+	const t_engine	*engine = get_engine();
+	int				block_x;
+	int				block_y;
+
+	block_y = y;
+	while (block_y < y + t->block_size)
+	{
+		block_x = x;
+		while (block_x < x + t->block_size)
+		{
+			mlx_put_pixel(engine->image_buffer, block_x, block_y, color);
+			block_x++;
+		}
+		block_y++;
+	}
+}
+
+static void	calculate_scene(t_threads *t, t_engine *engine)
+{
+	t_ray	ray;
+	t_hit	hit;
+	int		x;
+	int		y;
+	int		color;
+
+	y = t->start_y;
+	while (y < t->end_y)
+	{
+		x = t->start_x;
+		while (x < t->end_x)
+		{
+			ray = get_ray(get_sample(x, t, X_AXIS), get_sample(y, t, Y_AXIS));
+			hit.prev_hit = false;
+			(void)object_intersection(engine, &ray, &hit);
+			phong_model(engine, &hit);
+			if (hit.prev_hit)
+				color = scale_color(&hit.color, 1);
+			else
+				color = color_gradient(engine, y);
+			draw_to_buffer(t, x, y, color);
+			x += t->block_size;
+		}
+		y += t->block_size;
+	}
+}
 
 void	*raytracer(void *thread)
 {
 	t_engine	*engine;
 	t_threads	*t;
-	t_ray		ray = {0};
-	t_hit		hit = {0};
-	int			x;
-	int			y;
-	int color;
-	float sample_x;
-	float sample_y;
-	int block_end_y;
-	int block_end_x;
-	int block_x;
-	int block_y;
-	int block_size = 10;
-	bool last_move = false;
+
 	engine = get_engine();
 	t = thread;
 	t->done = true;
@@ -92,51 +138,16 @@ void	*raytracer(void *thread)
 	while (!t->end)
 	{
 		while (engine->recalculate == false)
-		{
-			if (t->end)
+			if (t->end && usleep(10))
 				return (NULL);
-			usleep(10);
-		}
 		t->done = false;
-		last_move = timer(engine->last_move_time, 1);
-		y = t->start_y;
-		while (y < t->end_y)
-		{
-			x = t->start_x;
-			while (x < t->end_x)
-			{
-				hit.prev_hit = false;
-				sample_x = x + block_size / 2.0f;
-				sample_y = y + block_size / 2.0f;
-				if (sample_x >= t->end_x)
-					sample_x = t->end_x - 1;
-				if (sample_y >= t->end_y)
-					sample_y = t->end_y - 1;
-				ray = get_ray(sample_x, sample_y);
-				(void)object_intersection(engine, &ray, &hit);
-				phong_model(engine, &hit);
-				if (hit.prev_hit)
-					color = scale_color(&hit.color, 1);
-				else
-					color = color_gradient(engine, y);
-				block_end_y = y + block_size;
-				block_end_x = x + block_size;
-				block_y = y - 1;
-				while (++block_y < block_end_y)
-				{
-					block_x = x - 1;
-					while (++block_x < block_end_x)
-						mlx_put_pixel(engine->image_buffer, block_x, block_y, color);
-				}
-				x += block_size;
-			}
-			y += block_size;
-		}
-		if (engine->moving == false && last_move == true)
-			if (block_size > 1)
-				block_size--;
-		if (block_size == 1 && engine->moving == true)
-			block_size = 10;
+		t->last_move = timer(engine->last_move_time, 1);
+		calculate_scene(t, engine);
+		if (engine->moving == false && t->last_move == true)
+			if (t->block_size > 1)
+				t->block_size--;
+		if (t->block_size == 1 && engine->moving == true)
+			t->block_size = 10;
 		t->done = true;
 		engine->recalculate = false;
 	}
