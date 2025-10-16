@@ -39,6 +39,8 @@ typedef pthread_mutex_t	t_mutex;
 
 # define THREAD_COUNT 12
 # define SHADOW_BIAS 0.001f
+# define X_AXIS 0
+# define Y_AXIS 1
 
 typedef struct s_phong
 {
@@ -65,6 +67,8 @@ typedef struct s_threads
 	int	end_x;
 	atomic_bool	done;
 	atomic_bool end;
+	atomic_int block_size;
+	bool last_move;
 }	t_threads;
 
 
