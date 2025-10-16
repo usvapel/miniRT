@@ -143,4 +143,6 @@ t_color vec3d_to_color(t_vec3d v);
 t_vec3d color_to_vec3d(t_color c);
 void phong_model(t_engine *engine, t_hit *hit);
 int object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
+t_vec3d	get_point_on_ray(t_ray ray, float t);
+t_ray    get_ray(int x, int y);
 #endif // MINIRT_T
