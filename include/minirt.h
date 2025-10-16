@@ -97,19 +97,17 @@ typedef struct s_engine
 	t_phong p;
 }	t_engine;
 
+void		input_parsing(t_engine *engine, char **av);
+int			color_gradient(t_engine *engine, int y);
+t_engine	*get_engine(void);
 
-void input_parsing(t_engine *engine, char **av);
-int color_gradient(t_engine *engine, int y);
-t_engine *get_engine(void);
-
-void    update_viewport(t_viewport *viewport, t_window window);
+void	update_viewport(t_viewport *viewport, t_window window);
 int		get_rgba(int r, int g, int b, int a);
 int		get_color(t_color *color);
-uint32_t scale_color(t_color *color, float brightness);
+uint32_t	scale_color(t_color *color, float brightness);
 void	apply_color(t_color *color, float brightness);
 void	fps_counter(void *param);
 void	key_hook(void *param);
-
 void	cursor_hook(double x, double y, void *param);
 float	solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 float	clamp(float value, float min, float max);
@@ -119,19 +117,19 @@ void	thread_cleanup();
 void	cleanup_and_exit();
 void	draw_scene(void *eng);
 void	wait_for_threads();
-void    scale_object(double x, double y);
-void    move_object(t_sphere *sphere, double x, double y);
-void *inside_object(t_ray *ray, double x, double y, int *type);
-void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
+void	scale_object(double x, double y);
+void	move_object(t_sphere *sphere, double x, double y);
+void	*inside_object(t_ray *ray, double x, double y, int *type);
+void	move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
 int		get_seconds(t_engine *engine);
-t_color checker_board(t_hit *hit);
-float max(float val1, float val2);
-t_color vec3d_to_color(t_vec3d v);
-t_vec3d color_to_vec3d(t_color c);
-void phong_model(t_engine *engine, t_hit *hit);
-int object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
+t_color	checker_board(t_hit *hit);
+float	max(float val1, float val2);
+t_color	vec3d_to_color(t_vec3d v);
+t_vec3d	color_to_vec3d(t_color c);
+void	phong_model(t_engine *engine, t_hit *hit);
+int		object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 t_vec3d	get_point_on_ray(t_ray ray, float t);
-t_ray    get_ray(int x, int y);
+t_ray	get_ray(int x, int y);
 
 #endif // MINIRT_T

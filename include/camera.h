@@ -16,12 +16,11 @@ typedef struct s_camera
 	t_vec3d v;
 	t_vec3d u;
 	int fov;
-} t_camera;
+}	t_camera;
 
-
-void 	update_camera(void);
-void    look_up_down(t_camera *camera, float dy);
-bool    orient_camera(t_engine *engine, float nx, float ny);
-bool    move_camera(t_engine *engine);
+void	update_camera(void);
+void	look_up_down(t_camera *camera, float dy);
+bool	orient_camera(t_engine *engine, float nx, float ny);
+bool	move_camera(t_engine *engine);
 
 #endif // CAMERA_H

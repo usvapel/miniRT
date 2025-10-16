@@ -11,8 +11,7 @@ typedef struct s_sphere
 	t_vec3d pos;
 	float r;
 	t_color color;
-} t_sphere;
-
+}	t_sphere;
 
 typedef struct s_plane
 {
@@ -20,7 +19,7 @@ typedef struct s_plane
 	t_vec3d pos;
 	t_vec3d normal;
 	t_color color;
-} t_plane;
+}	t_plane;
 
 typedef struct s_cylinder
 {
@@ -30,14 +29,13 @@ typedef struct s_cylinder
 	t_vec3d pos;
 	t_vec3d axis;
 	t_color color;
-} t_cylinder;
+}	t_cylinder;
 
 typedef struct s_circle
 {
 	t_vec3d pos;
 	float r;
-} t_circle;
-
+}	t_circle;
 
 typedef enum e_id
 {
@@ -47,17 +45,15 @@ typedef enum e_id
 	SPHERE,
 	PLANE,
 	CYLINDER
-} t_id ;
+}	t_id ;
 
-t_sphere new_sphere(t_vec3d pos, float r);
-bool sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit);
-float solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
-bool plane_hit(t_plane plane, t_ray ray, t_hit *hit);
-bool solve_plane_hit(t_plane plane, t_ray ray, float *t);
-void cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit);
-
-
-t_circle new_circle(t_vec3d pos, float r);
-bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
+t_sphere	new_sphere(t_vec3d pos, float r);
+bool		sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit);
+float		solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
+bool		plane_hit(t_plane plane, t_ray ray, t_hit *hit);
+bool		solve_plane_hit(t_plane plane, t_ray ray, float *t);
+void		cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit);
+t_circle	new_circle(t_vec3d pos, float r);
+bool		circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 
 #endif // GEOMETRY_H
