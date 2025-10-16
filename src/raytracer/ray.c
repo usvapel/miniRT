@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 t_ray	get_ray(int x, int y)

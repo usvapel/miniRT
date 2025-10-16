@@ -2,7 +2,7 @@
 
 bool	set_hit(t_vec3d new_hit, t_color color, t_hit *hit)
 {
-	const t_camera cam = get_engine()->camera;
+	const t_camera	cam = get_engine()->camera;
 
 	if (hit->prev_hit && closest_hit(cam.pos, hit->pos, new_hit))
 	   return (false);
@@ -14,8 +14,8 @@ bool	set_hit(t_vec3d new_hit, t_color color, t_hit *hit)
 
 bool	closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2)
 {
-	const float pow_mag1 = pow_magnitude_vec3d(sub_vec3d(hit1, pos));
-	const float pow_mag2 = pow_magnitude_vec3d(sub_vec3d(hit2, pos));
+	const float	pow_mag1 = pow_magnitude_vec3d(sub_vec3d(hit1, pos));
+	const float	pow_mag2 = pow_magnitude_vec3d(sub_vec3d(hit2, pos));
 	return (pow_mag1 < pow_mag2);
 }
 

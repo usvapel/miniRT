@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-void thread_cleanup()
+void	thread_cleanup()
 {
 	t_engine	*engine;
 	int			i;
@@ -50,10 +50,11 @@ void	setup_threads(void *eng)
 
 void	wait_for_threads()
 {
-	t_engine	*engine = get_engine();
+	t_engine	*engine;
 	int			thread_finished;
 	int			i;
 
+	engine = get_engine();
 	while (true)
 	{
 		thread_finished = 0;
