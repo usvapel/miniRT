@@ -47,3 +47,26 @@ void	setup_threads(void *eng)
 		i++;
 	}
 }
+
+void	wait_for_threads()
+{
+	t_engine	*engine = get_engine();
+	int			thread_finished;
+	int			i;
+
+	while (true)
+	{
+		thread_finished = 0;
+		i = 0;
+		while (i < THREAD_COUNT)
+		{
+			if (engine->threads[i].done == true)
+				thread_finished++;
+			i++;
+		}
+		if (thread_finished == THREAD_COUNT)
+			return;
+		usleep(10);
+	}
+	engine->moving = false;
+}
