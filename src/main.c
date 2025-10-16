@@ -9,16 +9,16 @@ t_engine *get_engine()
 
 void cleanup_and_exit()
 {
-	t_engine *engine = get_engine();
+	t_engine *engine;
 	static bool cleanup_done = false;
+	
+	engine = get_engine();
 	if (cleanup_done)
 		exit(1);
 	cleanup_done = true;
 	thread_cleanup();
 	free_vector(engine->objects);
 	free_vector(engine->lights);
-	// mlx_delete_image(engine->mlx, engine->image);
-	// mlx_delete_image(engine->mlx, engine->image_buffer);
 	exit(1);
 }
 

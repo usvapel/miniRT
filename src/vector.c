@@ -53,10 +53,11 @@ void	add_elem(t_vector *vector, void *elem)
 
 void	free_vector(t_vector *vector)
 {
-	size_t i = 0;
+	size_t i;
 	if (!vector)
 		return ;
 
+	i = 0;
 	while (i < vector->count)
 	{
 		if (vector->data[i])
