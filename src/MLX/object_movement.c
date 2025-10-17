@@ -22,15 +22,21 @@ void *inside_object(t_ray *ray, double x, double y, int *type)
 			*type = LIGHT;
 			light_hit(*((t_light *)object), *ray, &hit);
 		}
-		if (*(int *)engine->objects->data[i] == PLANE)
-		{
-			*type = PLANE;
-			plane_hit(*((t_plane *)object), *ray, &hit);
-		}
+		
 		if (*(int *)engine->objects->data[i] == CYLINDER)
 		{
 			*type = CYLINDER;
 			cylinder_hit(*((t_cylinder *)object), *ray, &hit);
+		}
+		if (*(int *)engine->objects->data[i] == PARABOLOID)
+		{
+			*type = PARABOLOID;
+			paraboloid_hit(*((t_paraboloid *)object), *ray, &hit);
+		}
+		if (*(int *)engine->objects->data[i] == PLANE)
+		{
+			*type = PLANE;
+			plane_hit(*((t_plane *)object), *ray, &hit);
 		}
 		if (hit.prev_hit)
 			break ;
@@ -42,52 +48,48 @@ void *inside_object(t_ray *ray, double x, double y, int *type)
 		return (NULL);
 }
 
-static void scale_by_factor(float d)
+static void scale_by_factor(void *object, float dx, float dy)
 {
-	static t_ray ray;
-	int type;
-	t_engine *engine = get_engine();
+	int type = *(int *)object;
 
-	void *object = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
-	if (!object)
-		return ;
 	if (type == SPHERE)
 	{
-		if ((*(t_sphere *)object).r >= 0.05f)
-			(*(t_sphere *)object).r += 0.01f * d;
+		(*(t_sphere *)object).r += 0.01f * -dx;
 		if ((*(t_sphere *)object).r <= 0.05f)
 			(*(t_sphere *)object).r = 0.05f;
 	}
 	if (type == CYLINDER)
 	{
-		if ((*(t_cylinder *)object).r >= 0.05f)
-			(*(t_cylinder *)object).r += 0.01f * d;
+		(*(t_cylinder *)object).r += 0.01f * -dx;
+		(*(t_cylinder *)object).h += 0.01f * dy;
 		if ((*(t_cylinder *)object).r <= 0.05f)
 			(*(t_cylinder *)object).r = 0.05f;
+		if ((*(t_cylinder *)object).h <= 0.05f)
+			(*(t_cylinder *)object).h = 0.05f;
 	}
 	if (type == LIGHT)
 	{
-		if ((*(t_light *)object).r >= 0.05f)
-			(*(t_light *)object).r += 0.01f * d;
+		(*(t_light *)object).r += 0.01f * -dx;
 		if ((*(t_light *)object).r <= 0.05f)
 			(*(t_light *)object).r = 0.05f;
 	}
+	if (type == PARABOLOID)
+	{
+		(*(t_paraboloid *)object).focal += 0.01f * -dx;
+		(*(t_paraboloid *)object).h += 0.01f * dy;
+		if ((*(t_paraboloid *)object).focal <= 0.05f)
+			(*(t_paraboloid *)object).focal = 0.05f;
+		if ((*(t_paraboloid *)object).h <= 0.05f)
+			(*(t_paraboloid *)object).h = 0.05f;
+	}
 }
 
-void    scale_object(double x, double y)
+void    scale_object(void *obj, double x, double y)
 {
-	static double	previous_length;
-	double			current_length;
-	static t_vec3d	previous_mouse;
-	t_vec3d			current_mouse;
-
-	current_mouse = new_vec3d(x, y, 0);
-	previous_length = pow_magnitude_vec3d(previous_mouse);
-	current_length = pow_magnitude_vec3d(current_mouse);
-	if (previous_length <= current_length)
-		scale_by_factor(1);
-	if (previous_length >= current_length)
-		scale_by_factor(-1);
-	previous_mouse = new_vec3d(x, y, 0);
-	previous_length = current_length;
+	t_mouse mouse = get_engine()->mouse;
+	(void)x;
+	(void)y;
+	float 			dx = mouse.prev_pos.x - mouse.pos.x;
+	float 			dy = mouse.prev_pos.y - mouse.pos.y;
+	scale_by_factor(obj, dx, dy);
 }
