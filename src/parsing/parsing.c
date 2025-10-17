@@ -120,6 +120,7 @@ void	init_light(t_vector *objects, char **split)
 	add_elem(objects, light);
 	t_light *tmp = malloc(sizeof(t_light));
 	ft_memcpy(tmp, light, sizeof(t_light));
+	tmp->pos_link = &light->pos;
 	add_elem(engine->lights, tmp);
 	engine->light_count++;
 	free_values(values, 3);

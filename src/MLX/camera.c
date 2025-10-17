@@ -24,9 +24,9 @@ bool    move_camera(t_engine *engine)
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
         move_left_right(camera, LEFT);
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
-		engine->camera.pos.y += 0.01;
+		engine->camera.pos.y += 0.1;
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
-		engine->camera.pos.y -= 0.01;
+		engine->camera.pos.y -= 0.1;
 	else if (!moved)
 		return false;
 	return true;
