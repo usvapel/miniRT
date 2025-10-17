@@ -14,10 +14,9 @@ bool light_hit(t_light light, t_ray ray, t_hit *hit)
 		return false;
 	n_hit_pos = get_point_on_ray(ray, nearest_t(t0, t1));
     is_set = set_hit(n_hit_pos, light.color, hit);
-	if (is_set)
-	{
-		hit->color = light.color;
-		hit->type = LIGHT;
-	}
+	if (!is_set)
+		return false;
+	hit->color = light.color;
+	hit->type = LIGHT;
     return true;
 }
