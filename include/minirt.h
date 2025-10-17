@@ -6,7 +6,7 @@
 /*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/17 14:36:14 by zfarah           ###   ########.fr       */
+/*   Updated: 2025/10/17 16:21:05 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct s_engine
 	atomic_bool update;
 	atomic_bool moving;
 	atomic_int  last_move_time;
+	atomic_bool complete_img;
 	int fps;
 	t_mouse mouse;
 	t_phong p;
