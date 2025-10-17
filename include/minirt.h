@@ -6,7 +6,7 @@
 /*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/01 16:02:35 by zfarah           ###   ########.fr       */
+/*   Updated: 2025/10/17 14:29:41 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ void	thread_cleanup();
 void	cleanup_and_exit();
 void	draw_scene(void *eng);
 void	wait_for_threads();
-void    scale_object(double x, double y);
-void    move_object(t_sphere *sphere, double x, double y);
+void    scale_object(void *obj, double x, double y);
+void move_object(void *obj, t_ray ray, float dx, float dy);
 void *inside_object(t_ray *ray, double x, double y, int *type);
 void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
