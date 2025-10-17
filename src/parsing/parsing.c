@@ -118,10 +118,7 @@ void	init_light(t_vector *objects, char **split)
 	light->color = parse_color(values[2]);
 	light->r = 0.1f;
 	add_elem(objects, light);
-	t_light *tmp = malloc(sizeof(t_light));
-	ft_memcpy(tmp, light, sizeof(t_light));
-	tmp->pos_link = &light->pos;
-	add_elem(engine->lights, tmp);
+	add_elem(engine->lights, light);
 	engine->light_count++;
 	free_values(values, 3);
 }
