@@ -154,6 +154,7 @@ void	init_paraboloid(t_vector *objects, char **split)
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
 	values[3] = safe_split(values, split[4]);
+	values[4] = safe_split(values, split[5]);
 	para->type = PARABOLOID;
 	para->pos = parse_vec3d(values[0]);
 	para->axis = parse_vec3d(values[1]);
@@ -162,7 +163,7 @@ void	init_paraboloid(t_vector *objects, char **split)
 	para->color = parse_color(values[4]);
 	normlize_vec3d(&para->axis);
 	add_elem(objects, para);
-	free_values(values);
+	free_values(values, 5);
 }
 void	init_cylinder(t_vector *objects, char **split)
 {
