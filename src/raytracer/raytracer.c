@@ -20,13 +20,13 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 	int	type;
 	int	i;
 
-	plane_hit(*((t_plane *)engine->objects->data[4]), *ray, hit);
+	// plane_hit(*((t_plane *)engine->objects->data[4]), *ray, hit);
 	i = 0;
 	while (i < engine->object_count)
 	{
 		type = *(int *)(engine->objects->data[i]);
-		// if (type == PLANE)
-		// 	plane_hit(*((t_plane *)engine->objects->data[i]), ray, &hit);
+		if (type == PLANE)
+			plane_hit(*((t_plane *)engine->objects->data[i]), *ray, hit);
 		if (type == SPHERE)
 			sphere_hit(*((t_sphere *)engine->objects->data[i]), *ray, hit);
 		else if (type == CYLINDER)
