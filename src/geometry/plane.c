@@ -23,13 +23,11 @@ bool plane_hit(t_plane plane, t_ray ray, t_hit *hit)
     if (t < 0.0f)
 		return false;
 	pos = get_point_on_ray(ray, t);
-	if (!hit->prev_hit || closest_hit(ray.origin, hit->pos, pos))
-	{
-		set_hit(pos, plane.color, hit);
-		hit->normal = plane.normal;
-		hit->type = PLANE;
+	if (!set_hit(pos, plane.color, hit))
+        return false;
+    hit->normal = plane.normal;
+    hit->type = PLANE;
 		// hit->color = checker_board(hit);
-	}
     return true;
 }
 

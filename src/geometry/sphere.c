@@ -17,19 +17,16 @@ bool sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit)
 	float t1;
 	float disc;
 	t_vec3d n_hit_pos;
-	bool is_set = {0};
 
 	disc = solve_sphere_hit(ray, sphere, &t0, &t1);
 	if (disc < 0.0f || (t0 < 0.0f && t1 < 0.0f))
 		return false;
 	n_hit_pos = get_point_on_ray(ray, nearest_t(t0, t1));
-	is_set = set_hit(n_hit_pos, sphere.color, hit);
-	if (is_set)
-	{
-		hit->normal = sub_vec3d(hit->pos, sphere.pos);
-		hit->type = SPHERE;
-		hit->color = sphere.color;
-	}
+	if (!set_hit(n_hit_pos, sphere.color, hit))
+        return false;
+    hit->normal = sub_vec3d(hit->pos, sphere.pos);
+    hit->type = SPHERE;
+    hit->color = sphere.color;
     return true;
 }
 
