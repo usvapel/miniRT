@@ -11,7 +11,7 @@ void cleanup_and_exit()
 {
 	t_engine *engine;
 	static bool cleanup_done = false;
-	
+
 	engine = get_engine();
 	if (cleanup_done)
 		exit(1);
@@ -19,6 +19,8 @@ void cleanup_and_exit()
 	thread_cleanup();
 	free_vector(engine->objects);
 	free_vector(engine->lights);
+	mlx_close_window(engine->mlx);
+	// mlx_terminate(engine->mlx);
 	exit(1);
 }
 
@@ -49,6 +51,6 @@ int	main(int ac, char **av)
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
 	mlx_loop(engine->mlx);
 	cleanup_and_exit();
-	mlx_terminate(engine->mlx);
+	// mlx_terminate(engine->mlx);
 	return (0);
 }
