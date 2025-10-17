@@ -143,6 +143,28 @@ void	init_sphere(t_vector *objects, char **split)
 	free_values(values, 3);
 }
 
+void	init_paraboloid(t_vector *objects, char **split)
+{
+	char	**values[5];
+	t_paraboloid *para = malloc(sizeof(t_paraboloid));
+
+	printf("initializing paraboloid\n");
+	*values = NULL;
+	values[0] = safe_split(values, split[1]);
+	values[1] = safe_split(values, split[2]);
+	values[2] = safe_split(values, split[3]);
+	values[3] = safe_split(values, split[4]);
+	values[4] = safe_split(values, split[5]);
+	para->type = PARABOLOID;
+	para->pos = parse_vec3d(values[0]);
+	para->axis = parse_vec3d(values[1]);
+	para->focal = ft_atof(values[2][0]);
+	para->h = ft_atof(values[3][0]);
+	para->color = parse_color(values[4]);
+	normlize_vec3d(&para->axis);
+	add_elem(objects, para);
+	free_values(values, 5);
+}
 void	init_cylinder(t_vector *objects, char **split)
 {
 	char	**values[5];
@@ -209,6 +231,11 @@ void	set_values(t_engine *engine, char **split)
 	{
 		engine->object_count++;
 		return (init_cylinder(engine->objects, split));
+	}
+	if (ft_strcmp(split[0], "pa") == 0)
+	{
+		engine->object_count++;
+		return (init_paraboloid(engine->objects, split));
 	}
 	printf("invalid identifier: %s\n", split[0]);
 }
