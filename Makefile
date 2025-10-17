@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/10/01 15:04:23 by zfarah           ###   ########.fr        #
+#    Updated: 2025/10/17 14:33:57 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 # Additional flags
 LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
 				-lglfw -lXext -lX11 -lm -ldl -pthread
+# 				-ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Terminal colors for build output
@@ -94,7 +95,8 @@ SRCS_MAIN := \
 	circle.c \
 	orthonormal_basis.c \
 	phong.c \
-	ray.c
+	ray.c \
+	paraboloid.c
 
 # Combine all source files
 SRCS := \
