@@ -27,7 +27,7 @@
 # include "vector.h"
 # include <sys/time.h>
 # include <pthread.h>
-#include <float.h>
+# include <float.h>
 # include <stdatomic.h>
 
 // this is not allowed in the norm
@@ -40,6 +40,7 @@ typedef pthread_mutex_t	t_mutex;
 # define THREAD_COUNT 12
 # define SHADOW_BIAS 0.001f
 # define SHININESS 64.0f
+# define BLOCK_SIZE 10;
 # define X_AXIS 0
 # define Y_AXIS 1
 
@@ -145,5 +146,6 @@ void	phong_model(t_engine *engine, t_hit *hit);
 int		object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 t_vec3d	get_point_on_ray(t_ray ray, float t);
 t_ray	get_ray(int x, int y);
+t_color int_to_color(t_color result, int color);
 
 #endif // MINIRT_T

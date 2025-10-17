@@ -15,6 +15,17 @@ void	draw_scene(void *eng)
 	engine->moving = false;
 }
 
+inline float smoothstep( float x )
+{
+  return x*x*x/(3.0*x*x-3.0*x+1.0);
+}
+
+float float_rand( float min, float max )
+{
+    float scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
+    return min + scale * ( max - min );      /* [min, max] */
+}
+
 int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 {
 	int	type;
@@ -78,13 +89,23 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 	}
 }
 
+bool color_in_range(t_color one, t_color two)
+{
+	float threshold = 0.05f;
+	float distance = sqrtf(powf(one.r - two.r, 2) + 
+						 powf(one.g - two.g, 2) + 
+						 powf(one.b - two.b, 2));
+	return distance <= threshold;
+}
+
+# define SAMPLE_SIZE 14
+
 static void	calculate_scene(t_threads *t, t_engine *engine)
 {
 	t_ray	ray;
 	t_hit	hit;
-	int		x;
-	int		y;
-	int		color;
+	float	x;
+	float	y;
 
 	y = t->start_y;
 	while (y < t->end_y)
@@ -92,15 +113,48 @@ static void	calculate_scene(t_threads *t, t_engine *engine)
 		x = t->start_x;
 		while (x < t->end_x)
 		{
-			ray = get_ray(get_sample(x, t, X_AXIS), get_sample(y, t, Y_AXIS));
-			hit.prev_hit = false;
-			(void)object_intersection(engine, &ray, &hit);
-			phong_model(engine, &hit);
-			if (hit.prev_hit)
-				color = scale_color(&hit.color, 1);
-			else
-				color = color_gradient(engine, y);
-			draw_to_buffer(t, x, y, color);
+			t_color final_color = {0};
+			t_color prev_sample = {0};
+			t_color current_sample = {0};
+			int similar;
+			int sample_count = 0;
+			int samples_taken = 1;
+			while (sample_count < SAMPLE_SIZE)
+			{
+				float jx = (sample_count % 2) * 0.5f + float_rand(-0.25f, 0.25f);
+				float jy = (sample_count / 2) * 0.5f + float_rand(-0.25f, 0.25f);
+				float sx = x + jx;
+				float sy = y + jy;
+				ray = get_ray(get_sample(sx, t, X_AXIS), get_sample(sy, t, Y_AXIS));
+				hit.prev_hit = false;
+				object_intersection(engine, &ray, &hit);
+				if (hit.prev_hit)
+				{
+					phong_model(engine, &hit);
+					current_sample = hit.color;
+					final_color.r += hit.color.r;
+					final_color.g += hit.color.g;
+					final_color.b += hit.color.b;
+					final_color.a = 255;
+					samples_taken++;
+				}
+				else
+					final_color = int_to_color(final_color, color_gradient(engine, sy));
+				if (samples_taken > 0 && color_in_range(current_sample, prev_sample))
+				{
+					similar++;
+					if (similar >= 2)
+						break ;
+				}
+				else
+					similar = 0;
+				prev_sample = current_sample;
+				sample_count++;
+			}
+			final_color.r /= samples_taken;
+			final_color.g /= samples_taken;
+			final_color.b /= samples_taken;
+			draw_to_buffer(t, x, y, scale_color(&final_color, 1));
 			x += t->block_size;
 		}
 		y += t->block_size;
@@ -125,7 +179,7 @@ void	*raytracer(void *thread)
 			usleep(10);
 		}
 		if (engine->moving)
-			t->block_size = 10;
+			t->block_size = BLOCK_SIZE;
 		t->done = false;
 		t->last_move = timer(engine->last_move_time, 1);
 		calculate_scene(t, engine);
