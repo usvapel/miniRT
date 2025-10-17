@@ -39,6 +39,7 @@ typedef pthread_mutex_t	t_mutex;
 
 # define THREAD_COUNT 12
 # define SHADOW_BIAS 0.001f
+# define SHININESS 64.0f
 # define X_AXIS 0
 # define Y_AXIS 1
 
