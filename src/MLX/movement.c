@@ -14,10 +14,10 @@ void scale_objects(t_engine *engine)
 	int type;
 	if (mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
-		t_sphere *sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
-		if (!sphere)
+		void *obj = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
+		if (!obj)
 			return ;
-		scale_object(engine->mouse.pos.x, engine->mouse.pos.y);
+		scale_object(obj, engine->mouse.pos.x, engine->mouse.pos.y);
 		update_camera();
 	}
 }
@@ -33,18 +33,41 @@ void scale_objects(t_engine *engine)
 // 		update_camera();
 // 	}
 // }
-
+t_vec3d *get_obj_pos(void *obj)
+{
+	if (*(int *)obj == SPHERE)
+		return &((t_sphere *)obj)->pos;
+	if (*(int *)obj == PLANE)
+		return &((t_plane *)obj)->pos;
+	if (*(int *)obj == CYLINDER)
+		return &((t_cylinder *)obj)->pos;
+	if (*(int *)obj == LIGHT) 
+		return &((t_light *)obj)->pos;
+	return &((t_paraboloid *)obj)->pos;
+}
+void move_object(void *obj, t_ray ray, float dx, float dy)
+{
+	t_vec3d *pos = get_obj_pos(obj);
+	t_vec3d tmp = *pos;
+	t_vec3d b = {0,0.001,0};
+	
+	minus_vec3d(&tmp, ray.origin);
+	dy *= magnitude_vec3d(tmp) * 0.4;
+	dx *= magnitude_vec3d(tmp) * 0.4;
+	move_pos_left_right(&get_engine()->camera, pos, dx);
+	scale_vec3d(&b, dy);
+	add_vec3d(pos, b);
+	update_camera();
+}
 
 void move_objects(t_engine *engine)
 {
 	static t_ray ray;
-	static t_sphere *sphere = NULL;
+	static void *obj = NULL;
 	static bool grabbed = false;
-
 	float dy;
 	float dx;
 	int type;
-	t_vec3d b = {0,0.001,0};
 
 	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
 	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
@@ -53,19 +76,12 @@ void move_objects(t_engine *engine)
 	{
 		if (grabbed == false)
 		{
-			sphere = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
-			if (!sphere)
+			obj = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y, &type);
+			if (!obj)
 				return ;
 			grabbed = true;
 		}
-		t_vec3d tmp = sphere->pos;
-		minus_vec3d(&tmp, ray.origin);
-		dy *= magnitude_vec3d(tmp) * 0.4;
-		dx *= magnitude_vec3d(tmp) * 0.4;
-		move_pos_left_right(&engine->camera, &sphere->pos, dx);
-		scale_vec3d(&b, dy);
-		add_vec3d(&sphere->pos, b);
-		update_camera();
+		move_object(obj, ray, dx, dy);
 	}
 	else
 		grabbed = false;
