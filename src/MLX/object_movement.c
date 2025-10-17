@@ -22,7 +22,6 @@ void *inside_object(t_ray *ray, double x, double y, int *type)
 			*type = LIGHT;
 			light_hit(*((t_light *)object), *ray, &hit);
 		}
-		
 		if (*(int *)engine->objects->data[i] == CYLINDER)
 		{
 			*type = CYLINDER;
