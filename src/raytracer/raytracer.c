@@ -91,7 +91,7 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 
 bool color_in_range(t_color one, t_color two)
 {
-	float threshold = 0.05f;
+	float threshold = 0.5f;
 	float distance = sqrtf(powf(one.r - two.r, 2) + 
 						 powf(one.g - two.g, 2) + 
 						 powf(one.b - two.b, 2));
@@ -118,7 +118,7 @@ static void	calculate_scene(t_threads *t, t_engine *engine)
 			t_color current_sample = {0};
 			int similar;
 			int sample_count = 0;
-			int samples_taken = 1;
+			int samples_taken = 0;
 			while (sample_count < SAMPLE_SIZE)
 			{
 				float jx = (sample_count % 2) * 0.5f + float_rand(-0.25f, 0.25f);
@@ -151,6 +151,8 @@ static void	calculate_scene(t_threads *t, t_engine *engine)
 				prev_sample = current_sample;
 				sample_count++;
 			}
+			if (samples_taken < 1)
+				samples_taken = 1;
 			final_color.r /= samples_taken;
 			final_color.g /= samples_taken;
 			final_color.b /= samples_taken;
