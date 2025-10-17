@@ -69,5 +69,4 @@ void	wait_for_threads()
 			return;
 		usleep(10);
 	}
-	engine->moving = false;
 }
