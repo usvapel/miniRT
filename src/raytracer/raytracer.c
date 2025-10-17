@@ -33,6 +33,8 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 			cylinder_hit(*((t_cylinder *)engine->objects->data[i]), *ray, hit);	
 		else if (type == LIGHT)
 			light_hit(*((t_light *)engine->objects->data[i]), *ray, hit);
+		else if (type == PARABOLOID)
+			paraboloid_hit(*((t_paraboloid *)engine->objects->data[i]), *ray, hit);
 		i++;
 	}
 	return (type);
