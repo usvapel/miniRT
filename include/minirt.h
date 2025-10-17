@@ -6,7 +6,7 @@
 /*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/17 16:21:05 by zfarah           ###   ########.fr       */
+/*   Updated: 2025/10/17 18:30:36 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef pthread_t t_pthread;
 typedef pthread_mutex_t	t_mutex;
 
 # define THREAD_COUNT 12
-# define SHADOW_BIAS 0.001f
+# define SHADOW_BIAS 0.01f
 # define SHININESS 64.0f
 # define X_AXIS 0
 # define Y_AXIS 1
