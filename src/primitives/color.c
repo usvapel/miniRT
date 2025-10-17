@@ -1,10 +1,8 @@
-
 #include "minirt.h"
 
-
-t_color vec3d_to_color(t_vec3d v)
+t_color	vec3d_to_color(t_vec3d v)
 {
-	t_color c;
+	t_color	c;
 	c.r = (unsigned char)(fmin(fmax(v.x, 0.0), 1.0) * 255.0);
 	c.g = (unsigned char)(fmin(fmax(v.y, 0.0), 1.0) * 255.0);
 	c.b = (unsigned char)(fmin(fmax(v.z, 0.0), 1.0) * 255.0);
@@ -37,7 +35,6 @@ t_color checker_board(t_hit *hit)
 	return (color);
 }
 
-
 void apply_color(t_color *color, float brightness)
 {
 	color->r = (color->r * brightness);
@@ -56,34 +53,9 @@ uint32_t scale_color(t_color *color, float brightness)
 	return result;
 }
 
-// float get_color(t_color *color)
-// {
-// 	return (color->r << 24 | color->g << 16 | color->b << 8 | color->a);
-// }
-
 int get_rgba(int r, int g, int b, int a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
-}
-
-int get_r(int rgba)
-{
-    return ((rgba >> 24) & 0xFF);
-}
-
-int get_g(int rgba)
-{
-    return ((rgba >> 16) & 0xFF);
-}
-
-int get_b(int rgba)
-{
-    return ((rgba >> 8) & 0xFF);
-}
-
-int get_a(int rgba)
-{
-    return (rgba & 0xFF);
 }
 
 float clamp(float value, float min, float max)
@@ -95,7 +67,6 @@ float clamp(float value, float min, float max)
 	return (value);
 }
 
-// linear interpolation
 int lerp(float level, int start, int end)
 {
     return (int)(start + level * (end - start));
@@ -110,15 +81,12 @@ int color_gradient(t_engine *engine, int y)
 	int color;
 
 	level = (float)y / (float)(engine->window.height - 1);
-
-	r = lerp(level, 135, 255);  // 135 to 255 (light blue to white)
-	g = lerp(level, 206, 255);  // 206 to 255
-	b = lerp(level, 250, 255);  // 250 to 255 (keep it blue-ish)
-
+	r = lerp(level, 135, 255);
+	g = lerp(level, 206, 255);
+	b = lerp(level, 250, 255);
 	r = clamp(r, 0, 255);
 	g = clamp(g, 0, 255);
 	b = clamp(b, 0, 255);
-
 	color = get_rgba((int)r, (int)g, (int)b, 255);
 	return color;
 }
