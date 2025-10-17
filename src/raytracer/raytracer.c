@@ -11,7 +11,7 @@ void	draw_scene(void *eng)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
 	engine->fps++;
-	engine->recalculate = true;
+	engine->recalculate = !engine->complete_img;
 	engine->moving = false;
 }
 
@@ -53,19 +53,28 @@ static float	get_sample(int value, t_threads *t, int axis)
 static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 {
 	const t_engine	*engine = get_engine();
-	int				block_x;
-	int				block_y;
+	int				block_end_x;
+	int				block_end_y;
+	int				init_x;
 
-	block_y = y;
-	while (block_y < y + t->block_size)
+	init_x = x;
+	if (y + t->block_size > t->end_y)
+		block_end_y = t->end_y;
+	else
+		block_end_y = y + t->block_size;
+	if (x + t->block_size > t->end_x)
+		block_end_x = t->end_x;
+	else
+		block_end_x = x + t->block_size;
+	while (y < block_end_y)
 	{
-		block_x = x;
-		while (block_x < x + t->block_size)
+		x = init_x;
+		while (x < block_end_x)
 		{
-			mlx_put_pixel(engine->image_buffer, block_x, block_y, color);
-			block_x++;
+			mlx_put_pixel(engine->image_buffer, x, y, color);
+			x++;
 		}
-		block_y++;
+		y++;
 	}
 }
 
@@ -110,16 +119,19 @@ void	*raytracer(void *thread)
 	while (!t->end)
 	{
 		while (engine->recalculate == false)
-			if (t->end && usleep(10))
+		{
+			if (t->end)
 				return (NULL);
+			usleep(10);
+		}
+		if (engine->moving)
+			t->block_size = 10;
 		t->done = false;
 		t->last_move = timer(engine->last_move_time, 1);
 		calculate_scene(t, engine);
-		if (engine->moving == false && t->last_move == true)
-			if (t->block_size > 1)
-				t->block_size--;
-		if (t->block_size == 1 && engine->moving == true)
-			t->block_size = 10;
+		if (engine->moving == false && t->last_move == true && t->block_size > 1)
+			t->block_size--;
+		engine->complete_img = t->block_size == 1;
 		t->done = true;
 		engine->recalculate = false;
 	}
