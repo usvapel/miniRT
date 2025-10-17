@@ -45,15 +45,16 @@ static bool	is_in_shadow(t_phong p, t_engine *engine, t_hit hit, t_light *light)
 	t_vec3d	tmp;
 	float	light_distance;
 	float	object_distance;
-	
-	tmp = normalize_vec3d(hit.normal);
+	(void)light;
+
+	tmp = normalize_vec3d(p.light_dir);
 	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(tmp, SHADOW_BIAS));
-	shadow_ray.udir = light->pos;
+	shadow_ray.udir = p.light_dir;
 	light_distance = magnitude_vec3d(p.light_dir);
 	shadow_hit.prev_hit = false;
 	(void)object_intersection(engine, &shadow_ray, &shadow_hit);
 	object_distance = magnitude_vec3d(sub_vec3d(shadow_hit.pos, hit.pos));
-	if (shadow_hit.prev_hit && shadow_hit.type != LIGHT && object_distance < light_distance)
+	if (shadow_hit.prev_hit == true && shadow_hit.type != LIGHT && object_distance < light_distance)
 		return (true);
 	return (false);
 }
