@@ -4,14 +4,14 @@ t_circle new_circle(t_vec3d pos, float r)
 {
     t_circle circ;
     
-    circ.pos = pos;
+    circ.base.pos = pos;
     circ.r = r;
     return circ;
 }
 
 bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1)
 {
-    t_vec3d oc = new_vec3d(ray.origin.x - circ.pos.x, ray.origin.y - circ.pos.y, ray.origin.z - circ.pos.z);
+    t_vec3d oc = new_vec3d(ray.origin.x - circ.base.pos.x, ray.origin.y - circ.base.pos.y, ray.origin.z - circ.base.pos.z);
     float a = dot_vec3d(ray.udir, ray.udir);
     float b;
     float c;
