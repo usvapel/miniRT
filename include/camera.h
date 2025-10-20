@@ -7,7 +7,7 @@
 # define LEFT 0
 # define RIGHT 1
 # define CAM_SPEED 0.003
-# define CAM_SENS 0.01
+# define CAM_SENS 0.005
 
 typedef struct s_engine t_engine;
 
