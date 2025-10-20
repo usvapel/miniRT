@@ -43,7 +43,7 @@ typedef pthread_mutex_t	t_mutex;
 # define SHININESS 64.0f
 # define X_AXIS 0
 # define Y_AXIS 1
-# define ESPSILON 1e-1
+# define ESPSILON 1e-2
 # define OBJ_SPEED 0.00009
 # define OBJ_S_SPEED 0.001
 
