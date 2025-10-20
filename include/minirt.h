@@ -25,6 +25,7 @@
 # include "light.h"
 # include "geometry.h"
 # include "vector.h"
+# include "mlx_hooks.h"
 # include <sys/time.h>
 # include <pthread.h>
 #include <float.h>
@@ -38,10 +39,13 @@ typedef pthread_t t_pthread;
 typedef pthread_mutex_t	t_mutex;
 
 # define THREAD_COUNT 12
-# define SHADOW_BIAS 0.01f
+# define SHADOW_BIAS 0.2f
 # define SHININESS 64.0f
 # define X_AXIS 0
 # define Y_AXIS 1
+# define ESPSILON 1e-1
+# define OBJ_SPEED 0.00009
+# define OBJ_S_SPEED 0.001
 
 typedef struct s_phong
 {
@@ -49,6 +53,7 @@ typedef struct s_phong
 	t_vec3d ambient;
 	t_vec3d light_color;
 	t_vec3d light_dir;
+	t_vec3d nlight_dir;
 	t_vec3d normal;
 	t_vec3d diffuse;
 	t_vec3d specular;
@@ -86,6 +91,14 @@ typedef struct s_mouse
 	t_vec3d	prev_pos;
 }	t_mouse;
 
+typedef struct s_frame
+{
+	int fps;
+	long delta;
+	long t_last_frame;
+	t_time start;
+} t_frame;
+
 typedef struct s_engine
 {
 	t_window window;
@@ -95,7 +108,6 @@ typedef struct s_engine
 	mlx_t *mlx;
 	mlx_image_t *image;
 	mlx_image_t *image_buffer;
-	t_time start;
 	t_camera camera;
 	t_vector *objects;
 	t_vector  *lights;
@@ -106,35 +118,21 @@ typedef struct s_engine
 	atomic_bool moving;
 	atomic_int  last_move_time;
 	atomic_bool complete_img;
-	int fps;
+	t_frame frame;
 	t_mouse mouse;
 	t_phong p;
 }	t_engine;
 
+// needs cleaning in the future
 void		input_parsing(t_engine *engine, char **av);
 int			color_gradient(t_engine *engine, int y);
 t_engine	*get_engine(void);
-
-void	update_viewport(t_viewport *viewport, t_window window);
 int		get_rgba(int r, int g, int b, int a);
-int		get_color(t_color *color);
 uint32_t	scale_color(t_color *color, float brightness);
 void	apply_color(t_color *color, float brightness);
-void	fps_counter(void *param);
-void	key_hook(void *param);
-void	cursor_hook(double x, double y, void *param);
-float	solve_for_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 float	clamp(float value, float min, float max);
-void	setup_threads(void *eng);
-void	wait_for_threads();
-void	thread_cleanup();
 void	cleanup_and_exit();
 void	draw_scene(void *eng);
-void	wait_for_threads();
-void    scale_object(void *obj, double x, double y);
-void move_object(void *obj, t_ray ray, float dx, float dy);
-void *inside_object(t_ray *ray, double x, double y, int *type);
-void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
 bool	timer(int prev_sec, int stop);
 int		get_seconds(t_engine *engine);
 t_color	checker_board(t_hit *hit);
@@ -143,7 +141,10 @@ t_color	vec3d_to_color(t_vec3d v);
 t_vec3d	color_to_vec3d(t_color c);
 void	phong_model(t_engine *engine, t_hit *hit);
 int		object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
-t_vec3d	get_point_on_ray(t_ray ray, float t);
-t_ray	get_ray(int x, int y);
+
+// threads
+void	setup_threads(void *eng);
+void	wait_for_threads();
+void	thread_cleanup();
 
 #endif // MINIRT_T
