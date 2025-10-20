@@ -5,16 +5,13 @@
 # include <stdbool.h>
 # include "ray.h"
 
-typedef struct s_light
-{
-	int		type;
-	t_vec3d pos;
-	t_vec3d *pos_link;
-	float r;
-	float	brightness;
-	t_color color;
-}	t_light;
+// typedef struct s_light
+// {
+// 	t_object base;
+// 	float r;
+// 	float	brightness;
+// }	t_light;
 
-bool	light_hit(t_light light, t_ray ray, t_hit *hit);
+// bool	light_hit(t_light *light, t_ray ray, t_hit *hit);
 
 #endif // LIGHT_H

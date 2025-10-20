@@ -112,16 +112,13 @@ void	init_light(t_vector *objects, char **split)
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	light->type = LIGHT;
-	light->pos = parse_vec3d(values[0]);
+	light->base.type = LIGHT;
+	light->base.pos = parse_vec3d(values[0]);
 	light->brightness = ft_atof(values[1][0]);
-	light->color = parse_color(values[2]);
-	light->r = 0.1f;
+	light->base.color = parse_color(values[2]);
+	light->r = 1.1f;
 	add_elem(objects, light);
-	t_light *tmp = malloc(sizeof(t_light));
-	ft_memcpy(tmp, light, sizeof(t_light));
-	tmp->pos_link = &light->pos;
-	add_elem(engine->lights, tmp);
+	add_elem(engine->lights, light);
 	engine->light_count++;
 	free_values(values, 3);
 }
@@ -136,10 +133,10 @@ void	init_sphere(t_vector *objects, char **split)
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	sphere->type = SPHERE;
-	sphere->pos = parse_vec3d(values[0]);
+	sphere->base.type = SPHERE;
+	sphere->base.pos = parse_vec3d(values[0]);
 	sphere->r = ft_atof(values[1][0]) / 2.0f;
-	sphere->color = parse_color(values[2]);
+	sphere->base.color = parse_color(values[2]);
 	add_elem(objects, sphere);
 	free_values(values, 3);
 }
@@ -156,12 +153,12 @@ void	init_paraboloid(t_vector *objects, char **split)
 	values[2] = safe_split(values, split[3]);
 	values[3] = safe_split(values, split[4]);
 	values[4] = safe_split(values, split[5]);
-	para->type = PARABOLOID;
-	para->pos = parse_vec3d(values[0]);
+	para->base.type = PARABOLOID;
+	para->base.pos = parse_vec3d(values[0]);
 	para->axis = parse_vec3d(values[1]);
 	para->focal = ft_atof(values[2][0]);
 	para->h = ft_atof(values[3][0]);
-	para->color = parse_color(values[4]);
+	para->base.color = parse_color(values[4]);
 	normlize_vec3d(&para->axis);
 	add_elem(objects, para);
 	free_values(values, 5);
@@ -178,12 +175,12 @@ void	init_cylinder(t_vector *objects, char **split)
 	values[2] = safe_split(values, split[3]);
 	values[3] = safe_split(values, split[4]);
 	values[4] = safe_split(values, split[5]);
-	cylinder->type = CYLINDER;
-	cylinder->pos = parse_vec3d(values[0]);
+	cylinder->base.type = CYLINDER;
+	cylinder->base.pos = parse_vec3d(values[0]);
 	cylinder->axis = parse_vec3d(values[1]);
 	cylinder->r = ft_atof(values[2][0]) / 2;
 	cylinder->h = ft_atof(values[3][0]);
-	cylinder->color = parse_color(values[4]);
+	cylinder->base.color = parse_color(values[4]);
 	normlize_vec3d(&cylinder->axis);
 	add_elem(objects, cylinder);
 	free_values(values, 5);
@@ -199,10 +196,10 @@ void	init_plane(t_vector *objects, char **split)
 	values[0] = safe_split(values, split[1]);
 	values[1] = safe_split(values, split[2]);
 	values[2] = safe_split(values, split[3]);
-	plane->type = PLANE;
-	plane->pos = parse_vec3d(values[0]);
+	plane->base.type = PLANE;
+	plane->base.pos = parse_vec3d(values[0]);
 	plane->normal = parse_vec3d(values[1]);
-	plane->color = parse_color(values[2]);
+	plane->base.color = parse_color(values[2]);
 	add_elem(objects, plane);
 	free_values(values, 3);
 }

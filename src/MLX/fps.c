@@ -1,5 +1,13 @@
 #include "minirt.h"
 
+long	time_in_ms(void)
+{
+	struct timeval	start;
+
+	gettimeofday(&start, NULL);
+	return (start.tv_sec * 1000L + (start.tv_usec / 1000L));
+}
+
 int	get_seconds(t_engine *engine)
 {
 	t_time		now;
@@ -8,7 +16,7 @@ int	get_seconds(t_engine *engine)
 
 	gettimeofday(&now, NULL);
 	us = ((long long)now.tv_sec * 1000000 + now.tv_usec);
-	us = us - ((long long)engine->start.tv_sec * 1000000 + engine->start.tv_usec);
+	us = us - ((long long)engine->frame.start.tv_sec * 1000000 + engine->frame.start.tv_usec);
 	ms = us / 1000000;
 	return ((int)ms);
 }
@@ -60,11 +68,13 @@ void fps_counter(void *param)
 
 	engine = param;
 	curr_sec = get_seconds(engine);
+	engine->frame.delta = time_in_ms() - engine->frame.t_last_frame;
+	engine->frame.t_last_frame = time_in_ms();
 	if (curr_sec > prev_sec)
 	{
-		add_fps(title, engine->fps);
+		add_fps(title, engine->frame.fps);
 		mlx_set_window_title(engine->mlx, title);
-		engine->fps = 0;
+		engine->frame.fps = 0;
 	}
 	prev_sec = curr_sec;
 }

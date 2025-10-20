@@ -5,6 +5,8 @@
 
 # define FOCAL_LENGTH 1
 
+typedef struct s_window t_window;
+
 typedef struct s_viewport
 {
 	float w;
@@ -18,6 +20,7 @@ typedef struct s_viewport
 }	t_viewport;
 
 void	setup_viewport(void);
-t_vec3d	get_viewport_pixel(int x, int y);;
+t_vec3d	get_viewport_pixel(int x, int y);
+void	update_viewport(t_viewport *viewport, t_window window);
 
 #endif // VIEWPORT_H
