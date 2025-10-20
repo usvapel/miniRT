@@ -2,13 +2,17 @@
 
 bool	set_hit(void *object, t_vec3d new_hit, t_ray ray, t_hit *hit)
 {
-	const t_object *base = (t_object *)object;
+	t_object *base;
 
 	if (hit->prev_hit && closest_hit(ray.origin, hit->pos, new_hit))
 	   return (false);
+	if (object)
+	{
+		base = (t_object *)object;
+		hit->type = base->type;
+		hit->color = base->color;
+	}
 	hit->pos = new_hit;
-	hit->color = base->color;
-	hit->type = base->type;
 	hit->prev_hit = true;
 	hit->obj = object;
 	return (true);
