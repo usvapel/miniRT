@@ -1,9 +1,11 @@
 #include "minirt.h"
 
-void    move_left_right(t_camera *cam, int dir);
-void    look_up_down(t_camera *camera, float dy);
+static bool orient_camera(t_engine *engine, float dx, float dy);
+static void    look_up_down(t_camera *camera, float dy);
+static void    move_left_right(t_camera *cam, int dir);
+static bool    move_camera(t_engine *engine);
 
-bool    move_camera(t_engine *engine)
+static bool    move_camera(t_engine *engine)
 {
     t_camera *camera = &engine->camera;
     t_vec3d tmp = camera->dir;
@@ -13,7 +15,7 @@ bool    move_camera(t_engine *engine)
 
 	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
 	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
-    scale_vec3d(&tmp, 0.1);
+    scale_vec3d(&tmp, CAM_SPEED * engine->frame.delta);
 	moved = orient_camera(engine, dx, dy);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
 		add_vec3d(&camera->pos, tmp);
@@ -24,47 +26,36 @@ bool    move_camera(t_engine *engine)
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
         move_left_right(camera, LEFT);
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
-		engine->camera.pos.y += 0.1;
+		engine->camera.pos.y += CAM_SPEED * engine->frame.delta;
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
-		engine->camera.pos.y -= 0.1;
+		engine->camera.pos.y -= CAM_SPEED * engine->frame.delta;
 	else if (!moved)
 		return false;
 	return true;
 }
 
-void    move_left_right(t_camera *cam, int dir)
+static void    move_left_right(t_camera *cam, int dir)
 {
     t_vec3d norm;
     float dz = cam->dir.z;
     float dx = cam->dir.x;
+    long delta = get_engine()->frame.delta;
     norm.y = 0;
     norm.x = -dz;
     norm.z = dx;
     if (dir == LEFT)
-        scale_vec3d(&norm, 0.1);
+        scale_vec3d(&norm, CAM_SPEED * delta);
     else
-        scale_vec3d(&norm, -0.1);
+        scale_vec3d(&norm, -CAM_SPEED * delta);
     add_vec3d(&cam->pos, norm);
 }
 
-void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d)
-{
-    t_vec3d norm;
-    float dz = cam->dir.z;
-    float dx = cam->dir.x;
-    norm.y = 0;
-    norm.x = -dz;
-    norm.z = dx;
-    scale_vec3d(&norm, 0.001 * d);
-    add_vec3d(pos, norm);
-}
-
-
-void    look_up_down(t_camera *camera, float dy)
+static void    look_up_down(t_camera *camera, float dy)
 {
     t_vec3d tmp;
+    float dt = get_engine()->frame.delta;
     tmp = camera->v;
-    scale_vec3d(&tmp, -dy * 0.001);
+    scale_vec3d(&tmp, -dy * CAM_SENS * dt);
     add_vec3d(&camera->dir, tmp);
     normlize_vec3d(&camera->dir);
 }
@@ -80,11 +71,20 @@ void update_camera(void)
 	engine->recalculate = true;
 }
 
-bool    orient_camera(t_engine *engine, float dx, float dy)
+static bool orient_camera(t_engine *engine, float dx, float dy)
 {
+    float dt = get_engine()->frame.delta;
     if (!mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
 		return false;
-    rotateY_vec3d(&engine->camera.dir, 0.1 * -dx);
-    look_up_down(&engine->camera, dy);
+    rotateY_vec3d(&engine->camera.dir, CAM_SENS * -dx * dt);
+    look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.2);
 	return true;
+}
+
+void handle_cam_movement(t_engine *engine)
+{
+	if (!move_camera(engine))
+		return ;
+	wait_for_threads();
+	update_camera();
 }

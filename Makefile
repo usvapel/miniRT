@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/10/17 14:33:57 by zfarah           ###   ########.fr        #
+#    Updated: 2025/10/20 12:49:15 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,13 +82,14 @@ SRCS_MAIN := \
 	raytracer.c \
 	sphere.c \
 	fps.c \
-	movement.c \
+	key_hooks.c \
 	plane.c \
 	hit.c \
 	threads.c \
 	rotation.c \
-	camera.c \
-	object_movement.c \
+	move_camera.c \
+	move_objects.c \
+	scale_objects.c \
 	vector.c \
 	light.c \
 	cylinder.c \

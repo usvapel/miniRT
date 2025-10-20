@@ -5,21 +5,21 @@ bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top);
 bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 bool cylinder_body_hit(t_cylinder cy, t_ray ray, t_hit *hit);
 
-void    cylinder_hit(t_cylinder cy, t_ray ray, t_hit *hit)
+void    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
 {
     t_hit local_hit = {0};
     bool hit_is_set;
 
     hit_is_set = false;
-    if (cylinder_disk_hit(cy, ray, &local_hit, 1))
-        hit_is_set = set_hit(local_hit.pos, cy.color, hit);
-    if (cylinder_disk_hit(cy, ray, &local_hit, -1))
-        hit_is_set = set_hit(local_hit.pos, cy.color, hit);
-    if (cylinder_body_hit(cy, ray, &local_hit))
-        hit_is_set = set_hit(local_hit.pos, cy.color, hit);
+    if (cylinder_disk_hit(*cy, ray, &local_hit, 1))
+        hit_is_set = set_hit(cy, local_hit.pos, ray, hit);
+    if (cylinder_disk_hit(*cy, ray, &local_hit, -1))
+        hit_is_set = set_hit(cy, local_hit.pos, ray, hit);
+    if (cylinder_body_hit(*cy, ray, &local_hit))
+        hit_is_set = set_hit(cy, local_hit.pos, ray, hit);
     if (hit_is_set)
     {
-        hit->color = cy.color;
+        hit->color = cy->base.color;
         hit->normal = local_hit.normal;
         hit->pos = local_hit.pos;
         hit->type = CYLINDER;
@@ -34,21 +34,21 @@ bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top)
     t_vec3d tmp;
     float t;
 
-    p.color = cy.color;
-    p.pos = cy.pos;
+    p.base.color = cy.base.color;
+    p.base.pos = cy.base.pos;
     p.normal = cy.axis;
-    add_vec3d(&p.pos, nscale_vec3d(cy.axis, top * cy.h * 0.5));
+    add_vec3d(&p.base.pos, nscale_vec3d(cy.axis, top * cy.h * 0.5));
     if (!solve_plane_hit(p, ray, &t))
         return false;
     if (t < 0)
         return false;
     lhit = get_point_on_ray(ray, t);
     tmp = lhit;
-    minus_vec3d(&tmp, p.pos);
+    minus_vec3d(&tmp, p.base.pos);
     magni = magnitude_vec3d(tmp);
     if (magni > cy.r)
         return false;
-    if (!set_hit(lhit, cy.color, hit))
+    if (!set_hit(NULL, lhit, ray, hit))
         return false;
     hit->normal = nscale_vec3d(cy.axis, top);
     return true; 
@@ -59,7 +59,7 @@ bool cylinder_body_hit(t_cylinder cy, t_ray ray, t_hit *hit)
 {
     t_basis3d cy_local = build_local_basis(cy.axis);
     t_ray ray_cy_base;
-    t_vec3d origin = sub_vec3d(cy.pos, nscale_vec3d(cy.axis, cy.h * 0.5));
+    t_vec3d origin = sub_vec3d(cy.base.pos, nscale_vec3d(cy.axis, cy.h * 0.5));
     float t0;
     float t1;
     t_vec3d pos;
@@ -78,7 +78,7 @@ bool cylinder_body_hit(t_cylinder cy, t_ray ray, t_hit *hit)
     if (pos.y < 0 || pos.y > cy.h)
         return false;
     pos = point_from_basis(pos, cy_local, origin);
-    if (!set_hit(pos, cy.color, hit))
+    if (!set_hit(NULL, pos, ray, hit))
         return false;
     pos = get_point_on_ray(ray_cy_base, nearest_t(t0, t1)); 
     minus_vec3d(&pos, new_vec3d(0, pos.y, 0));

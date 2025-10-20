@@ -1,7 +1,5 @@
 #include "minirt.h"
 
-void    set_sphere_color(t_sphere sphere, t_hit *hit);
-
 float max(float val1, float val2)
 {
 	if (val1 > val2)
@@ -11,25 +9,22 @@ float max(float val1, float val2)
 	return val1;
 }
 
-bool sphere_hit(t_sphere sphere, t_ray ray, t_hit *hit)
+bool sphere_hit(t_sphere *sphere, t_ray ray, t_hit *hit)
 {
 	float t0;
 	float t1;
 	float disc;
 	t_vec3d n_hit_pos;
-	bool is_set = {0};
 
-	disc = solve_sphere_hit(ray, sphere, &t0, &t1);
+	disc = solve_sphere_hit(ray, *sphere, &t0, &t1);
 	if (disc < 0.0f || (t0 < 0.0f && t1 < 0.0f))
 		return false;
 	n_hit_pos = get_point_on_ray(ray, nearest_t(t0, t1));
-	is_set = set_hit(n_hit_pos, sphere.color, hit);
-	if (is_set)
-	{
-		hit->normal = sub_vec3d(hit->pos, sphere.pos);
-		hit->type = SPHERE;
-		hit->color = sphere.color;
-	}
+	if (!set_hit(sphere, n_hit_pos, ray, hit))
+        return false;
+    hit->normal = sub_vec3d(hit->pos, sphere->base.pos);
+    hit->type = SPHERE;
+    hit->color = sphere->base.color;
     return true;
 }
 
@@ -43,7 +38,7 @@ float solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1)
     float disc;
     float sqrt_disc;
 
-    ray_s_origin = sphere.pos;
+    ray_s_origin = sphere.base.pos;
     minus_vec3d(&ray_s_origin, ray.origin);
     tmp = ray.udir;
     scale_vec3d(&tmp, -2);
@@ -63,8 +58,8 @@ t_sphere new_sphere(t_vec3d pos, float r)
 {
     t_sphere sphere;
 
-    sphere.pos = pos;
+    sphere.base.pos = pos;
     sphere.r = r;
-    sphere.type = SPHERE;
+    sphere.base.type = SPHERE;
     return sphere;
 }
