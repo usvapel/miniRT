@@ -1,14 +1,16 @@
 #include "minirt.h"
 
-bool	set_hit(t_vec3d new_hit, t_color color, t_hit *hit)
+bool	set_hit(void *object, t_vec3d new_hit, t_ray ray, t_hit *hit)
 {
-	const t_camera	cam = get_engine()->camera;
+	const t_object *base = (t_object *)object;
 
-	if (hit->prev_hit && closest_hit(cam.pos, hit->pos, new_hit))
+	if (hit->prev_hit && closest_hit(ray.origin, hit->pos, new_hit))
 	   return (false);
 	hit->pos = new_hit;
-	hit->color = color;
+	hit->color = base->color;
+	hit->type = base->type;
 	hit->prev_hit = true;
+	hit->obj = object;
 	return (true);
 }
 
