@@ -44,7 +44,7 @@ int	main(int ac, char **av)
 	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width, engine->window.height);
 	engine->moving = false;
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
-	gettimeofday(&engine->start, NULL);
+	gettimeofday(&engine->frame.start, NULL);
 	setup_threads(engine);
 	mlx_loop_hook(engine->mlx, key_hook, engine);
 	mlx_loop_hook(engine->mlx, draw_scene, engine);
