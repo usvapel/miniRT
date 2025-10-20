@@ -10,7 +10,7 @@ void	draw_scene(void *eng)
 	while (engine->update == true)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
-	engine->fps++;
+	engine->frame.fps++;
 	engine->recalculate = !engine->complete_img;
 	engine->moving = false;
 }
@@ -26,18 +26,18 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 	{
 		type = *(int *)(engine->objects->data[i]);
 		if (type == PLANE)
-			plane_hit(*((t_plane *)engine->objects->data[i]), *ray, hit);
+			plane_hit(((t_plane *)engine->objects->data[i]), *ray, hit);
 		if (type == SPHERE)
-			sphere_hit(*((t_sphere *)engine->objects->data[i]), *ray, hit);
+			sphere_hit(((t_sphere *)engine->objects->data[i]), *ray, hit);
 		else if (type == CYLINDER)
-			cylinder_hit(*((t_cylinder *)engine->objects->data[i]), *ray, hit);	
+			cylinder_hit(((t_cylinder *)engine->objects->data[i]), *ray, hit);	
 		else if (type == LIGHT)
-			light_hit(*((t_light *)engine->objects->data[i]), *ray, hit);
+			light_hit(((t_light *)engine->objects->data[i]), *ray, hit);
 		else if (type == PARABOLOID)
-			paraboloid_hit(*((t_paraboloid *)engine->objects->data[i]), *ray, hit);
+			paraboloid_hit(((t_paraboloid *)engine->objects->data[i]), *ray, hit);
 		i++;
 	}
-	return (type);
+	return (hit->type);
 }
 
 static float	get_sample(int value, t_threads *t, int axis)
