@@ -6,7 +6,7 @@
 /*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/17 18:30:36 by zfarah           ###   ########.fr       */
+/*   Updated: 2025/10/20 12:57:43 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ typedef pthread_mutex_t	t_mutex;
 # define X_AXIS 0
 # define Y_AXIS 1
 # define ESPSILON 1e-2
-# define OBJ_SPEED 0.00009
-# define OBJ_S_SPEED 0.001
+# define OBJ_SPEED 0.00003
+# define OBJ_S_SPEED 0.0005
 
 typedef struct s_phong
 {
