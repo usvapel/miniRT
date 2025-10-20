@@ -74,10 +74,11 @@ void update_camera(void)
 static bool orient_camera(t_engine *engine, float dx, float dy)
 {
     float dt = get_engine()->frame.delta;
+	dt = fminf(dt, 1.0f / 30.0f);
     if (!mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
 		return false;
     rotateY_vec3d(&engine->camera.dir, CAM_SENS * -dx * dt);
-    look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.2);
+    look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.001);
 	return true;
 }
 
