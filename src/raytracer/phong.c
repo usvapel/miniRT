@@ -5,7 +5,7 @@
 # define QUADRATIC_COEFFICIENT 0.032f
 
 /*
-	R = 2(N * L) - L, where N is normal surface and L is direction vector from the light source to the hit
+	R = L - 2(N * L), where N is normal surface and L is the incoming vector from the light source to the hit
 */
 static t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
 {
@@ -15,17 +15,19 @@ static t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
 	dot = dot_vec3d(direction, normal);
 	tmp = nscale_vec3d(normal, dot);
 	tmp = nscale_vec3d(tmp, 2);
-	tmp = sub_vec3d(tmp, direction);
+	tmp = sub_vec3d(direction, tmp);
 	return (tmp);
 }
-
+/*
+	S = (V * R)^n, where V is view and R is the reflection of the light
+*/
 static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p)
 {
 	float	specular_strength;
 
 	p->view_dir = sub_vec3d(engine->camera.pos, hit->pos);
 	p->view_dir = normalize_vec3d(p->view_dir);
-	p->reflect_dir = reflect(nscale_vec3d(p->light_dir, -1.0f), p->normal);
+	p->reflect_dir = reflect(nscale_vec3d(p->nlight_dir, -1.0f), p->normal);
 	p->reflect_dir = normalize_vec3d(p->reflect_dir);
 	specular_strength = powf(fmaxf(0.0f, dot_vec3d(p->view_dir, p->reflect_dir)), SHININESS);
 	p->specular = nscale_vec3d(p->light_color, specular_strength);
@@ -52,14 +54,14 @@ static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit, t_light light)
 	float	light_distance;
 	float	object_distance;
 	
-	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->light_dir, SHADOW_BIAS));
-	shadow_ray.udir = p->light_dir;
+	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir, 1e-2));
+	shadow_ray.udir = p->nlight_dir;
 	(void)object_intersection(engine, &shadow_ray, &shadow_hit);
 	if (!shadow_hit.prev_hit || shadow_hit.type == LIGHT)
 		return (false);
-	light_distance = magnitude_vec3d(sub_vec3d(light.pos, shadow_ray.origin));
+	light_distance = magnitude_vec3d(sub_vec3d(light.base.pos, shadow_ray.origin));
 	object_distance = magnitude_vec3d(sub_vec3d(shadow_hit.pos, shadow_ray.origin));
-	if (object_distance < light_distance)
+	if ((object_distance + ESPSILON) < light_distance)
 		return (true);
 	return (false);
 }
@@ -78,12 +80,12 @@ void	phong_model(t_engine *engine, t_hit *hit)
 	p.normal = normalize_vec3d(hit->normal);
 	p.final_color = p.ambient;
 	i = 0;
-	while (i < 1)
+	while (i < engine->light_count)
 	{
 		light = engine->lights->data[i++];
-		p.light_color = color_to_vec3d(light->color);
-		p.light_dir = sub_vec3d(light->pos, hit->pos);
-		p.light_dir = normalize_vec3d(p.light_dir);
+		p.light_color = color_to_vec3d(light->base.color);
+		p.light_dir = sub_vec3d(light->base.pos, hit->pos);
+		p.nlight_dir = normalize_vec3d(p.light_dir);
 		if (is_in_shadow(&p, engine, *hit, *light))
 			continue ;
 		if (hit->type == PLANE)
