@@ -2,11 +2,13 @@
 # define VECTOR_H
 
 # include <stdlib.h>
+# include <stdbool.h>
 
 typedef struct s_vector
 {
-	size_t count;
-	size_t size;
+	int count;
+	int size;
+	bool owns_data;
 	void **data;
 }	t_vector;
 
