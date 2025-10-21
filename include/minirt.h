@@ -15,9 +15,7 @@
 
 # include "MLX42.h"
 # include "mlx_hooks.h"
-# include <errno.h>
-# include <math.h>
-# include <stdio.h>
+
 # include "engine.h"
 # include "libft.h"
 # include "primitives.h"
@@ -28,6 +26,10 @@
 # include "geometry.h"
 # include "vector.h"
 # include "parsing.h"
+
+# include <errno.h>
+# include <math.h>
+# include <stdio.h>
 # include <sys/time.h>
 # include <pthread.h>
 # include <float.h>
@@ -67,11 +69,5 @@ int		object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 void	setup_threads(void *eng);
 void	wait_for_threads();
 void	thread_cleanup();
-
-// parsing
-void	runtime_error(char *s);
-void	free_array(void **array);
-void	free_values(char **values[3], int count);
-char	**safe_split(char **values[3], int count, char *line);
 
 #endif // MINIRT_T
