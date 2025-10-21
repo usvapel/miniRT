@@ -18,26 +18,39 @@ void	free_array(void **array)
 	free(array);
 }
 
-void	print_array(char **arr)
+void	free_values(char **values[3], int count)
 {
-	while (*arr)
-		ft_printf("%s ", *arr++);
+	int	i;
+
+	i = 0;
+	while (i < count)
+		free_array((void *)values[i++]);
 }
 
-static t_vec3d	parse_vec3d(char **components)
+static t_vec3d	parse_vec3d(char **values[3], char **components)
 {
 	t_vec3d	vec;
 
+	if (!components[0] || !components[1] || !components[2])
+	{
+		free_values(values, 3);
+		runtime_error("invalid/missing values!");
+	}
 	vec.x = ft_atof(components[0]);
 	vec.y = ft_atof(components[1]);
 	vec.z = ft_atof(components[2]);
 	return (vec);
 }
 
-static t_color	parse_color(char **components)
+static t_color	parse_color(char **values[3], char **components)
 {
 	t_color	color;
 
+	if (!components[0] || !components[1] || !components[2])
+	{
+		free_values(values, 3);
+		runtime_error("invalid/missing values!");
+	}
 	color.r = ft_atof(components[0]);
 	color.g = ft_atof(components[1]);
 	color.b = ft_atof(components[2]);
@@ -59,15 +72,6 @@ void	validate_camera(t_engine *engine)
 	if (is_initialized)
 		runtime_error("Too many cameras!");
 	is_initialized = true;
-}
-
-void	free_values(char **values[3], int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-		free_array((void *)values[i++]);
 }
 
 char	**safe_split(char **values[3], int count, char *line)
@@ -93,8 +97,13 @@ void	init_camera(t_engine *engine, char **split)
 	values[0] = safe_split(values, 3, split[1]);
 	values[1] = safe_split(values, 3, split[2]);
 	values[2] = safe_split(values, 3, split[3]);
-	engine->camera.pos = parse_vec3d(values[0]);
-	engine->camera.dir = parse_vec3d(values[1]);
+	if (split[4])
+	{
+		free_values(values, 3);
+		runtime_error("too many values in camera!");
+	}
+	engine->camera.pos = parse_vec3d(values, values[0]);
+	engine->camera.dir = parse_vec3d(values, values[1]);
 	engine->camera.fov = ft_atof(values[2][0]);
 	free_values(values, 3);
 	validate_camera(engine);
@@ -118,9 +127,9 @@ void	init_light(t_vector *objects, char **split)
 		runtime_error("failure during memory allocation!");
 	}
 	light->base.type = LIGHT;
-	light->base.pos = parse_vec3d(values[0]);
+	light->base.pos = parse_vec3d(values, values[0]);
 	light->brightness = ft_atof(values[1][0]);
-	light->base.color = parse_color(values[2]);
+	light->base.color = parse_color(values, values[2]);
 	light->r = LIGHT_RADIUS;
 	add_elem(objects, light);
 	add_elem(engine->lights, light);
@@ -137,9 +146,9 @@ void	init_sphere(t_vector *objects, char **split)
 	values[1] = safe_split(values, 3, split[2]);
 	values[2] = safe_split(values, 3, split[3]);
 	sphere->base.type = SPHERE;
-	sphere->base.pos = parse_vec3d(values[0]);
+	sphere->base.pos = parse_vec3d(values, values[0]);
 	sphere->r = ft_atof(values[1][0]) / 2.0f;
-	sphere->base.color = parse_color(values[2]);
+	sphere->base.color = parse_color(values, values[2]);
 	add_elem(objects, sphere);
 	free_values(values, 3);
 }
@@ -156,11 +165,11 @@ void	init_paraboloid(t_vector *objects, char **split)
 	values[3] = safe_split(values, 5, split[4]);
 	values[4] = safe_split(values, 5, split[5]);
 	para->base.type = PARABOLOID;
-	para->base.pos = parse_vec3d(values[0]);
-	para->axis = parse_vec3d(values[1]);
+	para->base.pos = parse_vec3d(values, values[0]);
+	para->axis = parse_vec3d(values, values[1]);
 	para->focal = ft_atof(values[2][0]);
 	para->h = ft_atof(values[3][0]);
-	para->base.color = parse_color(values[4]);
+	para->base.color = parse_color(values, values[4]);
 	para->axis = normalize_vec3d(para->axis);
 	add_elem(objects, para);
 	free_values(values, 5);
@@ -177,11 +186,11 @@ void	init_cylinder(t_vector *objects, char **split)
 	values[3] = safe_split(values, 5, split[4]);
 	values[4] = safe_split(values, 5, split[5]);
 	cylinder->base.type = CYLINDER;
-	cylinder->base.pos = parse_vec3d(values[0]);
-	cylinder->axis = parse_vec3d(values[1]);
+	cylinder->base.pos = parse_vec3d(values, values[0]);
+	cylinder->axis = parse_vec3d(values, values[1]);
 	cylinder->r = ft_atof(values[2][0]) / 2;
 	cylinder->h = ft_atof(values[3][0]);
-	cylinder->base.color = parse_color(values[4]);
+	cylinder->base.color = parse_color(values, values[4]);
 	cylinder->axis = normalize_vec3d(cylinder->axis);
 	add_elem(objects, cylinder);
 	free_values(values, 5);
@@ -197,9 +206,9 @@ void	init_plane(t_engine *engine, char **split)
 	values[1] = safe_split(values, 3, split[2]);
 	values[2] = safe_split(values, 3, split[3]);
 	plane->base.type = PLANE;
-	plane->base.pos = parse_vec3d(values[0]);
-	plane->normal = parse_vec3d(values[1]);
-	plane->base.color = parse_color(values[2]);
+	plane->base.pos = parse_vec3d(values, values[0]);
+	plane->normal = parse_vec3d(values, values[1]);
+	plane->base.color = parse_color(values, values[2]);
 	add_elem(engine->objects, plane);
 	free_values(values, 3);
 }
