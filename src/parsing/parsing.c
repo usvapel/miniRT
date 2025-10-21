@@ -2,7 +2,8 @@
 
 void	runtime_error(char *s)
 {
-	printf("Error: %s\n", s);
+	printf("Error\n");
+	printf("%s\n", s);
 	exit(EXIT_FAILURE);
 }
 
@@ -61,6 +62,7 @@ static t_color	parse_color(char **values[3], char **components)
 void	validate_camera(t_engine *engine)
 {
 	static bool is_initialized = false;
+
 	if (engine->camera.fov < 0 || engine->camera.fov > 180)
 		runtime_error("Invalid FOV value");
 	if (engine->camera.dir.x < -1 || engine->camera.dir.x > 1)
@@ -109,15 +111,13 @@ void	init_camera(t_engine *engine, char **split)
 	validate_camera(engine);
 }
 
-void	validate_light(t_light *light)
+void	validate_color(t_color color)
 {
-	if (light->brightness < 0.0 || light->brightness > 1.0)
-		runtime_error("Invalid light brightness value (0-1)");
-	if (light->base.color.r < 0.0 || light->base.color.r > 255)
+	if (color.r < 0.0 || color.r > 255)
 		runtime_error("Invalid light color values (0-255)");
-	if (light->base.color.g < 0.0 || light->base.color.g > 255)
+	if (color.g < 0.0 || color.g > 255)
 		runtime_error("Invalid light color values (0-255)");
-	if (light->base.color.b < 0.0 || light->base.color.b > 255)
+	if (color.b < 0.0 || color.b > 255)
 		runtime_error("Invalid light color values (0-255)");
 }
 
@@ -143,53 +143,81 @@ void	init_light(t_vector *objects, char **split)
 	light->base.color = parse_color(values, values[2]);
 	light->r = LIGHT_RADIUS;
 	free_values(values, 3);
-	validate_light(light);
+	if (light->brightness < 0.0 || light->brightness > 1.0)
+		runtime_error("Invalid light brightness value (0-1)");
+	validate_color(light->base.color);
 	add_elem(objects, light);
 	add_elem(engine->lights, light);
 }
 
 void	init_sphere(t_vector *objects, char **split)
 {
-	char	**values[3];
-	t_sphere *sphere = malloc(sizeof(t_sphere));
+	char		**values[3];
+	t_sphere	*sphere;
 
 	*values = NULL;
 	values[0] = safe_split(values, 3, split[1]);
 	values[1] = safe_split(values, 3, split[2]);
 	values[2] = safe_split(values, 3, split[3]);
+	sphere = malloc(sizeof(t_sphere));
+	if (!sphere)
+	{
+		free_values(values, 3);
+		runtime_error("failure during memory allocation!");
+	}
 	sphere->base.type = SPHERE;
 	sphere->base.pos = parse_vec3d(values, values[0]);
 	sphere->r = ft_atof(values[1][0]) / 2.0f;
 	sphere->base.color = parse_color(values, values[2]);
-	add_elem(objects, sphere);
 	free_values(values, 3);
+	validate_color(sphere->base.color);
+	add_elem(objects, sphere);
 }
 
-void	init_paraboloid(t_vector *objects, char **split)
+void	init_plane(t_engine *engine, char **split)
 {
-	char	**values[5];
-	t_paraboloid *para = malloc(sizeof(t_paraboloid));
+	char	**values[3];
+	t_plane	*plane;
 
 	*values = NULL;
-	values[0] = safe_split(values, 5, split[1]);
-	values[1] = safe_split(values, 5, split[2]);
-	values[2] = safe_split(values, 5, split[3]);
-	values[3] = safe_split(values, 5, split[4]);
-	values[4] = safe_split(values, 5, split[5]);
-	para->base.type = PARABOLOID;
-	para->base.pos = parse_vec3d(values, values[0]);
-	para->axis = parse_vec3d(values, values[1]);
-	para->focal = ft_atof(values[2][0]);
-	para->h = ft_atof(values[3][0]);
-	para->base.color = parse_color(values, values[4]);
-	para->axis = normalize_vec3d(para->axis);
-	add_elem(objects, para);
-	free_values(values, 5);
+	values[0] = safe_split(values, 3, split[1]);
+	values[1] = safe_split(values, 3, split[2]);
+	values[2] = safe_split(values, 3, split[3]);
+	plane = malloc(sizeof(t_plane));
+	if (!plane)
+	{
+		free_values(values, 3);
+		runtime_error("failure during memory allocation!");
+	}
+	plane->base.type = PLANE;
+	plane->base.pos = parse_vec3d(values, values[0]);
+	plane->normal = parse_vec3d(values, values[1]);
+	plane->base.color = parse_color(values, values[2]);
+	free_values(values, 3);
+	validate_color(plane->base.color);
+	if (plane->normal.x < -1.0f || plane->normal.x > 1.0f)
+		runtime_error("Invalid plane normal (-1 - 1)");
+	if (plane->normal.y < -1.0f || plane->normal.y > 1.0f)
+		runtime_error("Invalid plane normal (-1 - 1)");
+	if (plane->normal.z < -1.0f || plane->normal.z > 1.0f)
+		runtime_error("Invalid plane normal (-1 - 1)");
+	add_elem(engine->objects, plane);
 }
+
+void	validate_axis(t_vec3d axis)
+{
+	if (axis.x < -1.0f || axis.x > 1.0f)
+		runtime_error("Invalid obj axis (-1 - 1)");
+	if (axis.y < -1.0f || axis.y > 1.0f)
+		runtime_error("Invalid obj axis (-1 - 1)");
+	if (axis.z < -1.0f || axis.z > 1.0f)
+		runtime_error("Invalid obj axis (-1 - 1)");
+}
+
 void	init_cylinder(t_vector *objects, char **split)
 {
-	char	**values[5];
-	t_cylinder *cylinder = malloc(sizeof(t_cylinder));
+	char		**values[5];
+	t_cylinder	*cylinder;
 
 	*values = NULL;
 	values[0] = safe_split(values, 5, split[1]);
@@ -197,6 +225,12 @@ void	init_cylinder(t_vector *objects, char **split)
 	values[2] = safe_split(values, 5, split[3]);
 	values[3] = safe_split(values, 5, split[4]);
 	values[4] = safe_split(values, 5, split[5]);
+	cylinder = malloc(sizeof(t_cylinder));
+	if (!cylinder)
+	{
+		free_values(values, 5);
+		runtime_error("failure during memory allocation!");
+	}
 	cylinder->base.type = CYLINDER;
 	cylinder->base.pos = parse_vec3d(values, values[0]);
 	cylinder->axis = parse_vec3d(values, values[1]);
@@ -204,25 +238,40 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->h = ft_atof(values[3][0]);
 	cylinder->base.color = parse_color(values, values[4]);
 	cylinder->axis = normalize_vec3d(cylinder->axis);
-	add_elem(objects, cylinder);
 	free_values(values, 5);
+	validate_axis(cylinder->axis);
+	validate_color(cylinder->base.color);
+	add_elem(objects, cylinder);
 }
 
-void	init_plane(t_engine *engine, char **split)
+void	init_paraboloid(t_vector *objects, char **split)
 {
-	char	**values[3];
-	t_plane *plane = malloc(sizeof(t_plane));
+	char			**values[5];
+	t_paraboloid	*para;
 
 	*values = NULL;
-	values[0] = safe_split(values, 3, split[1]);
-	values[1] = safe_split(values, 3, split[2]);
-	values[2] = safe_split(values, 3, split[3]);
-	plane->base.type = PLANE;
-	plane->base.pos = parse_vec3d(values, values[0]);
-	plane->normal = parse_vec3d(values, values[1]);
-	plane->base.color = parse_color(values, values[2]);
-	add_elem(engine->objects, plane);
-	free_values(values, 3);
+	values[0] = safe_split(values, 5, split[1]);
+	values[1] = safe_split(values, 5, split[2]);
+	values[2] = safe_split(values, 5, split[3]);
+	values[3] = safe_split(values, 5, split[4]);
+	values[4] = safe_split(values, 5, split[5]);
+	para = malloc(sizeof(t_paraboloid));
+	if (!para)
+	{
+		free_values(values, 5);
+		runtime_error("failure during memory allocation!");
+	}
+	para->base.type = PARABOLOID;
+	para->base.pos = parse_vec3d(values, values[0]);
+	para->axis = parse_vec3d(values, values[1]);
+	para->focal = ft_atof(values[2][0]);
+	para->h = ft_atof(values[3][0]);
+	para->base.color = parse_color(values, values[4]);
+	para->axis = normalize_vec3d(para->axis);
+	free_values(values, 5);
+	validate_axis(para->axis);
+	validate_color(para->base.color);
+	add_elem(objects, para);
 }
 
 void	set_values(t_engine *engine, char **split)
