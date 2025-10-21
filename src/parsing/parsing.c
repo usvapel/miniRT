@@ -1,5 +1,3 @@
-
-#include "light.h"
 #include "minirt.h"
 
 void	runtime_error(char *s)
@@ -49,6 +47,7 @@ static t_color	parse_color(char **components)
 
 void	validate_camera(t_engine *engine)
 {
+	static bool is_initialized = false;
 	if (engine->camera.fov < 0 || engine->camera.fov > 180)
 		runtime_error("Invalid FOV value");
 	if (engine->camera.dir.x < -1 || engine->camera.dir.x > 1)
@@ -57,6 +56,9 @@ void	validate_camera(t_engine *engine)
 		runtime_error("Invalid orientation y value");
 	if (engine->camera.dir.z < -1 || engine->camera.dir.z > 1)
 		runtime_error("Invalid orientation z value");
+	if (is_initialized)
+		runtime_error("Too many cameras!");
+	is_initialized = true;
 }
 
 void	free_values(char **values[3], int count)
@@ -68,18 +70,17 @@ void	free_values(char **values[3], int count)
 		free_array((void *)values[i++]);
 }
 
-char	**safe_split(char **values[3], char *line)
+char	**safe_split(char **values[3], int count, char *line)
 {
 	char	**splitted;
 
+	if (!line)
+		runtime_error("Possible invalid/missing values!");
 	splitted = ft_split(line, ',');
-	for (int i = 0; splitted[i]; i++)
-		printf("%s ", splitted[i]);
-	printf("\n");
 	if (!splitted)
 	{
-		free_values(values, 3);
-		runtime_error("failure during memory allocation");
+		free_values(values, count);
+		runtime_error("failure during memory allocation!");
 	}
 	return (splitted);
 }
@@ -88,11 +89,10 @@ void	init_camera(t_engine *engine, char **split)
 {
 	char	**values[3];
 
-	printf("initializing camera\n");
 	*values = NULL;
-	values[0] = safe_split(values, split[1]);
-	values[1] = safe_split(values, split[2]);
-	values[2] = safe_split(values, split[3]);
+	values[0] = safe_split(values, 3, split[1]);
+	values[1] = safe_split(values, 3, split[2]);
+	values[2] = safe_split(values, 3, split[3]);
 	engine->camera.pos = parse_vec3d(values[0]);
 	engine->camera.dir = parse_vec3d(values[1]);
 	engine->camera.fov = ft_atof(values[2][0]);
@@ -103,15 +103,20 @@ void	init_camera(t_engine *engine, char **split)
 
 void	init_light(t_vector *objects, char **split)
 {
-	char	**values[3];
-	t_light *light = malloc(sizeof(t_light));
-	t_engine *engine = get_engine();
+	const t_engine	*engine = get_engine();
+	char			**values[3];
+	t_light			*light;
 
-	printf("initializing light\n");
 	*values = NULL;
-	values[0] = safe_split(values, split[1]);
-	values[1] = safe_split(values, split[2]);
-	values[2] = safe_split(values, split[3]);
+	values[0] = safe_split(values, 3, split[1]);
+	values[1] = safe_split(values, 3, split[2]);
+	values[2] = safe_split(values, 3, split[3]);
+	light = malloc(sizeof(t_light));
+	if (!light)
+	{
+		free_values(values, 3);
+		runtime_error("failure during memory allocation!");
+	}
 	light->base.type = LIGHT;
 	light->base.pos = parse_vec3d(values[0]);
 	light->brightness = ft_atof(values[1][0]);
@@ -119,7 +124,6 @@ void	init_light(t_vector *objects, char **split)
 	light->r = LIGHT_RADIUS;
 	add_elem(objects, light);
 	add_elem(engine->lights, light);
-	engine->light_count++;
 	free_values(values, 3);
 }
 
@@ -128,11 +132,10 @@ void	init_sphere(t_vector *objects, char **split)
 	char	**values[3];
 	t_sphere *sphere = malloc(sizeof(t_sphere));
 
-	printf("initializing sphere\n");
 	*values = NULL;
-	values[0] = safe_split(values, split[1]);
-	values[1] = safe_split(values, split[2]);
-	values[2] = safe_split(values, split[3]);
+	values[0] = safe_split(values, 3, split[1]);
+	values[1] = safe_split(values, 3, split[2]);
+	values[2] = safe_split(values, 3, split[3]);
 	sphere->base.type = SPHERE;
 	sphere->base.pos = parse_vec3d(values[0]);
 	sphere->r = ft_atof(values[1][0]) / 2.0f;
@@ -146,20 +149,19 @@ void	init_paraboloid(t_vector *objects, char **split)
 	char	**values[5];
 	t_paraboloid *para = malloc(sizeof(t_paraboloid));
 
-	printf("initializing paraboloid\n");
 	*values = NULL;
-	values[0] = safe_split(values, split[1]);
-	values[1] = safe_split(values, split[2]);
-	values[2] = safe_split(values, split[3]);
-	values[3] = safe_split(values, split[4]);
-	values[4] = safe_split(values, split[5]);
+	values[0] = safe_split(values, 5, split[1]);
+	values[1] = safe_split(values, 5, split[2]);
+	values[2] = safe_split(values, 5, split[3]);
+	values[3] = safe_split(values, 5, split[4]);
+	values[4] = safe_split(values, 5, split[5]);
 	para->base.type = PARABOLOID;
 	para->base.pos = parse_vec3d(values[0]);
 	para->axis = parse_vec3d(values[1]);
 	para->focal = ft_atof(values[2][0]);
 	para->h = ft_atof(values[3][0]);
 	para->base.color = parse_color(values[4]);
-	normlize_vec3d(&para->axis);
+	para->axis = normalize_vec3d(para->axis);
 	add_elem(objects, para);
 	free_values(values, 5);
 }
@@ -168,39 +170,37 @@ void	init_cylinder(t_vector *objects, char **split)
 	char	**values[5];
 	t_cylinder *cylinder = malloc(sizeof(t_cylinder));
 
-	printf("initializing cylinder\n");
 	*values = NULL;
-	values[0] = safe_split(values, split[1]);
-	values[1] = safe_split(values, split[2]);
-	values[2] = safe_split(values, split[3]);
-	values[3] = safe_split(values, split[4]);
-	values[4] = safe_split(values, split[5]);
+	values[0] = safe_split(values, 5, split[1]);
+	values[1] = safe_split(values, 5, split[2]);
+	values[2] = safe_split(values, 5, split[3]);
+	values[3] = safe_split(values, 5, split[4]);
+	values[4] = safe_split(values, 5, split[5]);
 	cylinder->base.type = CYLINDER;
 	cylinder->base.pos = parse_vec3d(values[0]);
 	cylinder->axis = parse_vec3d(values[1]);
 	cylinder->r = ft_atof(values[2][0]) / 2;
 	cylinder->h = ft_atof(values[3][0]);
 	cylinder->base.color = parse_color(values[4]);
-	normlize_vec3d(&cylinder->axis);
+	cylinder->axis = normalize_vec3d(cylinder->axis);
 	add_elem(objects, cylinder);
 	free_values(values, 5);
 }
 
-void	init_plane(t_vector *objects, char **split)
+void	init_plane(t_engine *engine, char **split)
 {
 	char	**values[3];
 	t_plane *plane = malloc(sizeof(t_plane));
 
-	printf("initializing plane\n");
 	*values = NULL;
-	values[0] = safe_split(values, split[1]);
-	values[1] = safe_split(values, split[2]);
-	values[2] = safe_split(values, split[3]);
+	values[0] = safe_split(values, 3, split[1]);
+	values[1] = safe_split(values, 3, split[2]);
+	values[2] = safe_split(values, 3, split[3]);
 	plane->base.type = PLANE;
 	plane->base.pos = parse_vec3d(values[0]);
 	plane->normal = parse_vec3d(values[1]);
 	plane->base.color = parse_color(values[2]);
-	add_elem(objects, plane);
+	add_elem(engine->objects, plane);
 	free_values(values, 3);
 }
 
@@ -211,30 +211,15 @@ void	set_values(t_engine *engine, char **split)
 	if (ft_strcmp(split[0], "C") == 0)
 		return (init_camera(engine, split));
 	if (ft_strcmp(split[0], "L") == 0)
-	{
-		engine->object_count++;
 		return (init_light(engine->objects, split));
-	}
 	if (ft_strcmp(split[0], "sp") == 0)
-	{
-		engine->object_count++;
 		return (init_sphere(engine->objects, split));
-	}
 	if (ft_strcmp(split[0], "pl") == 0)
-	{
-		engine->object_count++;
-		return (init_plane(engine->objects, split));
-	}
+		return (init_plane(engine, split));
 	if (ft_strcmp(split[0], "cy") == 0)
-	{
-		engine->object_count++;
 		return (init_cylinder(engine->objects, split));
-	}
 	if (ft_strcmp(split[0], "pa") == 0)
-	{
-		engine->object_count++;
 		return (init_paraboloid(engine->objects, split));
-	}
 	printf("invalid identifier: %s\n", split[0]);
 }
 
@@ -245,7 +230,9 @@ void	input_parsing(t_engine *engine, char **av)
 	int		fd;
 
 	engine->objects = new_vector(1);
+	engine->objects->owns_data = true;
 	engine->lights = new_vector(1);
+	engine->lights->owns_data = false;
 
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
@@ -261,7 +248,7 @@ void	input_parsing(t_engine *engine, char **av)
 			close(fd);
 			free(line);
 			free_array((void *)split);
-			exit(EXIT_FAILURE);
+			runtime_error("failure during memory allocation!");
 		}
 		free(line);
 		set_values(engine, split);
