@@ -1,3 +1,4 @@
+#include "camera.h"
 #include "minirt.h"
 
 void	runtime_error(char *s)
@@ -292,38 +293,52 @@ void	set_values(t_engine *engine, char **split)
 		return (init_paraboloid(engine->objects, split));
 }
 
-void	input_parsing(t_engine *engine, char **av)
+void	read_and_process_file(t_engine *engine, int fd)
 {
 	char	*line;
 	char	**split;
-	int		fd;
 
-	engine->objects = new_vector(1);
-	engine->objects->owns_data = true;
-	engine->lights = new_vector(1);
-	engine->lights->owns_data = false;
-
-	fd = open(av[1], O_RDONLY);
-	if (fd < 0)
-		exit(EXIT_FAILURE);
 	while (true)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break ;
 		if (line[0] != '\n')
-			line[ft_strlen(line)-1] = 0;
+			line[ft_strlen(line) - 1] = 0;
 		split = ft_split(line, ' ');
 		if (!split)
 		{
 			close(fd);
 			free(line);
-			free_array((void *)split);
 			runtime_error("failure during memory allocation!");
 		}
-		free(line);
 		set_values(engine, split);
 		free_array((void *)split);
+		free(line);
 	}
 	close(fd);
+}
+
+char *check_file_validity(char *file)
+{
+	int	len;
+
+	len = ft_strlen(file);
+	if (ft_strncmp(file + len - 3, ".rt", len - 3) == 0)
+		return (file);
+	return (NULL);
+}
+
+void	input_parsing(t_engine *engine, char **av)
+{
+	int		fd;
+
+	engine->objects = new_vector(1);
+	engine->objects->owns_data = true;
+	engine->lights = new_vector(1);
+	engine->lights->owns_data = false;
+	fd = open(check_file_validity(av[1]), O_RDONLY);
+	if (fd < 0)
+		runtime_error("failure opening file!");
+	read_and_process_file(engine, fd);
 }
