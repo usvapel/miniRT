@@ -43,6 +43,8 @@ float	ft_atof(const char *nptr)
 	int		floats;
 	int		flag;
 
+	if (!nptr)
+		return (0);
 	result = 0;
 	neg = 1;
 	floats = 0;
