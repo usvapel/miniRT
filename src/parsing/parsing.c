@@ -242,6 +242,7 @@ void	input_parsing(t_engine *engine, char **av)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
+		line[ft_strlen(line)-1] = 0;
 		split = ft_split(line, ' ');
 		if (!split)
 		{
