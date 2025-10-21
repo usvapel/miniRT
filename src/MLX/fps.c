@@ -68,8 +68,6 @@ void fps_counter(void *param)
 
 	engine = param;
 	curr_sec = get_seconds(engine);
-	engine->frame.delta = time_in_ms() - engine->frame.t_last_frame;
-	engine->frame.t_last_frame = time_in_ms();
 	if (curr_sec > prev_sec)
 	{
 		add_fps(title, engine->frame.fps);

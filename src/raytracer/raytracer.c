@@ -1,4 +1,5 @@
 #include "minirt.h"
+
 bool should_recalculate(t_engine *eng);
 
 void	draw_scene(void *eng)
@@ -13,6 +14,8 @@ void	draw_scene(void *eng)
 	while (engine->update == true)
 		usleep(10);
 	engine->image->pixels = engine->image_buffer->pixels;
+	engine->frame.delta = time_in_ms() - engine->frame.t_last_frame;
+	engine->frame.t_last_frame = time_in_ms();
 	engine->frame.fps++;
 	engine->recalculate = should_recalculate(engine);
 	while (engine->moving && i < THREAD_COUNT)

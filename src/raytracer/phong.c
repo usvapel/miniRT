@@ -75,8 +75,7 @@ void	phong_model(t_engine *engine, t_hit *hit)
 	if (hit->type == LIGHT)
 		return ;
 	p.model_color = color_to_vec3d(hit->color);
-	// p.ambient = new_vec3d(0.2, 0.2, 0.2);
-	p.ambient = color_to_vec3d(hit->color);
+	p.ambient = new_vec3d(0.1, 0.1, 0.1);
 	p.normal = normalize_vec3d(hit->normal);
 	p.final_color = p.ambient;
 	i = 0;
@@ -88,12 +87,12 @@ void	phong_model(t_engine *engine, t_hit *hit)
 		p.nlight_dir = normalize_vec3d(p.light_dir);
 		if (is_in_shadow(&p, engine, *hit, *light))
 			continue ;
-		if (hit->type == PLANE)
-			p.specular = nscale_vec3d(p.specular, 0.0f);
 		get_diffuse(&p);
 		get_specular(engine, hit, &p);
-		p.diffuse = nscale_vec3d(p.diffuse, 0.4f);
-		p.specular = nscale_vec3d(p.specular, 0.1f);
+		if (hit->type == PLANE)
+			p.specular = nscale_vec3d(p.specular, 0.0f);
+		p.diffuse = nscale_vec3d(p.diffuse, light->brightness);
+		p.specular = nscale_vec3d(p.specular, light->brightness);
 		p.final_color = add2_vec3d(p.final_color, p.diffuse);
 		p.final_color = add2_vec3d(p.final_color, p.specular);
 	}
