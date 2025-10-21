@@ -26,4 +26,4 @@ void	fps_counter(void *param);
 
 long	time_in_ms(void);
 
-#endif // mlx_hooks_H
+#endif // MLX_HOOKS_H

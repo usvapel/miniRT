@@ -82,7 +82,7 @@ SRCS_MAIN := \
 	parse_paraboloid.c \
 	parse_plane.c \
 	parse_sphere.c \
-	parse_utility.c \
+	parsing_utility.c \
 	color.c \
 	viewport.c \
 	vec3d.c \

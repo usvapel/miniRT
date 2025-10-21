@@ -4,6 +4,10 @@
 # include "vector.h"
 # include "engine.h"
 
+void	runtime_error(char *s);
+void	free_array(void **array);
+void	free_values(char **values[3], int count);
+char	**safe_split(char **values[3], int count, char *line);
 
 t_vec3d	parse_vec3d(char **values[3], char **components);
 t_color	parse_color(char **values[3], char **components);
