@@ -79,7 +79,7 @@ void	phong_model(t_engine *engine, t_hit *hit)
 	p.normal = normalize_vec3d(hit->normal);
 	p.final_color = p.ambient;
 	i = 0;
-	while (i < engine->light_count)
+	while (i < engine->lights->count)
 	{
 		light = engine->lights->data[i++];
 		p.light_color = color_to_vec3d(light->base.color);
