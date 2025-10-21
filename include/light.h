@@ -5,6 +5,8 @@
 # include <stdbool.h>
 # include "ray.h"
 
+# define LIGHT_RADIUS 0.1f
+
 // typedef struct s_light
 // {
 // 	t_object base;

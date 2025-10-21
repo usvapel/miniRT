@@ -116,7 +116,7 @@ void	init_light(t_vector *objects, char **split)
 	light->base.pos = parse_vec3d(values[0]);
 	light->brightness = ft_atof(values[1][0]);
 	light->base.color = parse_color(values[2]);
-	light->r = 1.1f;
+	light->r = LIGHT_RADIUS;
 	add_elem(objects, light);
 	add_elem(engine->lights, light);
 	engine->light_count++;
