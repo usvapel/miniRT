@@ -109,6 +109,17 @@ void	init_camera(t_engine *engine, char **split)
 	validate_camera(engine);
 }
 
+void	validate_light(t_light *light)
+{
+	if (light->brightness < 0.0 || light->brightness > 1.0)
+		runtime_error("Invalid light brightness value (0-1)");
+	if (light->base.color.r < 0.0 || light->base.color.r > 255)
+		runtime_error("Invalid light color values (0-255)");
+	if (light->base.color.g < 0.0 || light->base.color.g > 255)
+		runtime_error("Invalid light color values (0-255)");
+	if (light->base.color.b < 0.0 || light->base.color.b > 255)
+		runtime_error("Invalid light color values (0-255)");
+}
 
 void	init_light(t_vector *objects, char **split)
 {
@@ -131,9 +142,10 @@ void	init_light(t_vector *objects, char **split)
 	light->brightness = ft_atof(values[1][0]);
 	light->base.color = parse_color(values, values[2]);
 	light->r = LIGHT_RADIUS;
+	free_values(values, 3);
+	validate_light(light);
 	add_elem(objects, light);
 	add_elem(engine->lights, light);
-	free_values(values, 3);
 }
 
 void	init_sphere(t_vector *objects, char **split)
@@ -229,7 +241,7 @@ void	set_values(t_engine *engine, char **split)
 		return (init_cylinder(engine->objects, split));
 	if (ft_strcmp(split[0], "pa") == 0)
 		return (init_paraboloid(engine->objects, split));
-	printf("invalid identifier: %s\n", split[0]);
+	// printf("invalid identifier: %s\n", split[0]);
 }
 
 void	input_parsing(t_engine *engine, char **av)
@@ -251,7 +263,8 @@ void	input_parsing(t_engine *engine, char **av)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		line[ft_strlen(line)-1] = 0;
+		if (line[0] != '\n')
+			line[ft_strlen(line)-1] = 0;
 		split = ft_split(line, ' ');
 		if (!split)
 		{
