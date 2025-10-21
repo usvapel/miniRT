@@ -241,7 +241,6 @@ void	set_values(t_engine *engine, char **split)
 		return (init_cylinder(engine->objects, split));
 	if (ft_strcmp(split[0], "pa") == 0)
 		return (init_paraboloid(engine->objects, split));
-	// printf("invalid identifier: %s\n", split[0]);
 }
 
 void	input_parsing(t_engine *engine, char **av)
