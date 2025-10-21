@@ -1,4 +1,3 @@
-#include "camera.h"
 #include "minirt.h"
 
 void	runtime_error(char *s)
@@ -319,7 +318,7 @@ void	read_and_process_file(t_engine *engine, int fd)
 	close(fd);
 }
 
-char *check_file_validity(char *file)
+char	*check_file_validity(char *file)
 {
 	int	len;
 
