@@ -27,6 +27,7 @@ void	init_paraboloid(t_vector *objects, char **split)
 	para->base.color = parse_color(values, values[4]);
 	para->axis = normalize_vec3d(para->axis);
 	para->base.material.reflec = ft_atof(values[5][0]);
+	para->base.texture.index = -1;
 	free_values(values, 6);
 	validate_axis(para->axis);
 	validate_color(para->base.color);

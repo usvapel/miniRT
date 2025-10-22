@@ -11,6 +11,7 @@
 # include "viewport.h"
 # include "vector.h"
 # include "geometry.h"
+# include "textures.h"
 
 typedef struct timeval t_time;
 typedef pthread_t t_pthread;
@@ -83,6 +84,7 @@ typedef struct s_engine
 	t_ambient ambient;
 	t_vector *objects;
 	t_vector  *lights;
+	t_textures  textures;
 	t_viewport viewport;
 	atomic_bool update;
 	atomic_bool moving;

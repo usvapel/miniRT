@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/10/20 12:49:15 by zfarah           ###   ########.fr        #
+#    Updated: 2025/10/22 17:25:09 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,8 @@ VPATH	:= $(SRC_DIR): \
 	$(SRC_DIR)/geometry: \
 	$(SRC_DIR)/MLX: \
 	$(SRC_DIR)/raytracer \
-	$(SRC_DIR)/threads
+	$(SRC_DIR)/threads \
+	$(SRC_DIR)/textures:
 
 # Parsing and syntax analysis
 SRCS_MAIN := \
@@ -83,6 +84,7 @@ SRCS_MAIN := \
 	parse_paraboloid.c \
 	parse_plane.c \
 	parse_sphere.c \
+	parse_textures.c \
 	parsing_utility.c \
 	color.c \
 	viewport.c \
@@ -105,7 +107,10 @@ SRCS_MAIN := \
 	orthonormal_basis.c \
 	phong.c \
 	ray.c \
-	paraboloid.c
+	paraboloid.c \
+	plane_uv.c \
+	texture.c \
+	sphere_uv.c
 
 # Combine all source files
 SRCS := \
