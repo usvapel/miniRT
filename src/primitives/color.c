@@ -10,6 +10,44 @@ t_color	vec3d_to_color(t_vec3d v)
 	return c;
 }
 
+// Get the red channel.
+int get_r(int rgba)
+{
+    // Move 3 bytes to the right and mask out the first byte.
+    return ((rgba >> 24) & 0xFF);
+}
+
+// Get the green channel.
+int get_g(int rgba)
+{
+    // Move 2 bytes to the right and mask out the first byte.
+    return ((rgba >> 16) & 0xFF);
+}
+
+// Get the blue channel.
+int get_b(int rgba)
+{
+    // Move 1 byte to the right and mask out the first byte.
+    return ((rgba >> 8) & 0xFF);
+}
+
+// Get the alpha channel.
+int get_a(int rgba)
+{
+    // Move 0 bytes to the right and mask out the first byte.
+    return (rgba & 0xFF);
+}
+
+t_color int_to_color(int c)
+{
+	t_color result;
+	result.r = get_r(c);
+	result.g = get_g(c);
+	result.b = get_b(c);
+	result.a = get_a(c);
+	return result;
+}
+
 t_vec3d color_to_vec3d(t_color c)
 {
 	t_vec3d v;

@@ -4,6 +4,11 @@
 # include "primitives.h"
 # include <stdbool.h>
 
+typedef struct s_material
+{
+	float reflectiveness;
+}	t_material;
+
 typedef struct s_ray
 {
 	t_vec3d origin;
@@ -19,6 +24,7 @@ typedef struct s_hit
 	int type;
 	float distance;
 	void *obj;
+	t_material material;
 }	t_hit;
 
 void	*raytracer(void *engine);
