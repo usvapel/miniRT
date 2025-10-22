@@ -2,13 +2,14 @@
 
 void	init_plane(t_engine *engine, char **split)
 {
-	char	**values[3];
+	char	**values[4];
 	t_plane	*plane;
 
 	*values = NULL;
-	values[0] = safe_split(values, 3, split[1]);
-	values[1] = safe_split(values, 3, split[2]);
-	values[2] = safe_split(values, 3, split[3]);
+	values[0] = safe_split(values, 4, split[1]);
+	values[1] = safe_split(values, 4, split[2]);
+	values[2] = safe_split(values, 4, split[3]);
+	values[3] = safe_split(values, 4, split[4]);
 	plane = malloc(sizeof(t_plane));
 	if (!plane)
 	{
@@ -18,7 +19,8 @@ void	init_plane(t_engine *engine, char **split)
 	plane->base.type = PLANE;
 	plane->base.pos = parse_vec3d(values, values[0]);
 	plane->normal = parse_vec3d(values, values[1]);
-	plane->base.color = parse_color(values, values[2]);
+	plane->material.reflectiveness = ft_atof(values[2][0]);
+	plane->base.color = parse_color(values, values[3]);
 	free_values(values, 3);
 	validate_color(plane->base.color);
 	if (plane->normal.x < -1.0f || plane->normal.x > 1.0f)

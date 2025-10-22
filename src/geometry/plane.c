@@ -25,7 +25,7 @@ bool plane_hit(t_plane *plane, t_ray ray, t_hit *hit)
         return false;
     hit->normal = plane->normal;
     hit->type = PLANE;
-		// hit->color = checker_board(hit);
+	hit->material = plane->material;
     return true;
 }
 

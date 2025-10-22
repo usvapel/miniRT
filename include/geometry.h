@@ -15,18 +15,21 @@ typedef struct s_object
 typedef struct s_sphere
 {
 	t_object base;	
+	t_material material;
 	float r;
 }	t_sphere;
 
 typedef struct s_plane
 {
 	t_object base;
+	t_material material;
 	t_vec3d normal;
 }	t_plane;
 
 typedef struct s_cylinder
 {
 	t_object base;
+	t_material material;
 	float h;
 	float r;
 	t_vec3d axis;
@@ -35,12 +38,14 @@ typedef struct s_cylinder
 typedef struct s_circle
 {
 	t_object base;
+	t_material material;
 	float r;
 } t_circle;
 
 typedef struct s_paraboloid
 {
 	t_object base;
+	t_material material;
 	float	focal;
 	float	h;
 	t_vec3d axis;
