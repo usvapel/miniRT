@@ -26,6 +26,7 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->h = ft_atof(values[3][0]);
 	cylinder->base.color = parse_color(values, values[4]);
 	cylinder->axis = normalize_vec3d(cylinder->axis);
+	cylinder->base.texture.index = -1;
 	if (values[5])
 		cylinder->base.material.reflec = ft_atof(values[5][0]);
 	free_values(values, 6);
