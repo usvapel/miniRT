@@ -11,6 +11,8 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 	values[1] = safe_split(values, 2, split[3]);
 	check->color1 = parse_color(values, values[0]);
 	check->color2 = parse_color(values, values[1]);
+	check->block_size = ft_atof(split[4]);
+	printf("block size: %f\n", check->block_size);
 	print_vec(color_to_vec3d(check->color1), "Color: ");
 	add_elem(checkers, check);
 	free_values(values, 2);
@@ -20,12 +22,11 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 
 void	link_texture(t_object *obj, char **split)
 {
-	obj->texture.index = -1;
-	obj->texture.type = -1;
+
 	if (!split || !*split || !*(split + 1))
 	{
 		printf("Invalid linkage to texture\n");
-		return ;
+		// exit(1);
 	}
 	if (ft_strcmp(split[0], "ch") == 0)
 	{
@@ -34,4 +35,6 @@ void	link_texture(t_object *obj, char **split)
 	}
 	else
 		printf("Invalid texture type: %s\n", split[1]);
+	
+	printf("Linkage type: %d, i: %d\n",obj->type, obj->texture.index);
 }
