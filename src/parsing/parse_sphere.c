@@ -19,6 +19,10 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->base.pos = parse_vec3d(values, values[0]);
 	sphere->r = ft_atof(values[1][0]) / 2.0f;
 	sphere->base.color = parse_color(values, values[2]);
+	sphere->base.texture.index = -1;
+	sphere->base.texture.type = -1;
+	if (split[4])
+		link_texture(&sphere->base, split + 4);
 	free_values(values, 3);
 	validate_color(sphere->base.color);
 	add_elem(objects, sphere);
