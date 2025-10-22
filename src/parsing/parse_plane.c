@@ -32,11 +32,12 @@ void	init_plane(t_engine *engine, char **split)
 	plane->base.pos = parse_vec3d(values, values[0]);
 	plane->normal = parse_vec3d(values, values[1]);
 	plane->base.color = parse_color(values, values[2]);
+	plane->base.texture.index = -1;
 	if (values[3])
 		plane->base.material.reflec = ft_atof(values[3][0]);
 	free_values(values, 4);
 	if (split[4] && split[5])
-		link_texture(&plane->base, split + 4);
+		link_texture(&plane->base, split + 5);
 	validate_color(plane->base.color);
 	validate_normal(plane->normal);
 	add_elem(engine->objects, plane);
