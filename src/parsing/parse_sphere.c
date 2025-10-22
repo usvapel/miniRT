@@ -25,6 +25,11 @@ void	init_sphere(t_vector *objects, char **split)
 	if (values[3])
 		sphere->base.material.reflec = ft_atof(values[3][0]);
 	free_values(values, 4);
+	sphere->base.texture.index = -1;
+	sphere->base.texture.type = -1;
+	if (split[4] && split[5])
+		link_texture(&sphere->base, split + 5);
+	free_values(values, 3);
 	validate_color(sphere->base.color);
 	add_elem(objects, sphere);
 }
