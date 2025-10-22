@@ -81,6 +81,7 @@ typedef struct s_engine
 	t_camera camera;
 	t_vector *objects;
 	t_vector  *lights;
+	t_textures  textures;
 	t_viewport viewport;
 	atomic_bool update;
 	atomic_bool moving;
