@@ -118,9 +118,11 @@ static void	calculate_scene(t_threads *t, t_engine *engine)
 			ray = get_ray(get_sample(x, t, X_AXIS), get_sample(y, t, Y_AXIS));
 			hit.prev_hit = false;
 			(void)object_intersection(engine, &ray, &hit);
+			if (hit.prev_hit)
+				apply_texture(&hit);
 			phong_model(engine, &hit);
 			if (hit.prev_hit)
-				color = scale_color(&hit.color, 1);
+				color = scale_color(&hit.color, 1); // what is this????
 			else
 				color = color_gradient(engine, y);
 			draw_to_buffer(t, x, y, color);
