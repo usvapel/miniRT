@@ -1,8 +1,6 @@
 #ifndef TEXTURES_H
 #define TEXTURES_H
 
-// #include "primitives.h"
-#include "geometry.h"
 #include "vector.h"
 
 typedef struct s_plane t_plane;
@@ -30,6 +28,7 @@ typedef struct s_checker
 {
     t_color color1;
     t_color color2;
+    float block_size;
 } t_checker;
 
 typedef enum e_texture_type
