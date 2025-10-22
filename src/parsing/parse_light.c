@@ -24,6 +24,7 @@ void	init_light(t_vector *objects, char **split)
 	light->r = LIGHT_RADIUS;
 	light->base.material.reflec = 0.0f;
 	light->base.material.ignore = true;
+	light->base.texture.index = -1;
 	free_values(values, 3);
 	if (light->brightness < 0.0 || light->brightness > 1.0)
 		runtime_error("Invalid light brightness value (0-1)");

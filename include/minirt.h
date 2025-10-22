@@ -6,7 +6,7 @@
 /*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/20 12:57:43 by zfarah           ###   ########.fr       */
+/*   Updated: 2025/10/22 20:28:41 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "camera.h"
 # include "viewport.h"
 # include "light.h"
+# include "textures.h"
 # include "geometry.h"
 # include "vector.h"
 # include "parsing.h"
@@ -74,4 +75,6 @@ void	thread_cleanup();
 t_vec3d	reflect(t_vec3d direction, t_vec3d normal);
 
 t_color int_to_color(int c);
+
+t_object *get_base_object(void *obj);
 #endif // MINIRT_T

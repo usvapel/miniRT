@@ -1,0 +1,40 @@
+#include "minirt.h"
+
+void	init_checkerboard_text(t_vector *checkers, char **split)
+{
+	char	**values[2];
+	t_checker *check = malloc(sizeof(t_checker));
+
+	printf("Initializing checkerboard texture\n");
+	*values = NULL;
+	values[0] = safe_split(values, 2, split[2]);
+	values[1] = safe_split(values, 2, split[3]);
+	check->color1 = parse_color(values, values[0]);
+	check->color2 = parse_color(values, values[1]);
+	check->block_size = ft_atof(split[4]);
+	printf("block size: %f\n", check->block_size);
+	print_vec(color_to_vec3d(check->color1), "Color: ");
+	add_elem(checkers, check);
+	free_values(values, 2);
+	// exit(1);
+}
+
+
+void	link_texture(t_object *obj, char **split)
+{
+
+	if (!split || !*split || !*(split + 1))
+	{
+		printf("Invalid linkage to texture\n");
+		// exit(1);
+	}
+	if (ft_strcmp(split[0], "ch") == 0)
+	{
+		obj->texture.type = CHECKERBOARD;
+		obj->texture.index = ft_atoi(split[1]);
+	}
+	else
+		printf("Invalid texture type: %s\n", split[1]);
+	
+	printf("Linkage type: %d, i: %d\n",obj->type, obj->texture.index);
+}
