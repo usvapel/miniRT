@@ -10,6 +10,7 @@ typedef struct s_object
 	int type;
 	t_vec3d pos;
 	t_color color;
+	t_material material;
 } t_object;
 
 typedef struct s_sphere

@@ -19,16 +19,21 @@ void	free_array(void **array)
 	free(array);
 }
 
-void	free_values(char **values[3], int count)
+void	free_values(char **values[], int count)
 {
 	int	i;
 
 	i = 0;
-	while (i < count)
-		free_array((void *)values[i++]);
+	while (i < count && values[i])
+	{
+		if (!values[i][0])
+			break ;
+		free_array((void *)values[i]);
+		i++;
+	}
 }
 
-char	**safe_split(char **values[3], int count, char *line)
+char	**safe_split(char **values[], int count, char *line)
 {
 	char	**splitted;
 
@@ -43,7 +48,7 @@ char	**safe_split(char **values[3], int count, char *line)
 	return (splitted);
 }
 
-t_vec3d	parse_vec3d(char **values[3], char **components)
+t_vec3d	parse_vec3d(char **values[], char **components)
 {
 	t_vec3d	vec;
 
@@ -58,7 +63,7 @@ t_vec3d	parse_vec3d(char **values[3], char **components)
 	return (vec);
 }
 
-t_color	parse_color(char **values[3], char **components)
+t_color	parse_color(char **values[], char **components)
 {
 	t_color	color;
 
