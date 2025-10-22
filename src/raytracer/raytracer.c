@@ -1,3 +1,4 @@
+#include "geometry.h"
 #include "minirt.h"
 #include "primitives.h"
 
@@ -44,7 +45,6 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 	int	type;
 	int	i;
 
-	// plane_hit(*((t_plane *)engine->objects->data[4]), *ray, hit);
 	i = 0;
 	while (i < engine->objects->count)
 	{
@@ -105,22 +105,20 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 # define EPSILON 1e-4
 # define MAX_DEPTH 4
 
-static t_color	mix_colors(t_color c1, t_color c2, float r)
+
+static t_color mix_colors(t_color c1, t_color c2, float r)
 {
-	c1.r += (c2.r / 2) * r;
-	if (c1.r > 255)
-		c1.r = 255;
-	c1.g += (c2.g / 2) * r;
-	if (c1.g > 255)
-		c1.g = 255;
-	c1.b += (c2.b / 2) * r;
-	if (c1.b > 255)
-		c1.b = 255;
-	c1.a += (c2.a / 2) * r;
-	if (c1.a > 255)
-		c1.a = 255;
+	c1.r = c1.r * (1 - r) + c2.r * r;
+	c1.g = c1.g * (1 - r) + c2.g * r;
+	c1.b = c1.b * (1 - r) + c2.b * r;
+	c1.a = c1.a * (1 - r) + c2.a * r;
+	if (c1.r > 255) c1.r = 255;
+	if (c1.g > 255) c1.g = 255;
+	if (c1.b > 255) c1.b = 255;
+	if (c1.a > 255) c1.a = 255;
 	return c1;
 }
+
 
 static t_color	trace_ray(t_ray ray, int depth, int y)
 {
@@ -135,18 +133,16 @@ static t_color	trace_ray(t_ray ray, int depth, int y)
 	(void)object_intersection(engine, &ray, &hit);
 	if (!hit.prev_hit)
 		return (int_to_color(color_gradient(engine, y)));
-
 	phong_model(engine, &hit);
 	local = hit.color;
-	if (depth >= MAX_DEPTH || hit.material.reflectiveness == 0)
+	if (depth >= MAX_DEPTH || ((t_object *)hit.obj)->material.reflec == 0)
 		return (local);
-
+	hit.normal = normalize_vec3d(hit.normal);
 	R = reflect(ray.udir, hit.normal);
 	reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(R, EPSILON));
 	reflected.udir = normalize_vec3d(R);
-
 	reflect_color = trace_ray(reflected, depth + 1, y);
-	return (mix_colors(local, reflect_color, hit.material.reflectiveness));
+	return (mix_colors(local, reflect_color, ((t_object *)hit.obj)->material.reflec));
 }
 
 static void	calculate_scene(t_threads *t)
