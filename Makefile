@@ -47,8 +47,8 @@ DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 # Additional flags
 LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
-				-lglfw -lXext -lX11 -lm -ldl -pthread
-# 				-ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
+				-ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
+# 				-lglfw -lXext -lX11 -lm -ldl -pthread
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Terminal colors for build output
@@ -70,7 +70,8 @@ VPATH	:= $(SRC_DIR): \
 	$(SRC_DIR)/geometry: \
 	$(SRC_DIR)/MLX: \
 	$(SRC_DIR)/raytracer \
-	$(SRC_DIR)/threads
+	$(SRC_DIR)/threads \
+	$(SRC_DIR)/textures:
 
 # Parsing and syntax analysis
 SRCS_MAIN := \
@@ -104,7 +105,9 @@ SRCS_MAIN := \
 	orthonormal_basis.c \
 	phong.c \
 	ray.c \
-	paraboloid.c
+	paraboloid.c \
+	plane_uv.c \
+	texture.c
 
 # Combine all source files
 SRCS := \
