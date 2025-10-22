@@ -45,7 +45,7 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 
 	// plane_hit(*((t_plane *)engine->objects->data[4]), *ray, hit);
 	i = 0;
-	while (i < engine->object_count)
+	while (i < engine->objects->count)
 	{
 		type = *(int *)(engine->objects->data[i]);
 		if (type == PLANE)
