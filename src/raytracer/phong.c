@@ -7,7 +7,7 @@
 /*
 	R = L - 2(N * L), where N is normal surface and L is the incoming vector from the light source to the hit
 */
-static t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
+t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
 {
 	float	dot;
 	t_vec3d	tmp;
