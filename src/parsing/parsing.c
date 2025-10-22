@@ -4,6 +4,8 @@ static void	set_values(t_engine *engine, char **split)
 {
 	if (!split[0])
 		return ;
+	if (ft_strcmp(split[0], "A") == 0)
+		return (init_ambient(split));
 	if (ft_strcmp(split[0], "C") == 0)
 		return (init_camera(engine, split));
 	if (ft_strcmp(split[0], "L") == 0)
