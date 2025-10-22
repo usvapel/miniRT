@@ -59,6 +59,8 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 			paraboloid_hit(((t_paraboloid *)engine->objects->data[i]), *ray, hit);
 		i++;
 	}
+	if (hit->prev_hit)
+		apply_texture(hit);
 	return (hit->type);
 }
 
