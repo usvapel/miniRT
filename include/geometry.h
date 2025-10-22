@@ -4,12 +4,14 @@
 # include "primitives.h"
 # include "stdbool.h"
 # include "ray.h"
+# include "textures.h"
 
 typedef struct s_object
 {
 	int type;
 	t_vec3d pos;
 	t_color color;
+	t_texture texture;
 } t_object;
 
 typedef struct s_sphere
