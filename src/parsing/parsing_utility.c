@@ -33,7 +33,7 @@ char	**safe_split(char **values[3], int count, char *line)
 	char	**splitted;
 
 	if (!line)
-		runtime_error("Possible invalid/missing values!");
+		runtime_error("invalid/missing values!");
 	splitted = ft_split(line, ',');
 	if (!splitted)
 	{
