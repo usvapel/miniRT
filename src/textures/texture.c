@@ -1,0 +1,10 @@
+#include "minirt.h"
+
+void    apply_texture(t_hit *hit)
+{
+    t_object *base = (t_object *)hit->obj;
+    if (base->type == PLANE)
+        plane_uv(*((t_plane *)hit->obj), hit);
+    else if (base->type == SPHERE)
+        sphere_uv(*((t_sphere *)hit->obj), hit);
+}
