@@ -76,6 +76,13 @@ VPATH	:= $(SRC_DIR): \
 SRCS_MAIN := \
 	main.c \
 	parsing.c \
+	parse_camera.c \
+	parse_cylinder.c \
+	parse_light.c \
+	parse_paraboloid.c \
+	parse_plane.c \
+	parse_sphere.c \
+	parsing_utility.c \
 	color.c \
 	viewport.c \
 	vec3d.c \

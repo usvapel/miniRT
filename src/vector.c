@@ -24,7 +24,7 @@ void	expand_vector(t_vector *vector)
 {
 	void	**new;
 	void	**old;
-	size_t	i;
+	int	i;
 
 	i = 0;
 	new = malloc(sizeof(void *) * (vector->size * 2 + 1));
@@ -53,17 +53,21 @@ void	add_elem(t_vector *vector, void *elem)
 
 void	free_vector(t_vector *vector)
 {
-	size_t i;
-	if (!vector)
+	int i;
+	if (!vector || !vector->owns_data)
 		return ;
-
 	i = 0;
 	while (i < vector->count)
 	{
 		if (vector->data[i])
+		{
 			free(vector->data[i]);
+			vector->data[i] = NULL;
+		}
 		i++;
 	}
 	free(vector->data);
+	vector->data = NULL;
 	free(vector);
+	vector = NULL;
 }

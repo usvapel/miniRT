@@ -33,6 +33,7 @@ static size_t	ft_words_in_s(const char *s, char c)
 {
 	size_t	count;
 	size_t	i;
+	int		in_word;
 
 	if (c == '\0')
 	{
@@ -43,12 +44,16 @@ static size_t	ft_words_in_s(const char *s, char c)
 	}
 	count = 0;
 	i = 0;
-	if (s[i] && s[i + 1] && s[i] != c)
-		count++;
+	in_word = 0;
 	while (s[i])
 	{
-		if (s[i] == c && s[i + 1] && s[i + 1] != c)
+		if (s[i] != c && !in_word)
+		{
+			in_word = 1;
 			count++;
+		}
+		else if (s[i] == c)
+			in_word = 0;
 		i++;
 	}
 	return (count);
@@ -102,6 +107,8 @@ char	**ft_split(const char *s, char c)
 	if (!s)
 		return (NULL);
 	word_count = ft_words_in_s(s, c);
+	if (word_count == 0)
+		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
