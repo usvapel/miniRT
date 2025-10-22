@@ -76,6 +76,7 @@ VPATH	:= $(SRC_DIR): \
 SRCS_MAIN := \
 	main.c \
 	parsing.c \
+	parse_ambient.c \
 	parse_camera.c \
 	parse_cylinder.c \
 	parse_light.c \

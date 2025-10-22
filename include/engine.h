@@ -10,6 +10,7 @@
 # include "camera.h"
 # include "viewport.h"
 # include "vector.h"
+# include "geometry.h"
 
 typedef struct timeval t_time;
 typedef pthread_t t_pthread;
@@ -79,6 +80,7 @@ typedef struct s_engine
 	mlx_image_t *image;
 	mlx_image_t *image_buffer;
 	t_camera camera;
+	t_ambient ambient;
 	t_vector *objects;
 	t_vector  *lights;
 	t_viewport viewport;
