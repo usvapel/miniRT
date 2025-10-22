@@ -6,7 +6,7 @@
 /*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/20 12:57:43 by zfarah           ###   ########.fr       */
+/*   Updated: 2025/10/22 13:54:38 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "geometry.h"
 # include "vector.h"
 # include "parsing.h"
+# include "textures.h"
 
 # include <errno.h>
 # include <math.h>
