@@ -126,11 +126,15 @@ static t_color	trace_ray(t_ray ray, int depth, int y)
 	t_vec3d		R;
 	t_ray		reflected;
 	t_color		reflect_color;
+	static bool		applied_texture = {0};
 
 	hit.prev_hit = false;
 	(void)object_intersection(engine, &ray, &hit);
 	if (!hit.prev_hit)
 		return (int_to_color(color_gradient(engine, y)));
+	if (!applied_texture)
+		apply_texture(&hit);
+	applied_texture = true;
 	phong_model(engine, &hit);
 	local = hit.color;
 	if (depth >= BOUNCES || ((t_object *)hit.obj)->material.reflec == 0)
