@@ -11,6 +11,7 @@
 # include "viewport.h"
 # include "vector.h"
 # include "geometry.h"
+# include "textures.h"
 
 typedef struct timeval t_time;
 typedef pthread_t t_pthread;
