@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/10/20 12:49:15 by zfarah           ###   ########.fr        #
+#    Updated: 2025/10/22 17:25:09 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,8 @@ DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 # Additional flags
 LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
-				-ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
-# 				-lglfw -lXext -lX11 -lm -ldl -pthread
+				-lglfw -lXext -lX11 -lm -ldl -pthread
+# 				-ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Terminal colors for build output
@@ -84,6 +84,7 @@ SRCS_MAIN := \
 	parse_paraboloid.c \
 	parse_plane.c \
 	parse_sphere.c \
+	parse_textures.c \
 	parsing_utility.c \
 	color.c \
 	viewport.c \
@@ -108,7 +109,8 @@ SRCS_MAIN := \
 	ray.c \
 	paraboloid.c \
 	plane_uv.c \
-	texture.c
+	texture.c \
+	sphere_uv.c
 
 # Combine all source files
 SRCS := \
