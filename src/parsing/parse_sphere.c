@@ -19,6 +19,7 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->base.pos = parse_vec3d(values, values[0]);
 	sphere->r = ft_atof(values[1][0]) / 2.0f;
 	sphere->base.color = parse_color(values, values[2]);
+	sphere->material.reflectiveness = 0.0f;
 	free_values(values, 3);
 	validate_color(sphere->base.color);
 	add_elem(objects, sphere);
