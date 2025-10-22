@@ -21,6 +21,7 @@ void	init_camera(t_engine *engine, char **split)
 {
 	char	**values[3];
 
+	printf("init_camera\n");
 	*values = NULL;
 	values[0] = safe_split(values, 3, split[1]);
 	values[1] = safe_split(values, 3, split[2]);
@@ -28,7 +29,7 @@ void	init_camera(t_engine *engine, char **split)
 	if (split[4])
 	{
 		free_values(values, 3);
-		runtime_error("too many values in camera!");
+		runtime_error("too many values to camera!");
 	}
 	engine->camera.pos = parse_vec3d(values, values[0]);
 	engine->camera.dir = parse_vec3d(values, values[1]);
