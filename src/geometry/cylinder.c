@@ -23,7 +23,6 @@ void    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
         hit->normal = local_hit.normal;
         hit->pos = local_hit.pos;
         hit->type = CYLINDER;
-		hit->material.reflectiveness = cy->material.reflectiveness;
     }
 }
 
