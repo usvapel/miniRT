@@ -54,10 +54,15 @@ typedef struct s_light
 	float	brightness;
 }	t_light;
 
+typedef struct s_ambient
+{
+	t_object base;
+	float	ratio;
+}	t_ambient;
 
 typedef enum e_id
 {
-	AMBIENT_LIGHNING,
+	AMBIENT,
 	CAMERA,
 	LIGHT,
 	SPHERE,

@@ -1,4 +1,5 @@
 #include "minirt.h"
+#include "primitives.h"
 
 # define A_CONSTANT 1.0f
 # define LINEAR_COEFFICIENT 0.09f
@@ -75,7 +76,8 @@ void	phong_model(t_engine *engine, t_hit *hit)
 	if (hit->type == LIGHT)
 		return ;
 	p.model_color = color_to_vec3d(hit->color);
-	p.ambient = new_vec3d(0.1, 0.1, 0.1);
+	p.ambient = color_to_vec3d(engine->ambient.base.color);
+	p.ambient = nscale_vec3d(p.ambient, engine->ambient.ratio);
 	p.normal = normalize_vec3d(hit->normal);
 	p.final_color = p.ambient;
 	i = 0;
