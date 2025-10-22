@@ -25,6 +25,7 @@ bool sphere_hit(t_sphere *sphere, t_ray ray, t_hit *hit)
     hit->normal = sub_vec3d(hit->pos, sphere->base.pos);
     hit->type = SPHERE;
     hit->color = sphere->base.color;
+	hit->material.reflectiveness = sphere->material.reflectiveness;
     return true;
 }
 

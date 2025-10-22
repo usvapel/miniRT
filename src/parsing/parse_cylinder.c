@@ -24,6 +24,7 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->h = ft_atof(values[3][0]);
 	cylinder->base.color = parse_color(values, values[4]);
 	cylinder->axis = normalize_vec3d(cylinder->axis);
+	cylinder->material.reflectiveness = 0.0f;
 	free_values(values, 5);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
