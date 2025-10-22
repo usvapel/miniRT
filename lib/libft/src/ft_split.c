@@ -107,10 +107,10 @@ char	**ft_split(const char *s, char c)
 	if (!s)
 		return (NULL);
 	word_count = ft_words_in_s(s, c);
-	if (word_count == 0)
-		return (NULL);
-	result = malloc((word_count + 1) * sizeof(char *));
+	result = ft_calloc(1, (word_count + 1) * sizeof(char *));
 	if (!result)
+		return (NULL);
+	if (word_count == 0)
 		return (NULL);
 	i = 0;
 	while (*s && i < word_count)

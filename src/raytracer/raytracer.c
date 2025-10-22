@@ -43,7 +43,6 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 	int	type;
 	int	i;
 
-	// plane_hit(*((t_plane *)engine->objects->data[4]), *ray, hit);
 	i = 0;
 	while (i < engine->objects->count)
 	{
@@ -101,10 +100,52 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 	}
 }
 
-static void	calculate_scene(t_threads *t, t_engine *engine)
+static t_color mix_colors(t_color c1, t_color c2, float r)
+{
+	c1.r = c1.r * (1 - r) + c2.r * r;
+	c1.g = c1.g * (1 - r) + c2.g * r;
+	c1.b = c1.b * (1 - r) + c2.b * r;
+	c1.a = c1.a * (1 - r) + c2.a * r;
+	if (c1.r > 255)
+		c1.r = 255;
+	if (c1.g > 255)
+		c1.g = 255;
+	if (c1.b > 255)
+		c1.b = 255;
+	if (c1.a > 255)
+		c1.a = 255;
+	return (c1);
+}
+
+
+static t_color	trace_ray(t_ray ray, int depth, int y)
+{
+	t_engine	*engine = get_engine();
+	t_hit		hit;
+	t_color		local;
+	t_vec3d		R;
+	t_ray		reflected;
+	t_color		reflect_color;
+
+	hit.prev_hit = false;
+	(void)object_intersection(engine, &ray, &hit);
+	if (!hit.prev_hit)
+		return (int_to_color(color_gradient(engine, y)));
+	phong_model(engine, &hit);
+	local = hit.color;
+	if (depth >= BOUNCES || ((t_object *)hit.obj)->material.reflec == 0)
+		return (local);
+	hit.normal = normalize_vec3d(hit.normal);
+	R = reflect(ray.udir, hit.normal);
+	reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(R, EPSILON));
+	reflected.udir = normalize_vec3d(R);
+	reflect_color = trace_ray(reflected, depth + 1, y);
+	return (mix_colors(local, reflect_color, ((t_object *)hit.obj)->material.reflec));
+}
+
+static void	calculate_scene(t_threads *t)
 {
 	t_ray	ray;
-	t_hit	hit;
 	int		x;
 	int		y;
 	int		color;
@@ -116,13 +157,8 @@ static void	calculate_scene(t_threads *t, t_engine *engine)
 		while (x < t->end_x)
 		{
 			ray = get_ray(get_sample(x, t, X_AXIS), get_sample(y, t, Y_AXIS));
-			hit.prev_hit = false;
-			(void)object_intersection(engine, &ray, &hit);
-			phong_model(engine, &hit);
-			if (hit.prev_hit)
-				color = scale_color(&hit.color, 1);
-			else
-				color = color_gradient(engine, y);
+			t_color final = trace_ray(ray, 0, y);
+			color = scale_color(&final, 1);
 			draw_to_buffer(t, x, y, color);
 			x += t->block_size;
 		}
@@ -149,7 +185,7 @@ void	*raytracer(void *thread)
 		}
 		t->done = false;
 		t->last_move = timer(engine->last_move_time, 1);
-		calculate_scene(t, engine);
+		calculate_scene(t);
 		if (engine->moving == false && t->last_move == true && t->block_size > 1)
 			t->block_size--;
 		t->done = true;

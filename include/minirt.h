@@ -70,4 +70,8 @@ void	setup_threads(void *eng);
 void	wait_for_threads();
 void	thread_cleanup();
 
+// phong
+t_vec3d	reflect(t_vec3d direction, t_vec3d normal);
+
+t_color int_to_color(int c);
 #endif // MINIRT_T

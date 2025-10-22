@@ -4,6 +4,15 @@
 # include "primitives.h"
 # include <stdbool.h>
 
+# define EPSILON 1e-4
+# define BOUNCES 4
+
+typedef struct s_material
+{
+	float reflec;
+	bool  ignore;
+}	t_material;
+
 typedef struct s_ray
 {
 	t_vec3d origin;
@@ -19,6 +28,7 @@ typedef struct s_hit
 	int type;
 	float distance;
 	void *obj;
+	t_material material;
 }	t_hit;
 
 void	*raytracer(void *engine);

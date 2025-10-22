@@ -2,7 +2,7 @@
 
 void	init_cylinder(t_vector *objects, char **split)
 {
-	char		**values[5];
+	char		**values[6];
 	t_cylinder	*cylinder;
 
 	*values = NULL;
@@ -11,10 +11,12 @@ void	init_cylinder(t_vector *objects, char **split)
 	values[2] = safe_split(values, 5, split[3]);
 	values[3] = safe_split(values, 5, split[4]);
 	values[4] = safe_split(values, 5, split[5]);
-	cylinder = malloc(sizeof(t_cylinder));
+	if (split[6])
+		values[5] = safe_split(values, 5, split[6]);
+	cylinder = ft_calloc(1, sizeof(t_cylinder));
 	if (!cylinder)
 	{
-		free_values(values, 5);
+		free_values(values, 6);
 		runtime_error("failure during memory allocation!");
 	}
 	cylinder->base.type = CYLINDER;
@@ -24,7 +26,9 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->h = ft_atof(values[3][0]);
 	cylinder->base.color = parse_color(values, values[4]);
 	cylinder->axis = normalize_vec3d(cylinder->axis);
-	free_values(values, 5);
+	if (values[5])
+		cylinder->base.material.reflec = ft_atof(values[5][0]);
+	free_values(values, 6);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
 	add_elem(objects, cylinder);
