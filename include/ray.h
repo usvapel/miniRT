@@ -6,7 +6,8 @@
 
 typedef struct s_material
 {
-	float reflectiveness;
+	float reflec;
+	bool  ignore;
 }	t_material;
 
 typedef struct s_ray
