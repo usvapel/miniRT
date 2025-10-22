@@ -6,6 +6,11 @@ t_engine *get_engine()
 
 	return (&engine);
 }
+t_object *get_base_object(void *obj)
+{
+    return ((t_object *)obj);
+}
+
 
 void cleanup_and_exit()
 {
