@@ -1,5 +1,6 @@
 #include "minirt.h"
 void lchecker_board(t_hit *hit, int texture_index, float u, float v);
+void wrap_img_plane(t_hit *hit, int index, t_vec3d uv);
 
 void    plane_uv(t_plane plane, t_hit *hit)
 {
@@ -12,6 +13,8 @@ void    plane_uv(t_plane plane, t_hit *hit)
     l_hit = point_in_basis(hit->pos, local, plane.base.pos);
     if (plane.base.texture.type == CHECKERBOARD)
         lchecker_board(hit, plane.base.texture.index, l_hit.x, l_hit.z);
+    if (plane.base.texture.type == IMAGE)
+        wrap_img_plane(hit, plane.base.texture.index, l_hit);
 }
 
 void lchecker_board(t_hit *hit, int texture_index, float u, float v)
@@ -22,4 +25,14 @@ void lchecker_board(t_hit *hit, int texture_index, float u, float v)
 	int i_v = floorf(v / checkboard->block_size);
 	t_color color = ((i_u + i_v) % 2 == 0) ? checkboard->color1 : checkboard->color2;
     hit->color = color;
+}
+
+void wrap_img_plane(t_hit *hit, int index, t_vec3d uv)
+{
+    t_image_text *text = get_engine()->textures.images->data[index];
+    uv.x /= 10.0;
+    uv.z /= 10.0;
+    uv.x -= floor(uv.x);
+    uv.z -= floor(uv.z);
+    hit->color = get_texel(text->texture, uv.x, uv.z);
 }
