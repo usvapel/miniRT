@@ -19,6 +19,13 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 	// exit(1);
 }
 
+void	init_image_text(t_vector *images, char **split)
+{
+	t_image_text *text = malloc(sizeof(t_image_text));
+	printf("Initializing image texture: %s\n", split[2]);
+	text->texture = mlx_load_png(split[2]);
+	add_elem(images, text);
+}
 
 void	link_texture(t_object *obj, char **split)
 {
@@ -31,6 +38,11 @@ void	link_texture(t_object *obj, char **split)
 	if (ft_strcmp(split[0], "ch") == 0)
 	{
 		obj->texture.type = CHECKERBOARD;
+		obj->texture.index = ft_atoi(split[1]);
+	}
+	else if (ft_strcmp(split[0], "img") == 0)
+	{
+		obj->texture.type = IMAGE;
 		obj->texture.index = ft_atoi(split[1]);
 	}
 	else

@@ -20,6 +20,8 @@ static void	set_values(t_engine *engine, char **split)
 		return (init_paraboloid(engine->objects, split));
 	if (ft_strcmp(split[0], "tx") == 0 && ft_strcmp(split[1], "ch") == 0)
 		return (init_checkerboard_text(engine->textures.checkers, split));
+	if (ft_strcmp(split[0], "tx") == 0 && ft_strcmp(split[1], "img") == 0)
+		return (init_image_text(engine->textures.images, split));
 }
 
 static void	read_and_process_file(t_engine *engine, int fd)
@@ -67,6 +69,7 @@ void	input_parsing(t_engine *engine, char **av)
 	engine->lights = new_vector(1);
 	engine->lights->owns_data = false;
 	engine->textures.checkers = new_vector(1);
+	engine->textures.images = new_vector(1);
 	fd = open(check_file_validity(av[1]), O_RDONLY);
 	if (fd < 0)
 		runtime_error("failure opening file!");
