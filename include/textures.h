@@ -2,6 +2,7 @@
 #define TEXTURES_H
 
 #include "vector.h"
+#include "MLX42.h"
 
 typedef struct s_plane t_plane;
 typedef struct s_sphere t_sphere;
@@ -31,6 +32,11 @@ typedef struct s_checker
     float block_size;
 } t_checker;
 
+typedef struct s_image_text
+{
+   mlx_texture_t *texture; 
+} t_image_text;
+
 typedef enum e_texture_type
 {
 	CHECKERBOARD,
@@ -40,6 +46,7 @@ typedef enum e_texture_type
 
 // apply texture
 void    apply_texture(t_hit *hit);
+t_color get_texel(mlx_texture_t *text, float u, float v);
 
 // uv mappings
 void    plane_uv(t_plane plane, t_hit *hit);

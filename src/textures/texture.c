@@ -14,3 +14,19 @@ void    apply_texture(t_hit *hit)
     else if (base->type == SPHERE)
         sphere_uv(*((t_sphere *)hit->obj), hit);
 }
+
+t_color get_texel(mlx_texture_t *text, float u, float v)
+{
+    int x = floorf(u * text->width);
+    int y = floorf(v * text->height);
+    int w = text->width;
+    int pixel_index = ( y * w + x) * text->bytes_per_pixel;
+    uint8_t *pixels = text->pixels;
+    uint8_t r = pixels[pixel_index + 0];
+    uint8_t g = pixels[pixel_index + 1];
+    uint8_t b = pixels[pixel_index + 2];
+    uint8_t a = pixels[pixel_index + 3];
+    uint32_t color = (r << 24) | (g << 16) | (b << 8) | a;
+
+    return int_to_color(color);
+}
