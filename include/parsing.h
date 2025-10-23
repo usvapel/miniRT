@@ -7,10 +7,10 @@
 void	runtime_error(char *s);
 void	free_array(void **array);
 void	free_values(char **values[], int count);
-char	**safe_split(char **values[], int count, char *line);
+char	**safe_split(t_vector *v, char *line);
 
-t_vec3d	parse_vec3d(char **values[], char **components);
-t_color	parse_color(char **values[], char **components);
+t_vec3d	parse_vec3d(t_vector *v, char **components);
+t_color	parse_color(t_vector *v, char **components);
 void	validate_axis(t_vec3d axis);
 void	validate_color(t_color color);
 

@@ -4,16 +4,18 @@ void	init_ambient(char **split)
 {
 	t_engine	*engine;
 	t_ambient	ambient;
-	char		**values[2];
+	t_vector	*v;
 
+	v = new_vector(1);
+	if (!v)
+		runtime_error("allocation failed!");
 	engine = get_engine();
-	*values = NULL;
-	values[0] = safe_split(values, 3, split[1]);
-	values[1] = safe_split(values, 3, split[2]);
+	add_elem(v, safe_split(v, split[1]));
+	add_elem(v, safe_split(v, split[2]));
 	ambient.base.type = AMBIENT;
-	ambient.ratio = ft_atof(values[0][0]);
-	ambient.base.color = parse_color(values, values[1]);
-	free_values(values, 2);
+	ambient.ratio = ft_atof(((char ***)v->data)[0][0]);
+	ambient.base.color = parse_color(v, v->data[1]);
+	free_vector(v);
 	if (ambient.ratio < 0.0 || ambient.ratio > 1.0)
 		runtime_error("Invalid ambient lighting ratio value (0-1)");
 	validate_color(ambient.base.color);
