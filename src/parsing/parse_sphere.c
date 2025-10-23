@@ -5,6 +5,7 @@ void	init_sphere(t_vector *objects, char **split)
 	t_vector	*v;
 	t_sphere	*sphere;
 
+	puts("parse sphere");
 	v = new_vector(1);
 	v->owns_data = true;
 	add_elem(v, safe_split(v, split[1]));

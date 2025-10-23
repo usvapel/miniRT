@@ -1,5 +1,4 @@
 #include "minirt.h"
-#include "vector.h"
 
 void	init_light(t_vector *objects, char **split)
 {
@@ -7,6 +6,7 @@ void	init_light(t_vector *objects, char **split)
 	t_light			*light;
 	t_vector *v;
 
+	puts("parse light");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
@@ -21,7 +21,7 @@ void	init_light(t_vector *objects, char **split)
 	}
 	light->base.type = LIGHT;
 	light->base.pos = parse_vec3d(v, v->data[0]);
-	light->brightness = ft_atof(v->data[1]);
+	light->brightness = ft_atof(((char ***)v->data)[1][0]);
 	light->base.color = parse_color(v, v->data[2]);
 	light->r = LIGHT_RADIUS;
 	light->base.material.reflec = 0.0f;
