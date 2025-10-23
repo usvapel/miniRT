@@ -4,13 +4,15 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 {
 	char	**values[2];
 	t_checker *check = malloc(sizeof(t_checker));
+	t_vector *v;
 
-	printf("Initializing checkerboard texture\n");
-	*values = NULL;
-	values[0] = safe_split(values, 2, split[2]);
-	values[1] = safe_split(values, 2, split[3]);
-	check->color1 = parse_color(values, values[0]);
-	check->color2 = parse_color(values, values[1]);
+	v = new_vector(1);
+	if (!v)
+		runtime_error("allocation failed");
+	add_elem(v, safe_split(v, split[1]));
+	add_elem(v, safe_split(v, split[2]));
+	check->color1 = parse_color(v, v->data[0]);
+	check->color2 = parse_color(v, v->data[1]);
 	check->block_size = ft_atof(split[4]);
 	printf("block size: %f\n", check->block_size);
 	print_vec(color_to_vec3d(check->color1), "Color: ");

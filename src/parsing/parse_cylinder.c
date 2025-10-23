@@ -2,34 +2,36 @@
 
 void	init_cylinder(t_vector *objects, char **split)
 {
-	char		**values[6];
 	t_cylinder	*cylinder;
+	t_vector *v;
 
-	*values = NULL;
-	values[0] = safe_split(values, 5, split[1]);
-	values[1] = safe_split(values, 5, split[2]);
-	values[2] = safe_split(values, 5, split[3]);
-	values[3] = safe_split(values, 5, split[4]);
-	values[4] = safe_split(values, 5, split[5]);
+	v = new_vector(1);
+	if (!v)
+		runtime_error("allocation failed");
+	add_elem(v, safe_split(v, split[1]));
+	add_elem(v, safe_split(v, split[2]));
+	add_elem(v, safe_split(v, split[3]));
+	add_elem(v, safe_split(v, split[4]));
+	add_elem(v, safe_split(v, split[5]));
 	if (split[6])
-		values[5] = safe_split(values, 5, split[6]);
+		add_elem(v, safe_split(v, split[6]));
 	cylinder = ft_calloc(1, sizeof(t_cylinder));
 	if (!cylinder)
 	{
-		free_values(values, 6);
+		free_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
 	cylinder->base.type = CYLINDER;
-	cylinder->base.pos = parse_vec3d(values, values[0]);
-	cylinder->axis = parse_vec3d(values, values[1]);
-	cylinder->r = ft_atof(values[2][0]) / 2;
-	cylinder->h = ft_atof(values[3][0]);
-	cylinder->base.color = parse_color(values, values[4]);
+	cylinder->base.pos = parse_vec3d(v, v->data[0]);
+	cylinder->axis = parse_vec3d(v, v->data[1]);
+	cylinder->r = ft_atof(((char ***)v->data)[2][0]) / 2.0f;
+	cylinder->h = ft_atof(((char ***)v->data)[3][0]);
+	cylinder->base.color = parse_color(v, v->data[4]);
 	cylinder->axis = normalize_vec3d(cylinder->axis);
 	cylinder->base.texture.index = -1;
-	if (values[5])
-		cylinder->base.material.reflec = ft_atof(values[5][0]);
-	free_values(values, 6);
+	if (v->count >= 6)
+		cylinder->base.material.reflec = ft_atof(((char ***)v->data)[5][0]);
+	free_vector(v);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
 	add_elem(objects, cylinder);
