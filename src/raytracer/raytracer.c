@@ -124,29 +124,23 @@ static t_color	trace_ray(t_ray ray, int depth, int y)
 {
 	t_engine	*engine = get_engine();
 	t_hit		hit;
-	t_color		local;
 	t_vec3d		R;
 	t_ray		reflected;
 	t_color		reflect_color;
-	static bool		applied_texture = {0};
 
 	hit.prev_hit = false;
 	(void)object_intersection(engine, &ray, &hit);
 	if (!hit.prev_hit)
 		return (int_to_color(color_gradient(engine, y)));
-	if (!applied_texture)
-		apply_texture(&hit);
-	applied_texture = true;
 	phong_model(engine, &hit);
-	local = hit.color;
 	if (depth >= BOUNCES || ((t_object *)hit.obj)->material.reflec == 0)
-		return (local);
+		return (hit.color);
 	hit.normal = normalize_vec3d(hit.normal);
 	R = reflect(ray.udir, hit.normal);
 	reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(R, EPSILON));
 	reflected.udir = normalize_vec3d(R);
 	reflect_color = trace_ray(reflected, depth + 1, y);
-	return (mix_colors(local, reflect_color, ((t_object *)hit.obj)->material.reflec));
+	return (mix_colors(hit.color, reflect_color, ((t_object *)hit.obj)->material.reflec));
 }
 
 static void	calculate_scene(t_threads *t)
