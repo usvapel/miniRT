@@ -5,6 +5,7 @@ void	init_paraboloid(t_vector *objects, char **split)
 	t_paraboloid	*para;
 	t_vector *v;
 
+	puts("parse paraboloid");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
@@ -27,11 +28,11 @@ void	init_paraboloid(t_vector *objects, char **split)
 	para->focal = ft_atof(((char ***)v->data)[2][0]);
 	para->h = ft_atof(((char ***)v->data)[3][0]);
 	para->base.color = parse_color(v, v->data[4]);
-	para->axis = normalize_vec3d(para->axis);
 	para->base.material.reflec = ft_atof(((char ***)v->data)[5][0]);
 	para->base.texture.index = -1;
 	free_vector(v);
 	validate_axis(para->axis);
+	para->axis = normalize_vec3d(para->axis);
 	validate_color(para->base.color);
 	add_elem(objects, para);
 }
