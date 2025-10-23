@@ -15,6 +15,7 @@ void	init_plane(t_engine *engine, char **split)
 	t_plane	*plane;
 	t_vector *v;
 
+	puts("parse plane");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");

@@ -5,6 +5,7 @@ void	init_cylinder(t_vector *objects, char **split)
 	t_cylinder	*cylinder;
 	t_vector *v;
 
+	puts("parse cylinder");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
