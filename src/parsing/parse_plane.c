@@ -18,12 +18,16 @@ void	additional_values(t_vector *v, t_object *base, char **split, int index)
 			link_texture(base, split + index++);
 		else if (ft_strcmp(split[index], "img") == 0 && split[index + 1])
 			link_texture(base, split + index++);
-		else
+		else if (ft_strcmp(split[index], "rl") == 0 && split[index + 1])
 		{
-			// reflected value. Should maybe have a string identifier as well..
 			// add_elem needs to free the object..
-			add_elem(v, safe_split(v, split[index]));
+			add_elem(v, safe_split(v, split[index + 1]));
 			base->material.reflec = ft_atof(((char ***)v->data)[index - 1][0]);
+			if (base->material.reflec > 1.0f || base->material.reflec < 0.0f)
+			{
+				free_vector(v);
+				runtime_error("invalid reflection value! (0 - 1)");
+			}
 		}
 		if (!split[index])
 			return ;
@@ -44,6 +48,7 @@ void	init_plane(t_engine *engine, char **split)
 	add_elem(v, safe_split(v, split[2]));
 	add_elem(v, safe_split(v, split[3]));
 	plane = ft_calloc(1, sizeof(t_plane));
+	add_elem(engine->objects, plane);
 	if (!plane)
 	{
 		free_vector(v);
@@ -54,9 +59,8 @@ void	init_plane(t_engine *engine, char **split)
 	plane->normal = parse_vec3d(v, v->data[1]);
 	plane->base.color = parse_color(v, v->data[2]);
 	plane->base.texture.index = -1;
-	additional_values(v, &plane->base, split, 3); // make sure index is correct
+	additional_values(v, &plane->base, split, 4); // make sure index is correct
 	free_vector(v);
 	validate_color(plane->base.color);
 	validate_normal(plane->normal);
-	add_elem(engine->objects, plane);
 }
