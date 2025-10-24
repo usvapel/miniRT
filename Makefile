@@ -46,9 +46,10 @@ DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 
 # Additional flags
-LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42 \
-				-ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
-# 				-lglfw -lXext -lX11 -lm -ldl -pthread
+LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42
+# -ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
+
+LDFLAGS +=				-lglfw -lXext -lX11 -lm -ldl -pthread
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Terminal colors for build output
