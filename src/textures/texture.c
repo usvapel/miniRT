@@ -25,8 +25,6 @@ t_color get_texel(mlx_texture_t *text, float u, float v)
 	uint32_t y = floorf(v * text->height);
 	if (x >= text->width) x = text->width - 1;
 	if (y >= text->height) y = text->height - 1;
-	if (x < 0) x = 0;
-	if (y < 0) y = 0;
 	int w = text->width;
 	int pixel_index = (y * w + x) * text->bytes_per_pixel;
 	uint8_t *pixels = text->pixels;
