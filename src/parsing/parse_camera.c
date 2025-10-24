@@ -19,21 +19,23 @@ static void	validate_camera(t_engine *engine)
 
 void	init_camera(t_engine *engine, char **split)
 {
-	char	**values[3];
+	t_vector *v;
 
-	printf("init_camera\n");
-	*values = NULL;
-	values[0] = safe_split(values, 3, split[1]);
-	values[1] = safe_split(values, 3, split[2]);
-	values[2] = safe_split(values, 3, split[3]);
+	puts("parse camera");
+	v = new_vector(1);
+	if (!v)
+		runtime_error("allocation failed");
+	add_elem(v, safe_split(v, split[1]));
+	add_elem(v, safe_split(v, split[2]));
+	add_elem(v, safe_split(v, split[3]));
 	if (split[4])
 	{
-		free_values(values, 3);
+		free_vector(v);
 		runtime_error("too many values to camera!");
 	}
-	engine->camera.pos = parse_vec3d(values, values[0]);
-	engine->camera.dir = parse_vec3d(values, values[1]);
-	engine->camera.fov = ft_atof(values[2][0]);
-	free_values(values, 3);
+	engine->camera.pos = parse_vec3d(v, v->data[0]);
+	engine->camera.dir = parse_vec3d(v, v->data[1]);
+	engine->camera.fov = ft_atof(((char ***)v->data)[2][0]);
+	free_vector(v);
 	validate_camera(engine);
 }
