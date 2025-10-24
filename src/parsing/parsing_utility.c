@@ -1,4 +1,5 @@
 #include "minirt.h"
+#include "vector.h"
 
 void	runtime_error(char *s)
 {
@@ -33,7 +34,7 @@ void	free_values(char **values[], int count)
 	}
 }
 
-char	**safe_split(char **values[], int count, char *line)
+char	**safe_split(t_vector *v, char *line)
 {
 	char	**splitted;
 
@@ -42,19 +43,19 @@ char	**safe_split(char **values[], int count, char *line)
 	splitted = ft_split(line, ',');
 	if (!splitted)
 	{
-		free_values(values, count);
+		free_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
 	return (splitted);
 }
 
-t_vec3d	parse_vec3d(char **values[], char **components)
+t_vec3d	parse_vec3d(t_vector *v, char **components)
 {
 	t_vec3d	vec;
 
 	if (!components[0] || !components[1] || !components[2])
 	{
-		free_values(values, 3);
+		free_vector(v);
 		runtime_error("invalid/missing values!");
 	}
 	vec.x = ft_atof(components[0]);
@@ -63,13 +64,13 @@ t_vec3d	parse_vec3d(char **values[], char **components)
 	return (vec);
 }
 
-t_color	parse_color(char **values[], char **components)
+t_color	parse_color(t_vector *v, char **components)
 {
 	t_color	color;
 
 	if (!components[0] || !components[1] || !components[2])
 	{
-		free_values(values, 3);
+		free_vector(v);
 		runtime_error("invalid/missing values!");
 	}
 	color.r = ft_atof(components[0]);

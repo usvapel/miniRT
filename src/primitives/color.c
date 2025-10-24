@@ -10,31 +10,23 @@ t_color	vec3d_to_color(t_vec3d v)
 	return c;
 }
 
-// Get the red channel.
 int get_r(int rgba)
 {
-    // Move 3 bytes to the right and mask out the first byte.
     return ((rgba >> 24) & 0xFF);
 }
 
-// Get the green channel.
 int get_g(int rgba)
 {
-    // Move 2 bytes to the right and mask out the first byte.
     return ((rgba >> 16) & 0xFF);
 }
 
-// Get the blue channel.
 int get_b(int rgba)
 {
-    // Move 1 byte to the right and mask out the first byte.
     return ((rgba >> 8) & 0xFF);
 }
 
-// Get the alpha channel.
 int get_a(int rgba)
 {
-    // Move 0 bytes to the right and mask out the first byte.
     return (rgba & 0xFF);
 }
 
@@ -55,22 +47,6 @@ t_vec3d color_to_vec3d(t_color c)
 	v.y = (float)c.g / 255.0f;
 	v.z = (float)c.b / 255.0f;
 	return v;
-}
-
-t_color checker_board(t_hit *hit)
-{
-	float checker_size = 0.1f;
-	t_color color1 = {225, 224, 220, 255};
-	t_color color2 = {121, 121, 121, 255};
-	t_color color3 = {0,0,0,0};
-
-	int x = (int)floorf(hit->pos.x / checker_size);
-	int z = (int)floorf(hit->pos.z / checker_size);
-
-	t_color color = ((x + z) % 2 == 0) ? color1 : color2;
-	if (x > 20 || z > 20 || x < -20 || z < -20)
-		return color3;
-	return (color);
 }
 
 void apply_color(t_color *color, float brightness)
