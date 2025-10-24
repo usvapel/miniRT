@@ -20,8 +20,7 @@ void	additional_values(t_vector *v, t_object *base, char **split, int index)
 			link_texture(base, split + index);
 		else if (ft_strcmp(split[index], "rl") == 0 && split[index + 1])
 		{
-			add_elem(v, safe_split(v, split[index + 1]));
-			base->material.reflec = ft_atof(((char ***)v->data)[index - 1][0]);
+			base->material.reflec = ft_atof(split[index + 1]);
 			if (base->material.reflec > 1.0f || base->material.reflec < 0.0f)
 			{
 				free_vector(v);
