@@ -14,10 +14,9 @@ void	additional_values(t_vector *v, t_object *base, char **split, int index)
 {
 	while (split[index])
 	{
-		printf("split: %s\n", split[index]);
-		if (ft_strcmp(split[index], "ch") == 0)
+		if (ft_strcmp(split[index], "ch") == 0 && split[index + 1])
 			link_texture(base, split + index++);
-		else if (ft_strcmp(split[index], "img") == 0)
+		else if (ft_strcmp(split[index], "img") == 0 && split[index + 1])
 			link_texture(base, split + index++);
 		else
 		{
@@ -26,6 +25,8 @@ void	additional_values(t_vector *v, t_object *base, char **split, int index)
 			add_elem(v, safe_split(v, split[index]));
 			base->material.reflec = ft_atof(((char ***)v->data)[index - 1][0]);
 		}
+		if (!split[index])
+			return ;
 		index++;
 	}
 }
@@ -53,7 +54,7 @@ void	init_plane(t_engine *engine, char **split)
 	plane->normal = parse_vec3d(v, v->data[1]);
 	plane->base.color = parse_color(v, v->data[2]);
 	plane->base.texture.index = -1;
-	additional_values(v, &plane->base, split, 4);
+	additional_values(v, &plane->base, split, 3);
 	free_vector(v);
 	validate_color(plane->base.color);
 	validate_normal(plane->normal);
