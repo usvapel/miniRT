@@ -28,7 +28,8 @@ void	init_paraboloid(t_vector *objects, char **split)
 	para->focal = ft_atof(((char ***)v->data)[2][0]);
 	para->h = ft_atof(((char ***)v->data)[3][0]);
 	para->base.color = parse_color(v, v->data[4]);
-	para->base.material.reflec = ft_atof(((char ***)v->data)[5][0]);
+	if (split[6])
+		para->base.material.reflec = ft_atof(((char ***)v->data)[5][0]);
 	para->base.texture.index = -1;
 	free_vector(v);
 	validate_axis(para->axis);
