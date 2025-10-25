@@ -14,8 +14,6 @@ void	init_cylinder(t_vector *objects, char **split)
 	add_elem(v, safe_split(v, split[3]));
 	add_elem(v, safe_split(v, split[4]));
 	add_elem(v, safe_split(v, split[5]));
-	if (split[6])
-		add_elem(v, safe_split(v, split[6]));
 	cylinder = ft_calloc(1, sizeof(t_cylinder));
 	if (!cylinder)
 	{
@@ -30,8 +28,8 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->base.color = parse_color(v, v->data[4]);
 	cylinder->axis = normalize_vec3d(cylinder->axis);
 	cylinder->base.texture.index = -1;
-	if (v->count >= 6)
-		cylinder->base.material.reflec = ft_atof(((char ***)v->data)[5][0]);
+	cylinder->base.texture.type = -1;
+	get_additional_values(v, &cylinder->base, split, 6); // make sure index is correct
 	free_vector(v);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
