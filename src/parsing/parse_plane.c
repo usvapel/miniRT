@@ -14,6 +14,7 @@ void	get_additional_values(t_vector *v, t_object *base, char **split, int index)
 {
 	while (split[index])
 	{
+		printf("%d %s\n", index, split[index]);
 		if (ft_strcmp(split[index], "ch") == 0 && split[index + 1])
 			link_texture(base, split + index);
 		else if (ft_strcmp(split[index], "img") == 0 && split[index + 1])
@@ -27,16 +28,14 @@ void	get_additional_values(t_vector *v, t_object *base, char **split, int index)
 				runtime_error("invalid reflection value! (0 - 1)");
 			}
 		}
-		if (!split[index])
-			return ;
 		index++;
 	}
 }
 
 void	init_plane(t_engine *engine, char **split)
 {
-	t_plane	*plane;
-	t_vector *v;
+	t_plane		*plane;
+	t_vector	*v;
 
 	puts("parse plane");
 	v = new_vector(1);
