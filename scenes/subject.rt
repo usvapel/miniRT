@@ -1,0 +1,25 @@
+A   0.1                                          255,255,255
+
+C   -50,0,20         1,0,0                       70
+
+L   -40,0,30         0.7                         255,255,255
+
+# pl  0,0,0          0,1.0,0                     255,0,225
+
+sp  0,0,20           20                          255,0,0 0 img 1
+
+# cy  50.0,0.0,20.6  0,0,1.0    14.2    21.42    10,0,255
+
+
+# textures checkers
+tx  ch 255,220,80 255,200,50 0.5 # index 0
+tx  ch 180,80,60 220,100,70 0.5 # index 1
+
+# texture images
+tx  img ./earth.png 
+tx  img ./wood.png 
+tx  img ./mud.png 
+tx  img ./sparse_grass.png
+tx  img ./moon.png
+tx  img ./8k_stars_milky_way.png
+tx  img ./textures/8k_sun.png
