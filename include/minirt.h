@@ -46,7 +46,7 @@
 # define ESPSILON 1e-2
 # define OBJ_SPEED 0.0003
 # define OBJ_S_SPEED 0.0005
-#define PI 3.14159265358979323846
+# define PI 3.14159265358979323846
 
 // needs cleaning in the future
 void		input_parsing(t_engine *engine, char **av);
