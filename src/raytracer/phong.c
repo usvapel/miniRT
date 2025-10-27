@@ -1,5 +1,4 @@
 #include "minirt.h"
-#include "primitives.h"
 
 # define A_CONSTANT 1.0f
 # define LINEAR_COEFFICIENT 0.09f
@@ -22,9 +21,10 @@ t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
 /*
 	S = (V * R)^n, where V is view and R is the reflection of the light
 */
-static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p)
+static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p, t_light light)
 {
 	float	specular_strength;
+	float	light_distance;
 
 	p->view_dir = sub_vec3d(engine->camera.pos, hit->pos);
 	p->view_dir = normalize_vec3d(p->view_dir);
@@ -32,6 +32,8 @@ static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p)
 	p->reflect_dir = normalize_vec3d(p->reflect_dir);
 	specular_strength = powf(fmaxf(0.0f, dot_vec3d(p->view_dir, p->reflect_dir)), SHININESS);
 	p->specular = nscale_vec3d(p->light_color, specular_strength);
+	light_distance = magnitude_vec3d(sub_vec3d(light.base.pos, hit->pos));
+	p->specular = nscale_vec3d(p->specular, 1.0f / (light_distance));
 }
 
 static void	get_diffuse(t_phong *p)
@@ -90,7 +92,7 @@ void	phong_model(t_engine *engine, t_hit *hit)
 		if (is_in_shadow(&p, engine, *hit, *light))
 			continue ;
 		get_diffuse(&p);
-		get_specular(engine, hit, &p);
+		get_specular(engine, hit, &p, *light);
 		if (hit->type == PLANE)
 			p.specular = nscale_vec3d(p.specular, 0.0f);
 		p.diffuse = nscale_vec3d(p.diffuse, light->brightness);
