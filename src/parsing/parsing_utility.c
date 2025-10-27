@@ -2,8 +2,11 @@
 
 void	runtime_error(char *s)
 {
+	t_engine *engine = get_engine();
 	printf("Error\n");
 	printf("%s\n", s);
+	free_vector(engine->objects);
+	free_vector(engine->lights);
 	exit(EXIT_FAILURE);
 }
 
