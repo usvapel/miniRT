@@ -42,10 +42,9 @@ static void	get_diffuse(t_phong *p)
 	float	attenuation;
 
 	distance = magnitude_vec3d(p->nlight_dir);
-	p->light_dir = normalize_vec3d(p->light_dir);
 	attenuation = A_CONSTANT / (A_CONSTANT + LINEAR_COEFFICIENT * distance
 				+ QUADRATIC_COEFFICIENT * distance * distance);
-	p->diffuse_strength = dot_vec3d(p->normal, p->light_dir);
+	p->diffuse_strength = dot_vec3d(p->normal, p->nlight_dir);
 	p->diffuse_strength = fmaxf(0.0f, p->diffuse_strength);
 	p->diffuse = nscale_vec3d(multiply_vec3d(p->light_color, p->model_color), p->diffuse_strength * attenuation);
 }
