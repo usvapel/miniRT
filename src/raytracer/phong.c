@@ -1,9 +1,4 @@
 #include "minirt.h"
-#include "primitives.h"
-
-# define A_CONSTANT 1.0f
-# define LINEAR_COEFFICIENT 0.09f
-# define QUADRATIC_COEFFICIENT 0.032f
 
 /*
 	R = L - 2(N * L), where N is normal surface and L is the incoming vector from the light source to the hit
@@ -22,9 +17,10 @@ t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
 /*
 	S = (V * R)^n, where V is view and R is the reflection of the light
 */
-static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p)
+static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p, t_light light)
 {
 	float	specular_strength;
+	float	light_distance;
 
 	p->view_dir = sub_vec3d(engine->camera.pos, hit->pos);
 	p->view_dir = normalize_vec3d(p->view_dir);
@@ -32,6 +28,8 @@ static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p)
 	p->reflect_dir = normalize_vec3d(p->reflect_dir);
 	specular_strength = powf(fmaxf(0.0f, dot_vec3d(p->view_dir, p->reflect_dir)), SHININESS);
 	p->specular = nscale_vec3d(p->light_color, specular_strength);
+	light_distance = magnitude_vec3d(sub_vec3d(light.base.pos, hit->pos));
+	p->specular = nscale_vec3d(p->specular, 1.0f / (light_distance));
 }
 
 static void	get_diffuse(t_phong *p)
@@ -39,11 +37,10 @@ static void	get_diffuse(t_phong *p)
 	float	distance;
 	float	attenuation;
 
-	distance = magnitude_vec3d(p->light_dir);
-	p->light_dir = normalize_vec3d(p->light_dir);
+	distance = magnitude_vec3d(p->nlight_dir);
 	attenuation = A_CONSTANT / (A_CONSTANT + LINEAR_COEFFICIENT * distance
 				+ QUADRATIC_COEFFICIENT * distance * distance);
-	p->diffuse_strength = dot_vec3d(p->normal, p->light_dir);
+	p->diffuse_strength = dot_vec3d(p->normal, p->nlight_dir);
 	p->diffuse_strength = fmaxf(0.0f, p->diffuse_strength);
 	p->diffuse = nscale_vec3d(multiply_vec3d(p->light_color, p->model_color), p->diffuse_strength * attenuation);
 }
@@ -77,9 +74,8 @@ void	phong_model(t_engine *engine, t_hit *hit)
 		return ;
 	p.model_color = color_to_vec3d(hit->color);
 	p.ambient = color_to_vec3d(engine->ambient.base.color);
-	p.ambient = nscale_vec3d(p.ambient, engine->ambient.ratio);
+	p.final_color = nscale_vec3d(p.ambient, engine->ambient.ratio);
 	p.normal = normalize_vec3d(hit->normal);
-	p.final_color = p.ambient;
 	i = 0;
 	while (i < engine->lights->count)
 	{
@@ -90,7 +86,7 @@ void	phong_model(t_engine *engine, t_hit *hit)
 		if (is_in_shadow(&p, engine, *hit, *light))
 			continue ;
 		get_diffuse(&p);
-		get_specular(engine, hit, &p);
+		get_specular(engine, hit, &p, *light);
 		if (hit->type == PLANE)
 			p.specular = nscale_vec3d(p.specular, 0.0f);
 		p.diffuse = nscale_vec3d(p.diffuse, light->brightness);

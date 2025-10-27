@@ -90,6 +90,8 @@ void	validate_axis(t_vec3d axis)
 		runtime_error("Invalid obj axis (-1 - 1)");
 	if (axis.z < -1.0f || axis.z > 1.0f)
 		runtime_error("Invalid obj axis (-1 - 1)");
+	if (axis.x + axis.y + axis.z == 0)
+		runtime_error("Invalid obj axis (-1 - 1)");
 }
 
 void	validate_color(t_color color)
