@@ -1,9 +1,5 @@
 #include "minirt.h"
 
-# define A_CONSTANT 1.0f
-# define LINEAR_COEFFICIENT 0.09f
-# define QUADRATIC_COEFFICIENT 0.032f
-
 /*
 	R = L - 2(N * L), where N is normal surface and L is the incoming vector from the light source to the hit
 */

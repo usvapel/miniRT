@@ -48,6 +48,11 @@
 # define OBJ_S_SPEED 0.0005
 # define PI 3.14159265358979323846
 
+// phong
+# define A_CONSTANT 1.0f
+# define LINEAR_COEFFICIENT 0.09f
+# define QUADRATIC_COEFFICIENT 0.032f
+
 // needs cleaning in the future
 void		input_parsing(t_engine *engine, char **av);
 int			color_gradient(t_engine *engine, int y);
