@@ -41,7 +41,7 @@ static void	get_diffuse(t_phong *p)
 	float	distance;
 	float	attenuation;
 
-	distance = magnitude_vec3d(p->light_dir);
+	distance = magnitude_vec3d(p->nlight_dir);
 	p->light_dir = normalize_vec3d(p->light_dir);
 	attenuation = A_CONSTANT / (A_CONSTANT + LINEAR_COEFFICIENT * distance
 				+ QUADRATIC_COEFFICIENT * distance * distance);
@@ -79,9 +79,8 @@ void	phong_model(t_engine *engine, t_hit *hit)
 		return ;
 	p.model_color = color_to_vec3d(hit->color);
 	p.ambient = color_to_vec3d(engine->ambient.base.color);
-	p.ambient = nscale_vec3d(p.ambient, engine->ambient.ratio);
+	p.final_color = nscale_vec3d(p.ambient, engine->ambient.ratio);
 	p.normal = normalize_vec3d(hit->normal);
-	p.final_color = p.ambient;
 	i = 0;
 	while (i < engine->lights->count)
 	{
