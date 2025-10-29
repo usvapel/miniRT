@@ -1,5 +1,6 @@
 #include "minirt.h"
 #include "primitives.h"
+#include "geometry.h"
 
 # define A_CONSTANT 1.0f
 # define LINEAR_COEFFICIENT 0.09f
@@ -48,19 +49,19 @@ static void	get_diffuse(t_phong *p)
 	p->diffuse = nscale_vec3d(multiply_vec3d(p->light_color, p->model_color), p->diffuse_strength * attenuation);
 }
 
-static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit, t_light light)
+static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit, t_generic_light light)
 {
 	t_ray	shadow_ray = {0};
 	t_hit	shadow_hit = {0};
 	float	light_distance;
 	float	object_distance;
-	
+
 	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir, 1e-2));
 	shadow_ray.udir = p->nlight_dir;
-	(void)object_intersection(engine, &shadow_ray, &shadow_hit);
-	if (!shadow_hit.prev_hit || shadow_hit.type == LIGHT)
+	(void)objects_intersection(engine, &shadow_ray, &shadow_hit);
+	if (!shadow_hit.prev_hit || get_base_object(shadow_hit.obj)->is_light_source)
 		return (false);
-	light_distance = magnitude_vec3d(sub_vec3d(light.base.pos, shadow_ray.origin));
+	light_distance = magnitude_vec3d(sub_vec3d(adjusted_light_pos(light), shadow_ray.origin));
 	object_distance = magnitude_vec3d(sub_vec3d(shadow_hit.pos, shadow_ray.origin));
 	if ((object_distance + ESPSILON) < light_distance)
 		return (true);
@@ -69,24 +70,28 @@ static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit, t_light light)
 
 void	phong_model(t_engine *engine, t_hit *hit)
 {
-	t_light	*light;
+	t_generic_light	*light;
 	t_phong	p = {0};
+	t_object *base;
 	int	i;
 
-	if (hit->type == LIGHT)
+	if (get_base_object(hit->obj)->is_light_source)
 		return ;
 	p.model_color = color_to_vec3d(hit->color);
 	p.ambient = color_to_vec3d(engine->ambient.base.color);
 	p.ambient = nscale_vec3d(p.ambient, engine->ambient.ratio);
 	p.normal = normalize_vec3d(hit->normal);
 	p.final_color = p.ambient;
-	i = 0;
-	while (i < engine->lights->count)
+	i = -1;
+	while (++i < engine->lights->count)
 	{
-		light = engine->lights->data[i++];
-		p.light_color = color_to_vec3d(light->base.color);
-		p.light_dir = sub_vec3d(light->base.pos, hit->pos);
+		light = engine->lights->data[i];
+		base = get_base_light(light);
+		p.light_color = color_to_vec3d(base->color);
+		p.light_dir = sub_vec3d(base->pos, hit->pos);
 		p.nlight_dir = normalize_vec3d(p.light_dir);
+		if (get_base_object(light)->type == SPOT_LIGHT && !spot_light_hit(light, hit, &p))
+			continue;
 		if (is_in_shadow(&p, engine, *hit, *light))
 			continue ;
 		get_diffuse(&p);
