@@ -29,6 +29,7 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder->axis = normalize_vec3d(cylinder->axis);
 	cylinder->base.texture.index = -1;
 	cylinder->base.texture.type = -1;
+	cylinder->base.axis = &cylinder->axis;
 	get_additional_values(v, &cylinder->base, split, 6); // make sure index is correct
 	free_vector(v);
 	validate_axis(cylinder->axis);
