@@ -7,7 +7,15 @@ bool light_hit(t_generic_light *g_light, t_ray ray, t_hit *hit)
 		return false;
 	return obj_intersection(g_light->obj, ray, hit);
 }
-
+float smoothstep( float x )
+{
+  return x*x*x/(3.0*x*x-3.0*x+1.0);
+}
+	
+float smoothstep2( float x, float n )
+{
+  return pow(x,n)/(pow(x,n)+pow(1.0-x,n));
+}
 bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 {
 	t_spot_light *spot = (t_spot_light *)g_spot->light;
@@ -19,18 +27,22 @@ bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 	float r1;
 	float pos_hit;
 	t_vec3d pos;
+	float h1;
 
 	lray.origin = adjusted_light_pos(*g_spot);
 	lray.udir = *base->axis;
 	r = tanf(deg_to_radians(spot->fov)) * spot->range;
+	(void)r;
 	if (!solve_plane_hit(p, lray, &t))
 		return false;
 	pos = get_point_on_ray(lray, t);
 	r1 = tanf(deg_to_radians(spot->fov)) * magnitude_vec3d(sub_vec3d(lray.origin, pos));
+	h1 = magnitude_vec3d(sub_vec3d(lray.origin, pos));
 	pos_hit = magnitude_vec3d(sub_vec3d(pos, hit->pos));
-	if (pos_hit > r1 || r1 > r)	
+	if (pos_hit > r1)	
 		return false;
-	// scale_vec3d(&phong->light_color, r / r1);
+	scale_vec3d(&phong->light_color, smoothstep2(1 - pos_hit / r1, 0.5));
+	scale_vec3d(&phong->light_color,smoothstep(1 - h1 / spot->range));
 	return true;
 }
 
