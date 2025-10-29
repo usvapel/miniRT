@@ -6,6 +6,8 @@
 # include "ray.h"
 # include "textures.h"
 
+# define LIGHT_RADIUS 0.3f
+
 typedef struct s_object
 {
 	int			type;

@@ -1,8 +1,10 @@
 #ifndef TEXTURES_H
-#define TEXTURES_H
+# define TEXTURES_H
 
-#include "vector.h"
-#include "MLX42.h"
+# include "vector.h"
+# include "MLX42.h"
+# include "primitives.h"
+# include "ray.h"
 
 typedef struct s_plane t_plane;
 typedef struct s_sphere t_sphere;
