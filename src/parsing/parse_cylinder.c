@@ -34,7 +34,7 @@ void	init_cylinder(t_vector *objects, char **split)
 		runtime_error("failure during memory allocation!");
 	}
 	set_values(cylinder, v);
-	get_additional_values(v, &cylinder->base, split, 6);
+	get_additional_values(v, (void *)&cylinder->base, split, 6);
 	free_vector(v);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
