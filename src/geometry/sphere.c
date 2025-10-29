@@ -1,25 +1,20 @@
 #include "minirt.h"
 
-float max(float val1, float val2)
-{
-	if (val1 > val2)
-		return val1;
-	if (val2 > val1)
-		return val2;
-	return val1;
-}
-
 bool sphere_hit(t_sphere *sphere, t_ray ray, t_hit *hit)
 {
+    t_basis3d local = build_local_basis(sphere->axis);
+    t_sphere s = new_sphere(new_vec3d(0, 0, 0), sphere->r);
+    t_ray lray = local_ray(ray, local, sphere->base.pos);
 	float t0;
 	float t1;
 	float disc;
 	t_vec3d n_hit_pos;
 
-	disc = solve_sphere_hit(ray, *sphere, &t0, &t1);
+	disc = solve_sphere_hit(lray, s, &t0, &t1);
 	if (disc < 0.0f || (t0 < 0.0f && t1 < 0.0f))
 		return false;
-	n_hit_pos = get_point_on_ray(ray, nearest_t(t0, t1));
+    n_hit_pos = get_point_on_ray(lray, nearest_t(t0, t1));
+    n_hit_pos = point_from_basis(n_hit_pos, local, sphere->base.pos);
 	if (!set_hit(sphere, n_hit_pos, ray, hit))
         return false;
     hit->normal = sub_vec3d(hit->pos, sphere->base.pos);
