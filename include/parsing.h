@@ -25,6 +25,6 @@ void	init_cylinder(t_vector *objects, char **split);
 void	init_paraboloid(t_vector *objects, char **split);
 void	init_checkerboard_text(t_vector *checkers, char **split);
 void	init_image_text(t_vector *images, char **split);
-void	link_texture(t_object *obj, char **split);
+void	link_texture(t_object *obj, char **split, int type);
 
 #endif // PARSING_H
