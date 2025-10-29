@@ -5,7 +5,7 @@ bool should_recalculate(t_engine *eng);
 void	draw_scene(void *eng)
 {
 	t_engine	*engine;
-	int i;
+	int			i;
 
 	i = 0;
 	engine = eng;
@@ -64,9 +64,11 @@ int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 	return (hit->type);
 }
 
-static float	get_sample(int value, t_threads *t, int axis)
+inline static float	get_sample(int value, t_threads *t, int axis)
 {
-	float	result = value + t->block_size / 2.0f;
+	float	result;
+
+	result = value + t->block_size / 2.0f;
 	if (result >= t->end_x && axis == X_AXIS)
 		result = t->end_x - 1;
 	if (result >= t->end_y && axis == Y_AXIS)
@@ -102,7 +104,7 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 	}
 }
 
-static t_color mix_colors(t_color c1, t_color c2, float r)
+inline static t_color mix_colors(t_color c1, t_color c2, float r)
 {
 	c1.r = c1.r * (1 - r) + c2.r * r;
 	c1.g = c1.g * (1 - r) + c2.g * r;
@@ -119,12 +121,45 @@ static t_color mix_colors(t_color c1, t_color c2, float r)
 	return (c1);
 }
 
+float schlick_reflectance(float cosine, float ref_idx)
+{
+	float r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+	r0 = r0 * r0;
+	float x = 1.0 - cosine;
+	float x2 = x * x;
+	return r0 + (1.0 - r0) * x2 * x2 * x;
+}
+
+t_vec3d refract(t_vec3d uv, t_vec3d n, float etai_over_etat, bool *total_ir)
+{
+	float cos_theta = fminf(dot_vec3d(nscale_vec3d(uv, -1.0f), n), 1.0f);
+	float sin_theta = 1.0f - cos_theta * cos_theta;
+
+	if (etai_over_etat * etai_over_etat * sin_theta > 1.0f)
+	{
+		*total_ir =  true;
+		return (new_vec3d(0,0,0));
+	}
+	float reflectance = schlick_reflectance(cos_theta, etai_over_etat);
+	if (reflectance > 0.5f)
+	{
+		*total_ir = true;
+		return (new_vec3d(0,0,0));
+	}
+	t_vec3d r_out_perp = nscale_vec3d(n, cos_theta);
+	r_out_perp = add2_vec3d(uv, r_out_perp);
+	r_out_perp = nscale_vec3d(r_out_perp, etai_over_etat);
+	float length_squared = dot_vec3d(r_out_perp, r_out_perp);
+	t_vec3d r_out_parallel = nscale_vec3d(n, -sqrtf(fabs(1.0f - length_squared)));
+	*total_ir = false;
+	return (add2_vec3d(r_out_perp, r_out_parallel));
+}
 
 static t_color	trace_ray(t_ray ray, int depth, int y)
 {
 	t_engine	*engine = get_engine();
 	t_hit		hit;
-	t_vec3d		R;
+	t_vec3d		R = {0};
 	t_ray		reflected;
 	t_color		reflect_color;
 
@@ -133,14 +168,46 @@ static t_color	trace_ray(t_ray ray, int depth, int y)
 	if (!hit.prev_hit)
 		return (int_to_color(color_gradient(engine, y)));
 	phong_model(engine, &hit);
-	if (depth >= BOUNCES || ((t_object *)hit.obj)->material.reflec == 0)
+	float reflectance = ((t_object *)hit.obj)->material.reflect;
+	float indice = ((t_object *)hit.obj)->material.refract;
+	if (depth >= BOUNCES || reflectance == 0)
 		return (hit.color);
-	hit.normal = normalize_vec3d(hit.normal);
+	if (indice > 1.0f)
+	{
+		bool front_face = dot_vec3d(ray.udir, hit.normal) < 0.0f;
+		t_vec3d normal;
+		if (front_face)
+			normal = hit.normal;
+		else
+			normal = nscale_vec3d(hit.normal, -1.0f);
+		float eta_ratio;
+		if (front_face)
+			eta_ratio = (1.0f / indice);
+		else
+			eta_ratio = (indice / 1.0f);
+		bool should_reflect = false;
+		R = refract(ray.udir, normal, eta_ratio, &should_reflect);
+		if (should_reflect)
+		{
+			R = reflect(ray.udir, normal);
+			reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(normal, EPSILON));
+			reflected.udir = normalize_vec3d(R);
+			reflect_color = trace_ray(reflected, depth + 1, y);
+			return (mix_colors(hit.color, reflect_color, reflectance));
+		}
+		else
+		{
+			reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(normal, -EPSILON));
+			reflected.udir = normalize_vec3d(R);
+			reflect_color = trace_ray(reflected, depth + 1, y);
+			return (mix_colors(hit.color, reflect_color, reflectance));
+		}
+	}
 	R = reflect(ray.udir, hit.normal);
-	reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(R, EPSILON));
+	reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(hit.normal, EPSILON));
 	reflected.udir = normalize_vec3d(R);
 	reflect_color = trace_ray(reflected, depth + 1, y);
-	return (mix_colors(hit.color, reflect_color, ((t_object *)hit.obj)->material.reflec));
+	return (mix_colors(hit.color, reflect_color, reflectance));
 }
 
 static void	calculate_scene(t_threads *t)
@@ -148,7 +215,6 @@ static void	calculate_scene(t_threads *t)
 	t_ray	ray;
 	int		x;
 	int		y;
-	int		color;
 
 	y = t->start_y;
 	while (y < t->end_y)
@@ -157,9 +223,7 @@ static void	calculate_scene(t_threads *t)
 		while (x < t->end_x)
 		{
 			ray = get_ray(get_sample(x, t, X_AXIS), get_sample(y, t, Y_AXIS));
-			t_color final = trace_ray(ray, 0, y);
-			color = scale_color(&final, 1);
-			draw_to_buffer(t, x, y, color);
+			draw_to_buffer(t, x, y, color_to_int(trace_ray(ray, 0, y)));
 			x += t->block_size;
 		}
 		y += t->block_size;
