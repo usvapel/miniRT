@@ -70,7 +70,8 @@ float	max(float val1, float val2);
 t_color	vec3d_to_color(t_vec3d v);
 t_vec3d	color_to_vec3d(t_color c);
 void	phong_model(t_engine *engine, t_hit *hit);
-int		object_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
+int		objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
+bool obj_intersection(void *obj, t_ray ray, t_hit *hit);
 
 // threads
 void	setup_threads(void *eng);
