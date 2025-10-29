@@ -17,7 +17,7 @@ t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
 /*
 	S = (V * R)^n, where V is view and R is the reflection of the light
 */
-static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p, t_light light)
+static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p, t_generic_light light)
 {
 	float	specular_strength;
 	float	light_distance;
