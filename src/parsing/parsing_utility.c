@@ -1,5 +1,26 @@
 #include "minirt.h"
 
+void	get_additional_values(t_vector *v, t_object *base, char **split, int index)
+{
+	while (split[index])
+	{
+		if (ft_strcmp(split[index], "ch") == 0 && split[index + 1])
+			link_texture(base, split + index);
+		else if (ft_strcmp(split[index], "img") == 0 && split[index + 1])
+			link_texture(base, split + index);
+		else if (ft_strcmp(split[index], "rl") == 0 && split[index + 1])
+		{
+			base->material.reflec = ft_atof(split[index + 1]);
+			if (base->material.reflec > 1.0f || base->material.reflec < 0.0f)
+			{
+				free_vector(v);
+				runtime_error("invalid reflection value! (0 - 1)");
+			}
+		}
+		index++;
+	}
+}
+
 void	runtime_error(char *s)
 {
 	t_engine *engine = get_engine();

@@ -22,7 +22,6 @@
 # include "ray.h"
 # include "camera.h"
 # include "viewport.h"
-# include "light.h"
 # include "textures.h"
 # include "geometry.h"
 # include "vector.h"
