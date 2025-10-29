@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static bool orient_camera(t_engine *engine, float dx, float dy);
+static bool orient_camera(t_engine *engine);
 static void    look_up_down(t_camera *camera, float dy);
 static void    move_left_right(t_camera *cam, int dir);
 static bool    move_camera(t_engine *engine);
@@ -9,14 +9,10 @@ static bool    move_camera(t_engine *engine)
 {
     t_camera *camera = &engine->camera;
     t_vec3d tmp = camera->dir;
-	float dy;
-	float dx;
-	bool moved;
+    bool moved;
 
-	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
-	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
     scale_vec3d(&tmp, CAM_SPEED * engine->frame.delta);
-	moved = orient_camera(engine, dx, dy);
+	moved = orient_camera(engine);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
 		add_vec3d(&camera->pos, tmp);
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
@@ -71,12 +67,17 @@ void update_camera(void)
 	engine->recalculate = true;
 }
 
-static bool orient_camera(t_engine *engine, float dx, float dy)
+static bool orient_camera(t_engine *engine)
 {
-    float dt = get_engine()->frame.delta;
-	dt = fminf(dt, 1.0f / 30.0f);
+    float dt;
+	float dy;
+	float dx;
+
     if (!mlx_is_mouse_down(engine->mlx, MLX_MOUSE_BUTTON_LEFT))
 		return false;
+	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
+	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
+	dt = fminf(get_engine()->frame.delta, 1.0f / 30.0f);
     rotateY_vec3d(&engine->camera.dir, CAM_SENS * -dx * dt);
     look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.001);
 	return true;
