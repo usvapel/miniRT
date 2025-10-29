@@ -9,7 +9,9 @@ static void	set_values(t_engine *engine, char **split)
 	if (ft_strcmp(split[0], "C") == 0)
 		return (init_camera(engine, split));
 	if (ft_strcmp(split[0], "L") == 0)
-		return (init_light(engine->objects, split));
+		return (init_light(engine->lights, split));
+	if (ft_strcmp(split[0], "LS") == 0)
+		return (init_spot_light(engine->lights, split));
 	if (ft_strcmp(split[0], "sp") == 0)
 		return (init_sphere(engine->objects, split));
 	if (ft_strcmp(split[0], "pl") == 0)
@@ -60,6 +62,30 @@ static char	*check_file_validity(char *file)
 	return (NULL);
 }
 
+static void map_lights_to_objects(t_vector *objects, t_vector *lights)
+{
+	t_generic_light *light;
+	t_object *base;
+	t_object *obj_base;
+	int i;
+
+	i = -1;
+	while (++i < lights->count)
+	{
+		light = lights->data[i];
+		base = get_base_object(light);
+		if (light->obj_index < 0)
+			continue;
+		light->obj = objects->data[light->obj_index];
+		obj_base = get_base_object(light->obj);
+		obj_base->pos = base->pos;
+		obj_base->is_light_source = base->type == POINT_LIGHT;
+		obj_base->semi_light_source = base->type == SPOT_LIGHT;
+		if (obj_base->axis)
+			base->axis = obj_base->axis;
+	}
+}
+
 void	input_parsing(t_engine *engine, char **av)
 {
 	int		fd;
@@ -74,4 +100,5 @@ void	input_parsing(t_engine *engine, char **av)
 	if (fd < 0)
 		runtime_error("failure opening file!");
 	read_and_process_file(engine, fd);
+	map_lights_to_objects(engine->objects, engine->lights);
 }
