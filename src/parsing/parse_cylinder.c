@@ -11,6 +11,7 @@ static void	set_values(t_cylinder *cylinder, t_vector *v)
 	cylinder->axis = normalize_vec3d(cylinder->axis);
 	cylinder->base.texture.index = -1;
 	cylinder->base.texture.type = -1;
+	cylinder->base.axis = &cylinder->axis;
 }
 
 void	init_cylinder(t_vector *objects, char **split)

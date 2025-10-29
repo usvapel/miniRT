@@ -22,7 +22,9 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->base.color = parse_color(v, v->data[2]);
 	sphere->base.texture.index = -1;
 	sphere->base.texture.type = -1;
-	get_additional_values(v, &sphere->base, split, 4);
+	sphere->axis = new_vec3d(0, 1, 0);
+	sphere->base.axis = &sphere->axis;
+	get_additional_values(v, &sphere->base, split, 4); // make sure index is correct
 	free_vector(v);
 	validate_color(sphere->base.color);
 	add_elem(objects, sphere);
