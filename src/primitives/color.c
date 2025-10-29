@@ -57,12 +57,12 @@ void apply_color(t_color *color, float brightness)
 	color->a = (color->a);
 }
 
-uint32_t scale_color(t_color *color, float brightness)
+uint32_t color_to_int(t_color color)
 {
-	uint8_t r = (uint8_t)(color->r * brightness);
-	uint8_t g = (uint8_t)(color->g * brightness);
-	uint8_t b = (uint8_t)(color->b * brightness);
-	uint8_t a = (uint8_t)(color->a);
+	uint8_t r = (uint8_t)(color.r);
+	uint8_t g = (uint8_t)(color.g);
+	uint8_t b = (uint8_t)(color.b);
+	uint8_t a = (uint8_t)(color.a);
 	uint32_t result = (r << 24) | (g << 16) | (b << 8) | a;
 	return result;
 }
