@@ -3,9 +3,10 @@ void schecker_board(t_hit *hit, int texture_index, float u, float v);
 void wrap_img_sphere(t_hit *hit, float u, float v);
 void    sphere_uv(t_sphere sphere, t_hit *hit)
 {
-    t_vec3d lhit = sub_vec3d(hit->pos, sphere.base.pos);
+    t_basis3d local = build_local_basis(sphere.axis);
+    t_vec3d lhit = point_in_basis(hit->pos, local, sphere.base.pos);
     float theta = acosf(fmaxf(-1.0f, fminf(1.0f, lhit.y / sphere.r)));   
-    float phi = atan2f(lhit.z, lhit.x);
+    float phi = atan2f(-lhit.z, lhit.x);
     float u =  (phi + PI) / (2 * PI);
     float v = theta / PI;
 
