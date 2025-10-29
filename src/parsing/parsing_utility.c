@@ -8,9 +8,9 @@ void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 	while (split[index])
 	{
 		if (ft_strcmp(split[index], "ch") == 0 && split[index + 1])
-			link_texture(base, split + index);
+			link_texture(base, split + index, CHECKERBOARD);
 		else if (ft_strcmp(split[index], "img") == 0 && split[index + 1])
-			link_texture(base, split + index);
+			link_texture(base, split + index, IMAGE);
 		else if (ft_strcmp(split[index], "obj") == 0 && split[index + 1])
 			((t_generic_light *)obj)->obj_index = ft_atof(split[index + 1]);
 		else if (ft_strcmp(split[index], "rl") == 0 && split[index + 1])
