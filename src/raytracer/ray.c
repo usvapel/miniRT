@@ -24,3 +24,12 @@ t_vec3d	get_point_on_ray(t_ray ray, float t)
 	add_vec3d(&p, tmp);
 	return (p);
 }
+
+t_ray local_ray(t_ray ray, t_basis3d local, t_vec3d local_origin)
+{
+    t_ray r;
+
+    r.origin = point_in_basis(ray.origin, local, local_origin);
+    r.udir = vec_in_basis(ray.udir, local);
+    return r;
+}
