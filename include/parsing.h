@@ -18,6 +18,7 @@ void	validate_color(t_color color);
 void	init_ambient(char **split);
 void	init_camera(t_engine *engine, char **split);
 void	init_light(t_vector *objects, char **split);
+void	init_spot_light(t_vector *objects, char **split);
 void	init_sphere(t_vector *objects, char **split);
 void	init_plane(t_engine *engine, char **split);
 void	init_cylinder(t_vector *objects, char **split);

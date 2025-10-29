@@ -21,6 +21,9 @@ void *inside_object(t_ray *ray, double x, double y, int *type);
 // objects scaling
 void scale_objects(t_engine *engine);
 
+// objects rotation
+void rotate_objects(t_engine *engine);
+
 // fps counter
 void	fps_counter(void *param);
 
