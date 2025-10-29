@@ -57,7 +57,6 @@ void		input_parsing(t_engine *engine, char **av);
 int			color_gradient(t_engine *engine, int y);
 t_engine	*get_engine(void);
 int		get_rgba(int r, int g, int b, int a);
-uint32_t	scale_color(t_color *color, float brightness);
 void	apply_color(t_color *color, float brightness);
 float	clamp(float value, float min, float max);
 void	cleanup_and_exit();
@@ -80,6 +79,8 @@ void	thread_cleanup();
 t_vec3d	reflect(t_vec3d direction, t_vec3d normal);
 
 t_color int_to_color(int c);
+uint32_t color_to_int(t_color color);
 
 t_object *get_base_object(void *obj);
+
 #endif // MINIRT_T
