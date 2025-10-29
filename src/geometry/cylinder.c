@@ -1,6 +1,7 @@
 #include "geometry.h"
 #include "minirt.h"
 #include "math.h"
+#include "primitives.h"
 bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top);
 bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 bool cylinder_body_hit(t_cylinder cy, t_ray ray, t_hit *hit);
@@ -20,10 +21,12 @@ void    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
     if (hit_is_set)
     {
         hit->color = cy->base.color;
-        hit->normal = local_hit.normal;
+        hit->normal = normalize_vec3d(local_hit.normal);
         hit->pos = local_hit.pos;
         hit->type = CYLINDER;
+		hit->material = cy->base.material;
     }
+    
 }
 
 bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top)
