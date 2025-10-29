@@ -12,17 +12,14 @@ bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 {
 	t_spot_light *spot = (t_spot_light *)g_spot->light;
 	t_plane p = new_plane(hit->pos, phong->normal);
-	t_object *base;
+	t_object *base = get_base_light(g_spot);
 	t_ray lray;
 	float t;
 	float r;
 	float r1;
 	float pos_hit;
 	t_vec3d pos;
-	if (!g_spot->obj)
-		base = get_base_object(g_spot);
-	else
-		base = get_base_object(g_spot->obj);
+
 	lray.origin = adjusted_light_pos(*g_spot);
 	lray.udir = *base->axis;
 	r = tanf(deg_to_radians(spot->fov)) * spot->range;
@@ -63,4 +60,12 @@ t_vec3d	adjusted_light_pos(t_generic_light light)
 	else if (obj_base.type == PARABOLOID)
 		offset = ((t_paraboloid *)light.obj)->h;
 	return get_point_on_ray(r, offset + 2 * 1e-2);
+}
+
+t_object *get_base_light(t_generic_light *light)
+{
+	if (!light->obj)
+		return get_base_object(light);
+	else
+		return get_base_object(light->obj);
 }
