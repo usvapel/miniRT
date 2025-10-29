@@ -28,6 +28,7 @@ void	init_paraboloid(t_vector *objects, char **split)
 	para->base.color = parse_color(v, v->data[4]);
 	para->base.texture.index = -1;
 	para->base.texture.type = -1;
+	para->base.axis = &para->axis;
 	get_additional_values(v, &para->base, split, 6); // make sure index is correct
 	free_vector(v);
 	validate_axis(para->axis);
