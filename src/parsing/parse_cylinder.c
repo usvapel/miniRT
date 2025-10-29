@@ -1,11 +1,23 @@
 #include "minirt.h"
 
+static void	set_values(t_cylinder *cylinder, t_vector *v)
+{
+	cylinder->base.type = CYLINDER;
+	cylinder->base.pos = parse_vec3d(v, v->data[0]);
+	cylinder->axis = parse_vec3d(v, v->data[1]);
+	cylinder->r = ft_atof(((char ***)v->data)[2][0]) / 2.0f;
+	cylinder->h = ft_atof(((char ***)v->data)[3][0]);
+	cylinder->base.color = parse_color(v, v->data[4]);
+	cylinder->axis = normalize_vec3d(cylinder->axis);
+	cylinder->base.texture.index = -1;
+	cylinder->base.texture.type = -1;
+}
+
 void	init_cylinder(t_vector *objects, char **split)
 {
 	t_cylinder	*cylinder;
-	t_vector *v;
+	t_vector	*v;
 
-	puts("parse cylinder");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
@@ -20,16 +32,8 @@ void	init_cylinder(t_vector *objects, char **split)
 		free_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
-	cylinder->base.type = CYLINDER;
-	cylinder->base.pos = parse_vec3d(v, v->data[0]);
-	cylinder->axis = parse_vec3d(v, v->data[1]);
-	cylinder->r = ft_atof(((char ***)v->data)[2][0]) / 2.0f;
-	cylinder->h = ft_atof(((char ***)v->data)[3][0]);
-	cylinder->base.color = parse_color(v, v->data[4]);
-	cylinder->axis = normalize_vec3d(cylinder->axis);
-	cylinder->base.texture.index = -1;
-	cylinder->base.texture.type = -1;
-	get_additional_values(v, &cylinder->base, split, 6); // make sure index is correct
+	set_values(cylinder, v);
+	get_additional_values(v, &cylinder->base, split, 6);
 	free_vector(v);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
