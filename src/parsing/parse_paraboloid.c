@@ -33,7 +33,7 @@ void	init_paraboloid(t_vector *objects, char **split)
 		runtime_error("failure during memory allocation!");
 	}
 	set_values(para, v);
-	get_additional_values(v, &para->base, split, 6);
+	get_additional_values(v, (void *)&para->base, split, 6);
 	free_vector(v);
 	validate_axis(para->axis);
 	para->axis = normalize_vec3d(para->axis);

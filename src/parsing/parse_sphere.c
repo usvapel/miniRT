@@ -24,7 +24,7 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->base.texture.type = -1;
 	sphere->axis = new_vec3d(0, 1, 0);
 	sphere->base.axis = &sphere->axis;
-	get_additional_values(v, &sphere->base, split, 4); // make sure index is correct
+	get_additional_values(v, (void *)&sphere->base, split, 4); // make sure index is correct
 	free_vector(v);
 	validate_color(sphere->base.color);
 	add_elem(objects, sphere);
