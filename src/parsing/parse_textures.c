@@ -30,26 +30,9 @@ void	init_image_text(t_vector *images, char **split)
 	add_elem(images, text);
 }
 
-void	link_texture(t_object *obj, char **split)
+void	link_texture(t_object *obj, char **split, int type)
 {
-
-	if (!split || !*split || !*(split + 1))
-	{
-		printf("Invalid linkage to texture\n");
-		// exit(1);
-	}
-	if (ft_strcmp(split[0], "ch") == 0)
-	{
-		obj->texture.type = CHECKERBOARD;
-		obj->texture.index = ft_atoi(split[1]);
-	}
-	else if (ft_strcmp(split[0], "img") == 0)
-	{
-		obj->texture.type = IMAGE;
-		obj->texture.index = ft_atoi(split[1]);
-	}
-	else
-		printf("Invalid texture type: %s\n", split[1]);
-	
+	obj->texture.type = type;
+	obj->texture.index = ft_atoi(split[1]);
 	printf("Linkage type: %d, i: %d\n",obj->type, obj->texture.index);
 }
