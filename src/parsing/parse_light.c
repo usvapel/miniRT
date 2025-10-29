@@ -17,7 +17,8 @@ static void	set_values(t_light *light, t_vector *v)
 	light->r = LIGHT_RADIUS;
 	if (v->count == 4)
 		light->r = ft_atof(((char ***)v->data)[3][0]);
-	light->base.material.reflec = 0.0f;
+	light->base.material.reflect = 0.0f;
+	light->base.material.refract = -1.0f;
 	light->base.material.ignore = true;
 	light->base.texture.index = -1;
 }
