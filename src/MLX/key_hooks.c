@@ -15,10 +15,10 @@ void	key_hook(void *param)
 	engine->mouse.pos.y = y;
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_C))
 		scale_objects(engine);
-	// else if (mlx_is_key_down(engine->mlx, MLX_KEY_X))
-	// 	rotate_objects();
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_Z))
 		move_objects(engine);
+	else if (mlx_is_key_down(engine->mlx, MLX_KEY_X))
+		rotate_objects(engine);
 	else
 		handle_cam_movement(engine);
 }
