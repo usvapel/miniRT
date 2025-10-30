@@ -13,18 +13,18 @@ inline static float schlick_reflectance(float cosine, float ref_idx)
 	return (r0 + (1.0 - r0) * x2 * x2 * x);
 }
 
-static void calculate_face_normal(t_ray ray, t_hit *hit, float indice, bool *front_face, t_vec3d *normal, float *eta_ratio)
+static void calculate_face_normal(t_ray ray, t_hit *hit, t_refract *rf)
 {
-	*front_face = dot_vec3d(ray.udir, hit->normal) < 0.0f;
-	if (*front_face)
+	rf->front_face = dot_vec3d(ray.udir, hit->normal) < 0.0f;
+	if (rf->front_face)
 	{
-		*normal = hit->normal;
-		*eta_ratio = (1.0f / indice);
+		rf->normal = hit->normal;
+		rf->eta_ratio = (1.0f / rf->indice);
 	}
 	else
 	{
-		*normal = nscale_vec3d(hit->normal, -1.0f);
-		*eta_ratio = (indice / 1.0f);
+		rf->normal = nscale_vec3d(hit->normal, -1.0f);
+		rf->eta_ratio = (rf->indice / 1.0f);
 	}
 }
 
@@ -55,26 +55,19 @@ static t_vec3d refract(t_vec3d uv, t_vec3d n, float etai_over_etat, bool *total_
 	return (add2_vec3d(r_out_perp, r_out_parallel));
 }
 
-t_color handle_refraction(t_ray ray, t_hit *hit, float indice, float reflectance, int depth, int y)
-{
-	bool	front_face;
-	t_vec3d	normal;
-	float	eta_ratio;
-	bool	should_reflect;
-	t_vec3d	R;
-	t_ray	reflected;
-	t_color	reflect_color;
 
-	calculate_face_normal(ray, hit, indice, &front_face, &normal, &eta_ratio);
-	should_reflect = false;
-	R = refract(ray.udir, normal, eta_ratio, &should_reflect);
-	if (should_reflect)
+t_color handle_refraction(t_refract *rf, t_ray ray, t_hit *hit, int depth, int y)
+{
+	calculate_face_normal(ray, hit, rf);
+	rf->should_reflect = false;
+	rf->R = refract(ray.udir, rf->normal, rf->eta_ratio, &rf->should_reflect);
+	if (rf->should_reflect)
 	{
-		R = reflect(ray.udir, normal);
-		reflected = create_reflected_ray(hit->pos, normal, R, true);
+		rf->R = reflect(ray.udir, rf->normal);
+		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->R, true);
 	}
 	else
-		reflected = create_reflected_ray(hit->pos, normal, R, false);
-	reflect_color = trace_ray(reflected, depth + 1, y);
-	return (mix_colors(hit->color, reflect_color, reflectance));
+		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->R, false);
+	rf->reflect_color = trace_ray(rf->reflected, depth + 1, y);
+	return (mix_colors(hit->color, rf->reflect_color, rf->reflectance));
 }
