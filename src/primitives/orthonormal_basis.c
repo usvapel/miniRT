@@ -29,6 +29,25 @@ t_basis3d build_local_basis(t_vec3d up)
     return basis;
 }
 
+t_basis3d build_TBN_basis(t_vec3d normal)
+{
+    t_basis3d basis;
+    t_vec3d tmp;
+    
+    basis.forward = normal;
+    normlize_vec3d(&basis.forward);
+    if (fabsf(basis.forward.x) > 0.9f) 
+        tmp = new_vec3d(0, 0, 1);
+    else
+        tmp = new_vec3d(1, 0, 0);
+    basis.right = cross_vec3d(tmp, basis.forward);
+    normlize_vec3d(&basis.right);
+    basis.up = cross_vec3d(basis.forward, basis.right);
+    basis.up = nscale_vec3d(basis.up, -1);
+    normlize_vec3d(&basis.up);
+    return basis;
+}
+
 /*
 Converts a vector v from standard basis (world space) into given orthonormal basis (local).
 vl = B^(-1)v, where B^(-1) is the inverse matrix of basis transformation matrix, v world vector
