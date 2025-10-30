@@ -23,10 +23,13 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 
 void	init_image_text(t_vector *images, char **split)
 {
-	puts("parse image text");
 	t_image_text *text = ft_calloc(1, sizeof(t_image_text));
 	printf("Initializing image texture: %s\n", split[2]);
 	text->texture = mlx_load_png(split[2]);
+	text->bump = NULL;
+	text->texture = mlx_load_png(split[2]);
+	if (split[3])
+		text->bump = mlx_load_png(split[3]);
 	add_elem(images, text);
 }
 
@@ -36,3 +39,4 @@ void	link_texture(t_object *obj, char **split, int type)
 	obj->texture.index = ft_atoi(split[1]);
 	printf("Linkage type: %d, i: %d\n",obj->type, obj->texture.index);
 }
+
