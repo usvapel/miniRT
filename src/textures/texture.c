@@ -25,6 +25,8 @@ t_color get_texel(mlx_texture_t *text, float u, float v)
 	uint32_t y = floorf(v * text->height);
 	if (x >= text->width) x = text->width - 1;
 	if (y >= text->height) y = text->height - 1;
+	if (x < 0) x = 0;
+	if (y < 0) y = 0;
 	int w = text->width;
 	int pixel_index = (y * w + x) * text->bytes_per_pixel;
 	uint8_t *pixels = text->pixels;
@@ -34,4 +36,23 @@ t_color get_texel(mlx_texture_t *text, float u, float v)
 	uint8_t a = pixels[pixel_index + 3];
 	uint32_t color = (r << 24) | (g << 16) | (b << 8) | a;
 	return int_to_color(color);
+}
+/*
+    TBN space:
+        T: u, (right, x-axis)
+        B: v, (up, y-axis)
+        N: n (forward, z-axis)
+    Normal stored in the normal map defined in TBN space, to get the actual normal
+    we just need to transform from TBN to world space
+*/
+void	apply_normal_bump(mlx_texture_t *txt_normal, t_hit *hit, float u, float v)
+{
+    const t_basis3d TBN = build_TBN_basis(hit->normal);
+	const t_color col = get_texel(txt_normal, u, v);
+	t_vec3d lnormal;
+
+    lnormal = new_vec3d(col.r / 255, col.g / 255, col.b / 255);
+    lnormal = sub_vec3d(nscale_vec3d(lnormal, 2), new_vec3d(1,1,1));
+    hit->normal = point_from_basis(lnormal, TBN, hit->pos);
+    normlize_vec3d(&hit->normal);
 }
