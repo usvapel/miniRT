@@ -6,7 +6,7 @@ bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top);
 bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 bool cylinder_body_hit(t_cylinder cy, t_ray ray, t_hit *hit);
 
-void    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
+bool    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
 {
     t_hit local_hit = {0};
     bool hit_is_set;
@@ -27,6 +27,9 @@ void    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
 		hit->material = cy->base.material;
     }
     
+        return true;
+    }
+    return false;
 }
 
 bool    cylinder_disk_hit(t_cylinder cy, t_ray ray, t_hit *hit, int top)
