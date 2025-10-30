@@ -1,6 +1,8 @@
 #include "minirt.h"
+
 void schecker_board(t_hit *hit, int texture_index, float u, float v);
 void wrap_img_sphere(t_hit *hit, float u, float v);
+
 void    sphere_uv(t_sphere sphere, t_hit *hit)
 {
     t_basis3d local = build_local_basis(sphere.axis);
@@ -18,16 +20,20 @@ void    sphere_uv(t_sphere sphere, t_hit *hit)
 
 void schecker_board(t_hit *hit, int texture_index, float u, float v)
 {
-    t_vector *checkers = get_engine()->textures.checkers;
-	t_checker *checkboard = (t_checker *)(checkers->data[texture_index]);
-	int i_u = floorf((u * 10)/ checkboard->block_size);
-	int i_v = floorf((v * 10) / checkboard->block_size);
-	t_color color = ((i_u + i_v) % 2 == 0) ? checkboard->color1 : checkboard->color2;
+    const t_vector *checkers = get_engine()->textures.checkers;
+	const t_checker *checkboard = (t_checker *)(checkers->data[texture_index]);
+	const int i_u = floorf((u * 10)/ checkboard->block_size);
+	const int i_v = floorf((v * 10) / checkboard->block_size);
+	const t_color color = ((i_u + i_v) % 2 == 0) ? checkboard->color1 : checkboard->color2;
+
     hit->color = color;
 }
 void wrap_img_sphere(t_hit *hit, float u, float v)
 {
-    t_object *base = get_base_object(hit->obj);
-    t_image_text *text = get_engine()->textures.images->data[base->texture.index];
+    const t_object *base = get_base_object(hit->obj);
+    const t_image_text *text = get_engine()->textures.images->data[base->texture.index];
+
     hit->color = get_texel(text->texture, u, v);
+    if (text->bump)
+        apply_normal_bump(text->bump, hit, u, v);
 }
