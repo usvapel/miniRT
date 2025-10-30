@@ -111,7 +111,9 @@ SRCS_MAIN := \
 	paraboloid.c \
 	plane_uv.c \
 	texture.c \
-	sphere_uv.c
+	sphere_uv.c \
+	refraction.c \
+	reflection.c
 
 # Combine all source files
 SRCS := \
