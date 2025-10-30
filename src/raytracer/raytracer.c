@@ -19,7 +19,7 @@ void	draw_scene(void *eng)
 	engine->frame.fps++;
 	engine->recalculate = should_recalculate(engine);
 	while (engine->moving && i < THREAD_COUNT)
-		engine->threads[i++].block_size = 10;
+		engine->threads[i++].block_size = PIXEL_BLOCK_SIZE;
 	engine->moving = false;
 }
 
@@ -38,27 +38,32 @@ bool should_recalculate(t_engine *eng)
 	return false;
 }
 
-int	object_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
+bool obj_intersection(void *obj, t_ray ray, t_hit *hit)
 {
-	int	type;
+	t_object *base = (t_object *)obj;
+	int type = base->type;
+
+	if (type == PLANE)
+		return plane_hit(((t_plane *)obj), ray, hit);
+	if (type == SPHERE)
+		return sphere_hit(((t_sphere *)obj), ray, hit);
+	else if (type == CYLINDER)
+		return cylinder_hit(((t_cylinder *)obj), ray, hit);	
+	else if (type == LIGHT)
+		return light_hit(((t_generic_light *)obj), ray, hit);
+	else if (type == PARABOLOID)
+		return paraboloid_hit(((t_paraboloid *)obj), ray, hit);
+	else
+		return false;
+}
+
+int	objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
+{
 	int	i;
 
-	i = 0;
-	while (i < engine->objects->count)
-	{
-		type = *(int *)(engine->objects->data[i]);
-		if (type == PLANE)
-			plane_hit(((t_plane *)engine->objects->data[i]), *ray, hit);
-		if (type == SPHERE)
-			sphere_hit(((t_sphere *)engine->objects->data[i]), *ray, hit);
-		else if (type == CYLINDER)
-			cylinder_hit(((t_cylinder *)engine->objects->data[i]), *ray, hit);	
-		else if (type == LIGHT)
-			light_hit(((t_light *)engine->objects->data[i]), *ray, hit);
-		else if (type == PARABOLOID)
-			paraboloid_hit(((t_paraboloid *)engine->objects->data[i]), *ray, hit);
-		i++;
-	}
+	i = -1;
+	while (++i < engine->objects->count)
+		obj_intersection(engine->objects->data[i], *ray, hit);
 	if (hit->prev_hit)
 		apply_texture(hit);
 	return (hit->type);
@@ -164,7 +169,7 @@ static t_color	trace_ray(t_ray ray, int depth, int y)
 	t_color		reflect_color;
 
 	hit.prev_hit = false;
-	(void)object_intersection(engine, &ray, &hit);
+	(void)objects_intersection(engine, &ray, &hit);
 	if (!hit.prev_hit)
 		return (int_to_color(color_gradient(engine, y)));
 	phong_model(engine, &hit);

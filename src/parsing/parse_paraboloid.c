@@ -10,6 +10,7 @@ static void		set_values(t_paraboloid *para, t_vector *v)
 	para->base.color = parse_color(v, v->data[4]);
 	para->base.texture.index = -1;
 	para->base.texture.type = -1;
+	para->base.axis = &para->axis;
 }
 
 void	init_paraboloid(t_vector *objects, char **split)
@@ -32,7 +33,7 @@ void	init_paraboloid(t_vector *objects, char **split)
 		runtime_error("failure during memory allocation!");
 	}
 	set_values(para, v);
-	get_additional_values(v, &para->base, split, 6);
+	get_additional_values(v, (void *)&para->base, split, 6);
 	free_vector(v);
 	validate_axis(para->axis);
 	para->axis = normalize_vec3d(para->axis);

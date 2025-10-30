@@ -11,6 +11,7 @@ static void	set_values(t_cylinder *cylinder, t_vector *v)
 	cylinder->axis = normalize_vec3d(cylinder->axis);
 	cylinder->base.texture.index = -1;
 	cylinder->base.texture.type = -1;
+	cylinder->base.axis = &cylinder->axis;
 }
 
 void	init_cylinder(t_vector *objects, char **split)
@@ -33,7 +34,7 @@ void	init_cylinder(t_vector *objects, char **split)
 		runtime_error("failure during memory allocation!");
 	}
 	set_values(cylinder, v);
-	get_additional_values(v, &cylinder->base, split, 6);
+	get_additional_values(v, (void *)&cylinder->base, split, 6);
 	free_vector(v);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
