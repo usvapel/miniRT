@@ -96,8 +96,4 @@ typedef struct s_engine
 	t_phong p;
 }	t_engine;
 
-
-float schlick_reflectance(float cosine, float ref_idx);
-t_vec3d refract(t_vec3d uv, t_vec3d n, float etai_over_etat, bool *total_ir);
-
 #endif // ENGINE_H

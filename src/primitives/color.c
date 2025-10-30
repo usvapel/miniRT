@@ -1,5 +1,22 @@
 #include "minirt.h"
 
+t_color mix_colors(t_color c1, t_color c2, float r)
+{
+	c1.r = c1.r * (1 - r) + c2.r * r;
+	c1.g = c1.g * (1 - r) + c2.g * r;
+	c1.b = c1.b * (1 - r) + c2.b * r;
+	c1.a = c1.a * (1 - r) + c2.a * r;
+	if (c1.r > 255)
+		c1.r = 255;
+	if (c1.g > 255)
+		c1.g = 255;
+	if (c1.b > 255)
+		c1.b = 255;
+	if (c1.a > 255)
+		c1.a = 255;
+	return (c1);
+}
+
 t_color	vec3d_to_color(t_vec3d v)
 {
 	t_color	c;
