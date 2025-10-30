@@ -1,13 +1,18 @@
 #include "minirt.h"
 
-void	get_additional_values(t_vector *v, t_object *base, char **split, int index)
+void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 {
+	t_object *base;
+	
+	base = obj;
 	while (split[index])
 	{
 		if (ft_strcmp(split[index], "ch") == 0 && split[index + 1])
-			link_texture(base, split + index);
+			link_texture(base, split + index, CHECKERBOARD);
 		else if (ft_strcmp(split[index], "img") == 0 && split[index + 1])
-			link_texture(base, split + index);
+			link_texture(base, split + index, IMAGE);
+		else if (ft_strcmp(split[index], "obj") == 0 && split[index + 1])
+			((t_generic_light *)obj)->obj_index = ft_atof(split[index + 1]);
 		else if (ft_strcmp(split[index], "rl") == 0 && split[index + 1])
 		{
 			base->material.reflec = ft_atof(split[index + 1]);

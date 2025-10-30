@@ -41,7 +41,7 @@ void	setup_threads(void *eng)
 		engine->threads[i].end_x = x_step;
 		engine->threads[i].done = false;
 		engine->threads[i].end = false;
-		engine->threads[i].block_size = 10;
+		engine->threads[i].block_size = PIXEL_BLOCK_SIZE;
 		engine->threads[i].last_move = 0;
 		pthread_create(&engine->threads[i].thread, NULL, raytracer, &engine->threads[i]);
 		i++;
