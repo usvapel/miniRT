@@ -65,7 +65,7 @@ int	objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 	while (++i < engine->objects->count)
 		obj_intersection(engine->objects->data[i], *ray, hit);
 	if (hit->prev_hit)
-		apply_texture(hit);
+		normlize_vec3d(&hit->normal);
 	return (hit->type);
 }
 
@@ -128,7 +128,7 @@ static t_color mix_colors(t_color c1, t_color c2, float r)
 static t_color	trace_ray(t_ray ray, int depth, int y)
 {
 	t_engine	*engine = get_engine();
-	t_hit		hit;
+	t_hit		hit = {0};
 	t_vec3d		R;
 	t_ray		reflected;
 	t_color		reflect_color;
@@ -137,6 +137,7 @@ static t_color	trace_ray(t_ray ray, int depth, int y)
 	(void)objects_intersection(engine, &ray, &hit);
 	if (!hit.prev_hit)
 		return (int_to_color(color_gradient(engine, y)));
+	apply_texture(&hit);
 	phong_model(engine, &hit);
 	if (depth >= BOUNCES || ((t_object *)hit.obj)->material.reflec == 0)
 		return (hit.color);
