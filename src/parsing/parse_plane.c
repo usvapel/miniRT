@@ -15,6 +15,7 @@ void	init_plane(t_engine *engine, char **split)
 	t_plane		*plane;
 	t_vector	*v;
 
+	printf("Initializing plane\n");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
@@ -33,7 +34,8 @@ void	init_plane(t_engine *engine, char **split)
 	plane->normal = parse_vec3d(v, v->data[1]);
 	plane->base.color = parse_color(v, v->data[2]);
 	plane->base.texture.index = -1;
-	get_additional_values(v, &plane->base, split, 4);
+	plane->base.axis = &plane->normal;
+	get_additional_values(v, (void *)&plane->base, split, 4);
 	free_vector(v);
 	validate_color(plane->base.color);
 	validate_normal(plane->normal);

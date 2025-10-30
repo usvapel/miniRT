@@ -39,5 +39,6 @@ t_ray	get_ray(int x, int y);
 bool	set_hit(void *obj, t_vec3d new_hit, t_ray ray, t_hit *hit);
 bool	closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2);
 float	nearest_t(float t0, float t1);
+t_ray local_ray(t_ray ray, t_basis3d local, t_vec3d local_origin);
 
 #endif // RAY_H
