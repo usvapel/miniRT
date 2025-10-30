@@ -25,9 +25,7 @@ bool    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
         hit->pos = local_hit.pos;
         hit->type = CYLINDER;
 		hit->material = cy->base.material;
-    }
-    
-        return true;
+		return true;
     }
     return false;
 }
