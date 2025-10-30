@@ -37,6 +37,7 @@ typedef struct s_checker
 typedef struct s_image_text
 {
    mlx_texture_t *texture; 
+   mlx_texture_t *bump;
 } t_image_text;
 
 typedef enum e_texture_type
@@ -49,6 +50,7 @@ typedef enum e_texture_type
 // apply texture
 void    apply_texture(t_hit *hit);
 t_color get_texel(mlx_texture_t *text, float u, float v);
+void	apply_normal_bump(mlx_texture_t *txt_normal, t_hit *hit, float u, float v);
 
 // uv mappings
 void    plane_uv(t_plane plane, t_hit *hit);
