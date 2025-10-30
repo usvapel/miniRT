@@ -102,6 +102,7 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 
 t_color trace_ray(t_ray ray, int depth, int y)
 {
+	t_refract rf = {0};
 	t_hit	hit;
 	float	reflectance;
 	float	indice;
@@ -115,8 +116,10 @@ t_color trace_ray(t_ray ray, int depth, int y)
 	indice = ((t_object *)hit.obj)->material.refract;
 	if (depth >= BOUNCES || reflectance == 0)
 		return (hit.color);
+	rf.reflectance = reflectance;
+	rf.indice = indice;
 	if (indice > 1.0f)
-		return (handle_refraction(ray, &hit, indice, reflectance, depth, y));
+		return (handle_refraction(&rf, ray, &hit, depth, y));
 	return (handle_reflection(ray, &hit, reflectance, depth, y));
 }
 

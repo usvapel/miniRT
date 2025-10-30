@@ -33,6 +33,19 @@ typedef struct s_hit
 	t_material material;
 }	t_hit;
 
+typedef struct s_refract
+{
+	bool front_face;
+	t_vec3d normal;
+	float eta_ratio;
+	bool should_reflect;
+	t_vec3d R;
+	t_ray reflected;
+	t_color reflect_color;
+	float	reflectance;
+	float	indice;
+}	t_refract;
+
 void	*raytracer(void *engine);
 t_color trace_ray(t_ray ray, int depth, int y);
 t_vec3d	get_point_on_ray(t_ray ray, float t);
@@ -43,7 +56,7 @@ float	nearest_t(float t0, float t1);
 t_ray local_ray(t_ray ray, t_basis3d local, t_vec3d local_origin);
 
 //refraction
-t_color handle_refraction(t_ray ray, t_hit *hit, float indice, float reflectance, int depth, int y);
+t_color handle_refraction(t_refract *rf, t_ray ray, t_hit *hit, int depth, int y);
 
 //reflection
 t_color handle_reflection(t_ray ray, t_hit *hit, float reflectance, int depth, int y);
