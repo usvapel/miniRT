@@ -51,6 +51,7 @@ static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit, t_generic_ligh
 	t_hit	shadow_hit = {0};
 	float	light_distance;
 	float	object_distance;
+	return false;
 
 	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir, 1e-2));
 	shadow_ray.udir = p->nlight_dir;
@@ -77,10 +78,10 @@ void	phong_model(t_engine *engine, t_hit *hit)
 	p.ambient = color_to_vec3d(engine->ambient.base.color);
 	p.final_color = nscale_vec3d(p.ambient, engine->ambient.ratio);
 	p.normal = normalize_vec3d(hit->normal);
-	i = -1;
-	while (++i < engine->lights->count)
+	i = 0;
+	while (i < engine->lights->count)
 	{
-		light = engine->lights->data[i];
+		light = engine->lights->data[i++];
 		base = get_base_light(light);
 		p.light_color = color_to_vec3d(base->color);
 		p.light_dir = sub_vec3d(base->pos, hit->pos);

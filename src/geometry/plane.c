@@ -1,4 +1,5 @@
 #include "minirt.h"
+#include "primitives.h"
 /*
 Point in ray: p = o + td, o is origin, d ray direction and t distance from origin
 Plane in normal form: n * (r-r0) = 0, n normal form, r0 known point and r is any point in the plane, r == p
@@ -23,8 +24,9 @@ bool plane_hit(t_plane *plane, t_ray ray, t_hit *hit)
 	pos = get_point_on_ray(ray, t);
 	if (!set_hit(plane, pos, ray, hit))
         return false;
-    hit->normal = plane->normal;
+    hit->normal = normalize_vec3d(plane->normal);
     hit->type = PLANE;
+	hit->material = plane->base.material;
     return true;
 }
 

@@ -18,8 +18,10 @@ bool sphere_hit(t_sphere *sphere, t_ray ray, t_hit *hit)
 	if (!set_hit(sphere, n_hit_pos, ray, hit))
         return false;
     hit->normal = sub_vec3d(hit->pos, sphere->base.pos);
+	hit->normal = normalize_vec3d(hit->normal);
     hit->type = SPHERE;
     hit->color = sphere->base.color;
+	hit->material = sphere->base.material;
     return true;
 }
 

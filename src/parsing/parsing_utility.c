@@ -15,12 +15,17 @@ void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 			((t_generic_light *)obj)->obj_index = ft_atof(split[index + 1]);
 		else if (ft_strcmp(split[index], "rl") == 0 && split[index + 1])
 		{
-			base->material.reflec = ft_atof(split[index + 1]);
-			if (base->material.reflec > 1.0f || base->material.reflec < 0.0f)
+			base->material.reflect = ft_atof(split[index + 1]);
+			if (base->material.reflect > 1.0f || base->material.reflect < 0.0f)
 			{
 				free_vector(v);
 				runtime_error("invalid reflection value! (0 - 1)");
 			}
+		}
+		else if (ft_strcmp(split[index], "rf") == 0 && split[index + 1])
+		{
+			base->material.refract = ft_atof(split[index + 1]);
+			base->material.should_refract = true;
 		}
 		index++;
 	}

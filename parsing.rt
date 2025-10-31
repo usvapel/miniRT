@@ -1,16 +1,23 @@
 A   0.1                              255,255,255
 
-C   0.0,2.0,8.0     0.0,-0.1,-1.0    70
+C   -1.73,2.160,1.86     1.0,-0.1,-1.0    70
 
-L   0.0,4.8,0.0     0.8              255,255,240
+L   5.0,5.0,0.0     0.2              254,243,226
+L   0.0,5.0,5.0     0.2              250,177,47
+L   5.0,5.0,5.0     0.2              250,129,47
+L   0.0,5.0,0.0     0.2              250,64,50
 
-pl  0.0,0.0,0.0     0.0,1.0,0.0      120,85,60 rl 0.0 img 1
+//glass
+cy  2.5,0.0,2.5     0.0,1.0,0.0      1.0     1.8      0,0,80 rl 0.7 rf 1.58
+//water
+cy  2.5,0.001,2.5   0.0,1.0,0.0      0.98    1.8      0,0,80 rl 0.9 rf 1.333
+//straw
+cy  2.4,0.0,2.8     0.0,1.0,0.1      0.1     2.2      80,60,40 rl 0.0
 
-sp  -2.0,1.0,-2.0   0.8              104,181,230 rl 0.0 img 1
+pl  0.0,0.0,0.0     0.0,1.0,0.0      120,85,60 rl 0.0 img 2
 
-cy  -1.0,0.0,-1.5   0.0,1.0,0.0      0.3         1.8   80,60,40 rl 0.0 img 1
-
-pa  -4.5,3.0,-2.0   0.8,0.0,0.2      1.5         2.0     100,80,60 rl 0.0 img 1
+sp  0.0,1.0,2.0     0.1             120,120,140 rl 0.1
+sp  0.0,1.0,2.0     10             0,0,255 rl 0.33 rf 1.77
 
 # textures checkers
 tx  ch 255,220,80 255,200,50 0.5 # index 0
@@ -23,3 +30,24 @@ tx  img ./mud.png
 tx  img ./sparse_grass.png
 tx  img ./moon.png
 tx  img ./8k_stars_milky_way.png
+
+# Material	Index of Refraction
+# Vacuum	           1.0000
+# Air	               1.0003
+# Ice	               1.309
+# Water	               1.333
+# Ethyl Alcohol        1.361
+# Teflon	           1.38
+# Fluorite	           1.434
+# Glycerine	           1.473
+# Benzene	           1.501
+# Plexiglas	           1.51
+# Crown Glass	       1.52
+# Light Flint Glass    1.58
+# Polycarbonate Glass  1.59
+# Dense Flint Glass    1.66
+# Sapphire gemstone    1.77
+# Zircon               1.923
+# Diamond              2.417
+# Rutile               2.907
+# Gallium phosphide    3.50
