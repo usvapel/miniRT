@@ -68,7 +68,7 @@ int	objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 		i++;
 	}
 	if (hit->prev_hit)
-		apply_texture(hit);
+		normlize_vec3d(&hit->normal);
 	return (hit->type);
 }
 
@@ -111,6 +111,7 @@ t_color trace_ray(t_ray ray, int depth, int y)
 	(void)objects_intersection(get_engine(), &ray, &hit);
 	if (!hit.prev_hit)
 		return (int_to_color(color_gradient(get_engine(), y)));
+	apply_texture(&hit);
 	phong_model(get_engine(), &hit);
 	reflectance = ((t_object *)hit.obj)->material.reflect;
 	indice = ((t_object *)hit.obj)->material.refract;
