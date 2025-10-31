@@ -76,6 +76,7 @@ void rotate_object(void *obj,  t_ray ray, float dx, float dy)
 	rotateY_vec3d(&axis, -dy * 100);
 	rotateZ_vec3d(&axis, dx * 100);
 	*base->axis = point_from_basis(axis, local, new_vec3d(0,0,0));
+	normlize_vec3d(base->axis);
 	update_camera();
 }
 
