@@ -17,24 +17,25 @@ void    apply_texture(t_hit *hit)
 
 t_color get_texel(mlx_texture_t *text, float u, float v)
 {
-	if (u < 0.0f) u = 0.0f;
-	if (u > 1.0f) u = 1.0f;
-	if (v < 0.0f) v = 0.0f;
-	if (v > 1.0f) v = 1.0f;
-	uint32_t x = floorf(u * text->width);
-	uint32_t y = floorf(v * text->height);
-	if (x >= text->width) x = text->width - 1;
-	if (y >= text->height) y = text->height - 1;
-	if (x < 0) x = 0;
-	if (y < 0) y = 0;
-	int w = text->width;
-	int pixel_index = (y * w + x) * text->bytes_per_pixel;
-	uint8_t *pixels = text->pixels;
-	uint8_t r = pixels[pixel_index + 0];
-	uint8_t g = pixels[pixel_index + 1];
-	uint8_t b = pixels[pixel_index + 2];
-	uint8_t a = pixels[pixel_index + 3];
-	uint32_t color = (r << 24) | (g << 16) | (b << 8) | a;
+	const uint8_t *pixels = text->pixels;
+	uint32_t x;
+	uint32_t y;
+	int pixel_i;
+	uint32_t color;
+
+	u = clamp(u, 0.0f, 1.0f);
+	v = clamp(v, 0.0f, 1.0f);
+	x = floorf(u * text->width);
+	y = floorf(v * text->height);
+	if (x >= text->width)
+		x = text->width - 1;
+	if (y >= text->height)
+		y = text->height - 1;
+	pixel_i = (y * text->width + x) * text->bytes_per_pixel;
+	color = (pixels[pixel_i + 0] << 24) // r
+			| (pixels[pixel_i + 1] << 16) // g
+			| (pixels[pixel_i + 2] << 8) // b
+			| pixels[pixel_i + 3]; // a
 	return int_to_color(color);
 }
 /*
