@@ -1,5 +1,22 @@
 #include "minirt.h"
 
+t_color mix_colors(t_color c1, t_color c2, float r)
+{
+	c1.r = c1.r * (1 - r) + c2.r * r;
+	c1.g = c1.g * (1 - r) + c2.g * r;
+	c1.b = c1.b * (1 - r) + c2.b * r;
+	c1.a = c1.a * (1 - r) + c2.a * r;
+	if (c1.r > 255)
+		c1.r = 255;
+	if (c1.g > 255)
+		c1.g = 255;
+	if (c1.b > 255)
+		c1.b = 255;
+	if (c1.a > 255)
+		c1.a = 255;
+	return (c1);
+}
+
 t_color	vec3d_to_color(t_vec3d v)
 {
 	t_color	c;
@@ -57,12 +74,12 @@ void apply_color(t_color *color, float brightness)
 	color->a = (color->a);
 }
 
-uint32_t scale_color(t_color *color, float brightness)
+uint32_t color_to_int(t_color color)
 {
-	uint8_t r = (uint8_t)(color->r * brightness);
-	uint8_t g = (uint8_t)(color->g * brightness);
-	uint8_t b = (uint8_t)(color->b * brightness);
-	uint8_t a = (uint8_t)(color->a);
+	uint8_t r = (uint8_t)(color.r);
+	uint8_t g = (uint8_t)(color.g);
+	uint8_t b = (uint8_t)(color.b);
+	uint8_t a = (uint8_t)(color.a);
 	uint32_t result = (r << 24) | (g << 16) | (b << 8) | a;
 	return result;
 }
