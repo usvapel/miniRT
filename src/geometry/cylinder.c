@@ -21,7 +21,7 @@ bool    cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit)
     if (hit_is_set)
     {
         hit->color = cy->base.color;
-        hit->normal = normalize_vec3d(local_hit.normal);
+        hit->normal = local_hit.normal;
         hit->pos = local_hit.pos;
         hit->type = CYLINDER;
 		hit->material = cy->base.material;

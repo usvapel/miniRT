@@ -24,7 +24,7 @@ bool plane_hit(t_plane *plane, t_ray ray, t_hit *hit)
 	pos = get_point_on_ray(ray, t);
 	if (!set_hit(plane, pos, ray, hit))
         return false;
-    hit->normal = normalize_vec3d(plane->normal);
+    hit->normal = plane->normal;
     hit->type = PLANE;
 	hit->material = plane->base.material;
     return true;
