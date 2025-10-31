@@ -45,7 +45,7 @@ void	init_light(t_vector *lights, char **split)
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
-	set_values(g_light, light, v);
+	set_values(g_light, light, v, split);
 	free_vector(v);
 	validate_color(g_light->base.color);
 	validate_light(*g_light);
