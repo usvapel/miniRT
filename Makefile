@@ -44,12 +44,21 @@ INC				:= -I./include -I$(LIB_DIR)/MLX42/include/MLX42 -I$(LIBFT_DIR)/include
 # Dependency generation flags
 DEPFLAGS		= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
-
 # Additional flags
 LDFLAGS			= -L$(LIBFT_DIR) -lft -L$(MLX_PATH) -lmlx42
-LDFLAGS += -ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
 
-#LDFLAGS +=				-lglfw -lXext -lX11 -lm -ldl -pthread
+# Detect the operating system
+UNAME_S := $(shell uname -s)
+
+# Set OS-specific variables
+ifeq ($(UNAME_S),Linux)
+LDFLAGS +=	-lglfw -lXext -lX11 -lm -ldl -pthread
+endif
+
+ifeq ($(UNAME_S),Darwin)
+LDFLAGS += -ldl /opt/homebrew/opt/glfw/lib/libglfw.dylib -pthread -lm
+endif
+
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ VISUAL STYLING ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
 # Terminal colors for build output
@@ -111,7 +120,9 @@ SRCS_MAIN := \
 	paraboloid.c \
 	plane_uv.c \
 	texture.c \
-	sphere_uv.c
+	sphere_uv.c \
+	refraction.c \
+	reflection.c
 
 # Combine all source files
 SRCS := \

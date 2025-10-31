@@ -5,7 +5,7 @@ bool should_recalculate(t_engine *eng);
 void	draw_scene(void *eng)
 {
 	t_engine	*engine;
-	int i;
+	int			i;
 
 	i = 0;
 	engine = eng;
@@ -61,22 +61,15 @@ int	objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
 {
 	int	i;
 
-	i = -1;
-	while (++i < engine->objects->count)
+	i = 0;
+	while (i < engine->objects->count)
+	{
 		obj_intersection(engine->objects->data[i], *ray, hit);
+		i++;
+	}
 	if (hit->prev_hit)
 		apply_texture(hit);
 	return (hit->type);
-}
-
-static float	get_sample(int value, t_threads *t, int axis)
-{
-	float	result = value + t->block_size / 2.0f;
-	if (result >= t->end_x && axis == X_AXIS)
-		result = t->end_x - 1;
-	if (result >= t->end_y && axis == Y_AXIS)
-		result = t->end_y - 1;
-	return (result);
 }
 
 static void	draw_to_buffer(t_threads *t, int x, int y, int color)
@@ -107,45 +100,39 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 	}
 }
 
-static t_color mix_colors(t_color c1, t_color c2, float r)
+t_color trace_ray(t_ray ray, int depth, int y)
 {
-	c1.r = c1.r * (1 - r) + c2.r * r;
-	c1.g = c1.g * (1 - r) + c2.g * r;
-	c1.b = c1.b * (1 - r) + c2.b * r;
-	c1.a = c1.a * (1 - r) + c2.a * r;
-	if (c1.r > 255)
-		c1.r = 255;
-	if (c1.g > 255)
-		c1.g = 255;
-	if (c1.b > 255)
-		c1.b = 255;
-	if (c1.a > 255)
-		c1.a = 255;
-	return (c1);
-}
-
-
-static t_color	trace_ray(t_ray ray, int depth, int y)
-{
-	t_engine	*engine = get_engine();
-	t_hit		hit;
-	t_vec3d		R;
-	t_ray		reflected;
-	t_color		reflect_color;
+	t_refract rf = {0};
+	t_hit	hit;
+	float	reflectance;
+	float	indice;
 
 	hit.prev_hit = false;
-	(void)objects_intersection(engine, &ray, &hit);
+	(void)objects_intersection(get_engine(), &ray, &hit);
 	if (!hit.prev_hit)
-		return (int_to_color(color_gradient(engine, y)));
-	phong_model(engine, &hit);
-	if (depth >= BOUNCES || ((t_object *)hit.obj)->material.reflec == 0)
+		return (int_to_color(color_gradient(get_engine(), y)));
+	phong_model(get_engine(), &hit);
+	reflectance = ((t_object *)hit.obj)->material.reflect;
+	indice = ((t_object *)hit.obj)->material.refract;
+	if (depth >= BOUNCES || reflectance == 0)
 		return (hit.color);
-	hit.normal = normalize_vec3d(hit.normal);
-	R = reflect(ray.udir, hit.normal);
-	reflected.origin = add2_vec3d(hit.pos, nscale_vec3d(R, EPSILON));
-	reflected.udir = normalize_vec3d(R);
-	reflect_color = trace_ray(reflected, depth + 1, y);
-	return (mix_colors(hit.color, reflect_color, ((t_object *)hit.obj)->material.reflec));
+	rf.reflectance = reflectance;
+	rf.indice = indice;
+	if (indice > 1.0f)
+		return (handle_refraction(&rf, ray, &hit, depth, y));
+	return (handle_reflection(ray, &hit, reflectance, depth, y));
+}
+
+inline static float	get_sample(int value, t_threads *t, int axis)
+{
+	float	result;
+
+	result = value + t->block_size / 2.0f;
+	if (result >= t->end_x && axis == X_AXIS)
+		result = t->end_x - 1;
+	if (result >= t->end_y && axis == Y_AXIS)
+		result = t->end_y - 1;
+	return (result);
 }
 
 static void	calculate_scene(t_threads *t)
@@ -153,7 +140,6 @@ static void	calculate_scene(t_threads *t)
 	t_ray	ray;
 	int		x;
 	int		y;
-	int		color;
 
 	y = t->start_y;
 	while (y < t->end_y)
@@ -162,9 +148,7 @@ static void	calculate_scene(t_threads *t)
 		while (x < t->end_x)
 		{
 			ray = get_ray(get_sample(x, t, X_AXIS), get_sample(y, t, Y_AXIS));
-			t_color final = trace_ray(ray, 0, y);
-			color = scale_color(&final, 1);
-			draw_to_buffer(t, x, y, color);
+			draw_to_buffer(t, x, y, color_to_int(trace_ray(ray, 0, y)));
 			x += t->block_size;
 		}
 		y += t->block_size;

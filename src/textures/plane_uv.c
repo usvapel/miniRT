@@ -5,11 +5,11 @@ void wrap_img_plane(t_hit *hit, int index, t_vec3d uv);
 void    plane_uv(t_plane plane, t_hit *hit)
 {
     const t_basis3d local = build_local_basis(plane.normal);
-    t_uv_mapping map;
+    /*t_uv_mapping map;*/
     t_vec3d l_hit = {};
 
-    map.u = local.right;
-    map.v = local.forward;
+    /*map.u = local.right;*/
+    /*map.v = local.forward;*/
     l_hit = point_in_basis(hit->pos, local, plane.base.pos);
     if (plane.base.texture.type == CHECKERBOARD)
         lchecker_board(hit, plane.base.texture.index, l_hit.x, l_hit.z);
