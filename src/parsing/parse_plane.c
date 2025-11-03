@@ -26,7 +26,7 @@ void	init_plane(t_engine *engine, char **split)
 	add_elem(engine->objects, plane);
 	if (!plane)
 	{
-		free_vector(v);
+		free_split_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
 	plane->base.type = PLANE;
@@ -36,7 +36,7 @@ void	init_plane(t_engine *engine, char **split)
 	plane->base.texture.index = -1;
 	plane->base.axis = &plane->normal;
 	get_additional_values(v, (void *)&plane->base, split, 4);
-	free_vector(v);
+	free_split_vector(v);
 	validate_color(plane->base.color);
 	validate_normal(plane->normal);
 }

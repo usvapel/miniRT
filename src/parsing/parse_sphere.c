@@ -15,7 +15,7 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere = ft_calloc(1, sizeof(t_sphere));
 	if (!sphere)
 	{
-		free_vector(v);
+		free_split_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
 	sphere->base.type = SPHERE;
@@ -27,7 +27,7 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->axis = new_vec3d(0, 1, 0);
 	sphere->base.axis = &sphere->axis;
 	get_additional_values(v, (void *)&sphere->base, split, 4);
-	free_vector(v);
+	free_split_vector(v);
 	validate_color(sphere->base.color);
 	add_elem(objects, sphere);
 }
