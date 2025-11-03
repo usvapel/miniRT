@@ -11,29 +11,29 @@
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
-# define MINIRT_H
+#define MINIRT_H
 
-# include "MLX42.h"
-# include "mlx_hooks.h"
+#include "MLX42.h"
+#include "mlx_hooks.h"
 
-# include "engine.h"
-# include "libft.h"
-# include "primitives.h"
-# include "ray.h"
-# include "camera.h"
-# include "viewport.h"
-# include "textures.h"
-# include "geometry.h"
-# include "vector.h"
-# include "parsing.h"
+#include "camera.h"
+#include "engine.h"
+#include "geometry.h"
+#include "libft.h"
+#include "parsing.h"
+#include "primitives.h"
+#include "ray.h"
+#include "textures.h"
+#include "vector.h"
+#include "viewport.h"
 
-# include <errno.h>
-# include <math.h>
-# include <stdio.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <float.h>
-# include <stdatomic.h>
+#include <errno.h>
+#include <float.h>
+#include <math.h>
+#include <pthread.h>
+#include <stdatomic.h>
+#include <stdio.h>
+#include <sys/time.h>
 
 // this is not allowed in the norm
 #define deg_to_radians(degres) ((degres) * M_PI / 180.0)
@@ -49,40 +49,40 @@
 # define QUALITY_DELAY_SECONDS 1
 
 // phong
-# define A_CONSTANT 1.0f
-# define LINEAR_COEFFICIENT 0.09f
-# define QUADRATIC_COEFFICIENT 0.032f
+#define A_CONSTANT 1.0f
+#define LINEAR_COEFFICIENT 0.09f
+#define QUADRATIC_COEFFICIENT 0.032f
 
 // needs cleaning in the future
-void		input_parsing(t_engine *engine, char **av);
-t_engine	*get_engine(void);
-float	clamp(float value, float min, float max);
-void	cleanup_and_exit();
-void	draw_scene(void *eng);
-bool	timer(int prev_sec, int stop);
-int		get_seconds(t_engine *engine);
-float	max(float val1, float val2);
+void input_parsing(t_engine *engine, char **av);
+t_engine *get_engine(void);
+float clamp(float value, float min, float max);
+void cleanup_and_exit();
+void draw_scene(void *eng);
+bool timer(int prev_sec, int stop);
+int get_seconds(t_engine *engine);
+float max(float val1, float val2);
 
 // color
-t_color	checker_board(t_hit *hit);
-int		get_rgba(int r, int g, int b, int a);
-void	apply_color(t_color *color, float brightness);
-int		color_gradient(t_engine *engine, int y);
-t_color	vec3d_to_color(t_vec3d v);
-t_vec3d	color_to_vec3d(t_color c);
+t_color checker_board(t_hit *hit);
+int get_rgba(int r, int g, int b, int a);
+void apply_color(t_color *color, float brightness);
+int color_gradient(t_engine *engine, int y);
+t_color vec3d_to_color(t_vec3d v);
+t_vec3d color_to_vec3d(t_color c);
 t_color mix_colors(t_color c1, t_color c2, float r);
 
-void	phong_model(t_engine *engine, t_hit *hit);
-int		objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
+void phong_model(t_engine *engine, t_hit *hit);
+int objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 bool obj_intersection(void *obj, t_ray ray, t_hit *hit);
 
 // threads
-void	setup_threads(void *eng);
-void	wait_for_threads();
-void	thread_cleanup();
+void setup_threads(void *eng);
+bool wait_for_threads();
+void thread_cleanup();
 
 // phong
-t_vec3d	reflect(t_vec3d direction, t_vec3d normal);
+t_vec3d reflect(t_vec3d direction, t_vec3d normal);
 
 t_color int_to_color(int c);
 uint32_t color_to_int(t_color color);
