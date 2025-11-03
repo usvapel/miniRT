@@ -18,7 +18,7 @@ typedef pthread_t t_pthread;
 typedef pthread_mutex_t	t_mutex;
 
 # define THREAD_COUNT 12
-# define PIXEL_BLOCK_SIZE 5
+# define PIXEL_BLOCK_SIZE 8
 
 typedef struct s_phong
 {
