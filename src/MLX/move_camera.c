@@ -15,17 +15,17 @@ static bool    move_camera(t_engine *engine)
 	moved = orient_camera(engine);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
 		add_vec3d(&camera->pos, tmp);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
         minus_vec3d(&camera->pos, tmp);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
         move_left_right(camera, RIGHT);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
         move_left_right(camera, LEFT);
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
 		engine->camera.pos.y += CAM_SPEED * engine->frame.delta;
 	else if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
 		engine->camera.pos.y -= CAM_SPEED * engine->frame.delta;
-	else if (!moved)
+	if (!moved)
 		return false;
 	return true;
 }
