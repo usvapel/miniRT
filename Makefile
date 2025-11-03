@@ -222,7 +222,7 @@ $(MLX):
 # Development and debugging build configuration
 debug: CFLAGS	+= $(DEBUG_FLAGS)
 debug: OPTFLAGS	:= -O0
-debug: clean $(NAME)
+debug: fclean $(NAME)
 	@echo ">$(BOLD)$(CYAN) Debug build completed!$(RESET)"
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ CLEAN TARGETS ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
