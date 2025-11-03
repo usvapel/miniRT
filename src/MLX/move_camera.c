@@ -21,10 +21,8 @@ static bool    move_camera(t_engine *engine)
         move_left_right(camera, RIGHT);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
         move_left_right(camera, LEFT);
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
 		engine->camera.pos.y += CAM_SPEED * engine->frame.delta;
-	else if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
-		engine->camera.pos.y -= CAM_SPEED * engine->frame.delta;
 	if (!moved)
 		return false;
 	return true;
@@ -79,7 +77,9 @@ static bool orient_camera(t_engine *engine)
 	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
 	dt = fminf(get_engine()->frame.delta, 1.0f / 30.0f);
     rotateY_vec3d(&engine->camera.dir, CAM_SENS * -dx * dt);
-    look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.001);
+    look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.001f);
+    engine->mouse.prev_pos.x = engine->mouse.pos.x;
+    engine->mouse.prev_pos.y = engine->mouse.pos.y;
 	return true;
 }
 
