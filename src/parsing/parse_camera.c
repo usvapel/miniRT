@@ -2,7 +2,7 @@
 
 static void	validate_camera(t_engine *engine)
 {
-	static bool is_initialized = false;
+	static bool	is_initialized = false;
 
 	if (engine->camera.fov < 0 || engine->camera.fov > 180)
 		runtime_error("Invalid FOV value");
@@ -12,7 +12,8 @@ static void	validate_camera(t_engine *engine)
 		runtime_error("Invalid orientation y value");
 	if (engine->camera.dir.z < -1 || engine->camera.dir.z > 1)
 		runtime_error("Invalid orientation z value");
-	if (engine->camera.dir.x + engine->camera.dir.y + engine->camera.dir.z == 0)
+	if (engine->camera.dir.x == 0 && engine->camera.dir.y == 0
+		&& engine->camera.dir.z == 0)
 		runtime_error("Invalid camera direction (-1 - 1)");
 	if (is_initialized)
 		runtime_error("Too many cameras!");
@@ -21,7 +22,7 @@ static void	validate_camera(t_engine *engine)
 
 void	init_camera(t_engine *engine, char **split)
 {
-	t_vector *v;
+	t_vector	*v;
 
 	puts("parse camera");
 	v = new_vector(1);
