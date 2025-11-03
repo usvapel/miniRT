@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-bool should_recalculate(t_engine *eng);
+bool				should_recalculate(t_engine *eng);
 
 void	draw_scene(void *eng)
 {
@@ -23,38 +23,40 @@ void	draw_scene(void *eng)
 	engine->moving = false;
 }
 
-bool should_recalculate(t_engine *eng)
+bool	should_recalculate(t_engine *eng)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (eng->moving)
-		return true;
-	while (i < THREAD_COUNT)	
+		return (true);
+	while (i < THREAD_COUNT)
 	{
 		if (eng->threads[i++].block_size != 1)
-			return true;
+			return (true);
 	}
-	return false;
+	return (false);
 }
 
-bool obj_intersection(void *obj, t_ray ray, t_hit *hit)
+bool	obj_intersection(void *obj, t_ray ray, t_hit *hit)
 {
-	t_object *base = (t_object *)obj;
-	int type = base->type;
+	t_object	*base;
+	int			type;
 
+	base = (t_object *)obj;
+	type = base->type;
 	if (type == PLANE)
-		return plane_hit(((t_plane *)obj), ray, hit);
+		return (plane_hit(((t_plane *)obj), ray, hit));
 	if (type == SPHERE)
-		return sphere_hit(((t_sphere *)obj), ray, hit);
+		return (sphere_hit(((t_sphere *)obj), ray, hit));
 	else if (type == CYLINDER)
-		return cylinder_hit(((t_cylinder *)obj), ray, hit);	
+		return (cylinder_hit(((t_cylinder *)obj), ray, hit));
 	else if (type == LIGHT)
-		return light_hit(((t_generic_light *)obj), ray, hit);
+		return (light_hit(((t_generic_light *)obj), ray, hit));
 	else if (type == PARABOLOID)
-		return paraboloid_hit(((t_paraboloid *)obj), ray, hit);
+		return (paraboloid_hit(((t_paraboloid *)obj), ray, hit));
 	else
-		return false;
+		return (false);
 }
 
 int	objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
@@ -100,12 +102,12 @@ static void	draw_to_buffer(t_threads *t, int x, int y, int color)
 	}
 }
 
-t_color trace_ray(t_ray ray, int depth, int y)
+t_color	trace_ray(t_ray ray, int depth, int y)
 {
-	t_refract rf = {0};
-	t_hit	hit;
-	float	reflectance;
-	float	indice;
+	t_refract	rf;
+	t_hit		hit;
+	float		reflectance;
+	float		indice;
 
 	hit.prev_hit = false;
 	(void)objects_intersection(get_engine(), &ray, &hit);
@@ -164,7 +166,8 @@ void	*raytracer(void *thread)
 	engine = get_engine();
 	t = thread;
 	t->done = true;
-	wait_for_threads();
+	if (!wait_for_threads())
+		return (NULL);
 	while (!t->end)
 	{
 		while (engine->recalculate == false)
@@ -176,7 +179,8 @@ void	*raytracer(void *thread)
 		t->done = false;
 		t->last_move = timer(engine->last_move_time, 1);
 		calculate_scene(t);
-		if (engine->moving == false && t->last_move == true && t->block_size > 1)
+		if (engine->moving == false && t->last_move == true
+			&& t->block_size > 1)
 			t->block_size--;
 		t->done = true;
 		engine->recalculate = false;
