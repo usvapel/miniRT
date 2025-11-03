@@ -1,18 +1,20 @@
 C   0.0,0.2,-1.0    0.0,-0.5,1.0     70
-# A   0.01 255,255,255
+
+A   0.1 255,255,255
+
 sp  0.0,0.0,0.0     0.2             255,255,255
-sp  0.2,0.0,0.0     0.3             140,225,122 img 1
-sp  0.4,0.0,0.0     0.3             120,185,182 img 2
-sp  0.6,0.0,-2.0     0.3             120,185,182 img 3
-cy  0.0,1.0,0.8     0.0,-1.0,0.0     0.1     0.1     160,100,142 0.0
-pl 0.0,0.0,0.0 0.0,1.0,0.0 173,161,146 img 0
-L   0.0,1.0,0.0   1.0            255,255,255 obj 0
+sp  0.2,0.0,0.0     0.3             140,225,122 rl 0.9 rf 1.33 img 1
+sp  0.2,0.0,0.0     0.3             140,225,122 rl 1.0 rf 1.0032
+
+pl 0.0,0.0,0.0 0.0,1.0,0.0 173,161,146 img 3
+
+L   0.0,20.0,0.0   1.0            255,255,255 obj 0
 
 # textures checkers
 tx  ch 64,64,64 224,224,224 0.5 # index 0
 tx  ch 128,128,128 160,160,160 0.5 # index 1
 # texture images
 tx  img ./mud.png ./mud_normal.png
-tx  img ./stone.png ./stone_n.png
 tx  img ./metal.png ./metal_n.png
-tx  img ./rusty.png ./rusty_n.png
+tx  img ./8k_earth.png ./8k_earth_normal.png
+tx  img ./mud_cracked_dry_riverbed_002_diff_4k.png ./mud_cracked_dry_riverbed_002_nor_gl_4k.png
