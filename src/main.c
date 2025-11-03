@@ -6,6 +6,7 @@ t_engine	*get_engine(void)
 
 	return (&engine);
 }
+
 t_object	*get_base_object(void *obj)
 {
 	return ((t_object *)obj);
@@ -27,15 +28,18 @@ void	cleanup_and_exit(void)
 	exit(1);
 }
 
-void	get_screen_size(t_engine *engine)
+void	initialize_mlx(t_engine *engine)
 {
 	mlx_set_setting(MLX_HEADLESS, true);
-	engine->mlx = mlx_init(10, 10, "init", true);
+	engine->mlx = mlx_init(800, 600, "temp", true);
 	mlx_get_monitor_size(0, &engine->window.width, &engine->window.height);
 	engine->window.aspect_ratio = (float)engine->window.width
 		/ engine->window.height;
 	setup_viewport();
+	mlx_terminate(engine->mlx);
 	mlx_set_setting(MLX_HEADLESS, false);
+	engine->mlx = mlx_init(engine->window.width, engine->window.height,
+			"miniRT | fps: 0", true);
 }
 
 int	main(int ac, char **av)
@@ -45,16 +49,14 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (0);
 	engine = get_engine();
+	initialize_mlx(engine);
 	input_parsing(engine, av);
-	get_screen_size(engine);
-	engine->mlx = mlx_init(engine->window.width, engine->window.height,
-			"miniRT | fps: 0", true);
 	engine->image = mlx_new_image(engine->mlx, engine->window.width,
 			engine->window.height);
 	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width,
 			engine->window.height);
-	engine->moving = false;
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
+	engine->moving = false;
 	gettimeofday(&engine->frame.start, NULL);
 	setup_threads(engine);
 	mlx_loop_hook(engine->mlx, key_hook, engine);
