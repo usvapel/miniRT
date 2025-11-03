@@ -174,7 +174,7 @@ void	*raytracer(void *thread)
 			usleep(10);
 		}
 		t->done = false;
-		t->last_move = timer(engine->last_move_time, 1);
+		t->last_move = timer(engine->last_move_time, QUALITY_DELAY_SECONDS);
 		calculate_scene(t);
 		if (engine->moving == false && t->last_move == true && t->block_size > 1)
 			t->block_size--;
