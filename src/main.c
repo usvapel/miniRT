@@ -23,7 +23,7 @@ void	cleanup_and_exit(void)
 	cleanup_done = true;
 	thread_cleanup();
 	free_vector(engine->objects);
-	free_vector(engine->lights);
+	free_vector(engine->g_lights);
 	mlx_close_window(engine->mlx);
 	exit(1);
 }
