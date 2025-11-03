@@ -46,6 +46,7 @@
 # define OBJ_SPEED 0.0003
 # define OBJ_S_SPEED 0.0005
 # define PI 3.14159265358979323846
+# define QUALITY_DELAY_SECONDS 1
 
 // phong
 # define A_CONSTANT 1.0f
