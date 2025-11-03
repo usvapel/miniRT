@@ -30,8 +30,8 @@ void wrap_img_plane(t_hit *hit, int txt_index, t_vec3d uv)
 {
     const t_image_text *text = get_engine()->textures.images->data[txt_index];
 
-    uv.x /= 6.0;
-    uv.z /= 6.0;
+    uv.x /= 1.0;
+    uv.z /= 1.0;
     uv.x -= floor(uv.x);
     uv.z -= floor(uv.z);
     hit->color = get_texel(text->texture, uv.x, uv.z);

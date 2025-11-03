@@ -38,14 +38,15 @@
 // this is not allowed in the norm
 #define deg_to_radians(degres) ((degres) * M_PI / 180.0)
 
-#define SHADOW_BIAS 0.2f
-#define SHININESS 64.0f
-#define X_AXIS 0
-#define Y_AXIS 1
-#define ESPSILON 1e-2
-#define OBJ_SPEED 0.0003
-#define OBJ_S_SPEED 0.0005
-#define PI 3.14159265358979323846
+# define SHADOW_BIAS 0.2f
+# define SHININESS 64.0f
+# define X_AXIS 0
+# define Y_AXIS 1
+# define ESPSILON 1e-2
+# define OBJ_SPEED 0.0003
+# define OBJ_S_SPEED 0.0005
+# define PI 3.14159265358979323846
+# define QUALITY_DELAY_SECONDS 1
 
 // phong
 #define A_CONSTANT 1.0f
