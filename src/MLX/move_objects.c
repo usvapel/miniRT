@@ -1,8 +1,27 @@
 #include "minirt.h"
 
-static void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
-static void	move_object(void *obj, t_ray ray, float dx, float dy);
-static void    move_pos_left_right(t_camera *cam, t_vec3d *pos, float d);
+static void move_object(void *obj, double mouse_x, double mouse_y)
+{
+	t_object *base = get_base_object(obj);
+	t_ray new_ray = get_ray(mouse_x, mouse_y);
+	float distance = magnitude_vec3d(sub_vec3d(base->pos, new_ray.origin));
+	t_vec3d new_pos = add2_vec3d(new_ray.origin, nscale_vec3d(new_ray.udir, distance));
+	base->pos = new_pos;
+	update_camera();
+}
+
+void *inside_object(t_ray *ray, double x, double y, int *type)
+{
+	t_engine *engine = get_engine();
+	*ray = get_ray(x, y);
+	t_hit hit = {0};
+
+	objects_intersection(engine, ray, &hit);
+	if (!hit.prev_hit)
+		return (NULL);
+	*type = hit.type;
+	return (hit.obj);
+}
 
 void move_objects(t_engine *engine)
 {
