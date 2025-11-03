@@ -48,19 +48,13 @@ void move_objects(t_engine *engine)
 void rotate_object(void *obj, float dx, float dy)
 {
 	t_object *base = get_base_object(obj);
-	t_vec3d tmp = base->pos;
-	long dt = get_engine()->frame.delta;
 	t_camera camera = get_engine()->camera;
 	if (!base->axis)
 		return;
-	t_basis3d local = build_local_basis(camera.u);
-	t_vec3d axis = vec_in_basis(*base->axis, local);
-	minus_vec3d(&tmp, ray.origin);
-	dy *= magnitude_vec3d(tmp) * OBJ_SPEED * dt;
-	dx *= magnitude_vec3d(tmp) * OBJ_SPEED * dt;
-	rotateY_vec3d(&axis, -dy * 100);
-	rotateZ_vec3d(&axis, dx * 100);
-	*base->axis = point_from_basis(axis, local, new_vec3d(0,0,0));
+	float angle_x = dx * 0.01f; // rotation speed
+	float angle_y = dy * 0.01f;
+	rotate_vec3d(base->axis, camera.v, angle_x);
+	rotate_vec3d(base->axis, camera.u, angle_y);
 	normlize_vec3d(base->axis);
 	update_camera();
 }
@@ -86,7 +80,7 @@ void rotate_objects(t_engine *engine)
 				return ;
 			grabbed = true;
 		}
-		rotate_object(obj, ray, dx, dy);
+		rotate_object(obj, dx, dy);
 	}
 	else
 		grabbed = false;
