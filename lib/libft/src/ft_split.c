@@ -82,7 +82,7 @@ static char	*ft_find_char(const char **arr, char c)
 	while (**arr != '\0' && **arr == c)
 		(*arr)++;
 	i = ft_get_word_len(*arr, c);
-	buffer = malloc(i + 1);
+	buffer = ft_calloc(i + 1, sizeof(char));
 	if (!buffer)
 		return (NULL);
 	i = 0;
@@ -107,11 +107,11 @@ char	**ft_split(const char *s, char c)
 	if (!s)
 		return (NULL);
 	word_count = ft_words_in_s(s, c);
-	result = ft_calloc(1, (word_count + 1) * sizeof(char *));
+	result = ft_calloc(word_count + 1, sizeof(char *));
 	if (!result)
 		return (NULL);
 	if (word_count == 0)
-		return (NULL);
+		return (result);
 	i = 0;
 	while (*s && i < word_count)
 	{
