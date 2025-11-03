@@ -1,31 +1,38 @@
 #include "minirt.h"
 
-static bool orient_camera(t_engine *engine);
-static void    look_up_down(t_camera *camera, float dy);
-static void    move_left_right(t_camera *cam, int dir);
-static bool    move_camera(t_engine *engine);
+static bool	orient_camera(t_engine *engine);
+static void	look_up_down(t_camera *camera, float dy);
+static void	move_left_right(t_camera *cam, int dir);
+static bool	move_camera(t_engine *engine);
 
-static bool    move_camera(t_engine *engine)
+static bool	move_camera(t_engine *engine)
 {
-    t_camera *camera = &engine->camera;
-    t_vec3d tmp = camera->dir;
-    bool moved;
+	t_camera	*camera;
+	t_vec3d		tmp_dir;
+	bool		oriented;
 
-    scale_vec3d(&tmp, CAM_SPEED * engine->frame.delta);
-	moved = orient_camera(engine);
+	camera = &engine->camera;
+	tmp_dir = nscale_vec3d(camera->dir, CAM_SPEED * engine->frame.delta);
+	oriented = orient_camera(engine);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_W))
-		add_vec3d(&camera->pos, tmp);
+		(add_vec3d(&camera->pos, tmp_dir), oriented = true);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_S))
-        minus_vec3d(&camera->pos, tmp);
+		(minus_vec3d(&camera->pos, tmp_dir), oriented = true);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_D))
-        move_left_right(camera, RIGHT);
+		(move_left_right(camera, RIGHT), oriented = true);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_A))
-        move_left_right(camera, LEFT);
+		(move_left_right(camera, LEFT), oriented = true);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE))
+	{
 		engine->camera.pos.y += CAM_SPEED * engine->frame.delta;
-	if (!moved)
-		return false;
-	return true;
+		oriented = true;
+	}
+	if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL))
+	{
+		engine->camera.pos.y -= CAM_SPEED * engine->frame.delta;
+		oriented = true;
+	}
+	return (oriented);
 }
 
 static void    move_left_right(t_camera *cam, int dir)
