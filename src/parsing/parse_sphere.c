@@ -6,6 +6,8 @@ void	init_sphere(t_vector *objects, char **split)
 	t_sphere	*sphere;
 
 	v = new_vector(1);
+	if (!v)
+		runtime_error("allocation failed");
 	v->owns_data = true;
 	add_elem(v, safe_split(v, split[1]));
 	add_elem(v, safe_split(v, split[2]));
@@ -24,7 +26,7 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->base.texture.type = -1;
 	sphere->axis = new_vec3d(0, 1, 0);
 	sphere->base.axis = &sphere->axis;
-	get_additional_values(v, (void *)&sphere->base, split, 4); // make sure index is correct
+	get_additional_values(v, (void *)&sphere->base, split, 4);
 	free_vector(v);
 	validate_color(sphere->base.color);
 	add_elem(objects, sphere);
