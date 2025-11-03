@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-void	thread_cleanup()
+void	thread_cleanup(void)
 {
 	t_engine	*engine;
 	int			i;
@@ -22,7 +22,7 @@ void	thread_cleanup()
 
 void	setup_threads(void *eng)
 {
-    t_engine	*engine;
+	t_engine	*engine;
 	int			y_step;
 	int			x_step;
 	int			i;
@@ -43,12 +43,19 @@ void	setup_threads(void *eng)
 		engine->threads[i].end = false;
 		engine->threads[i].block_size = PIXEL_BLOCK_SIZE;
 		engine->threads[i].last_move = 0;
-		pthread_create(&engine->threads[i].thread, NULL, raytracer, &engine->threads[i]);
+		if (pthread_create(&engine->threads[i].thread, NULL, raytracer,
+				&engine->threads[i]))
+		{
+			engine->thread_failure = true;
+			while (i)
+				pthread_join(engine->threads[--i].thread, NULL);
+			runtime_error("failure in thread creation");
+		}
 		i++;
 	}
 }
 
-void	wait_for_threads()
+bool	wait_for_threads(void)
 {
 	t_engine	*engine;
 	int			thread_finished;
@@ -61,12 +68,14 @@ void	wait_for_threads()
 		i = 0;
 		while (i < THREAD_COUNT)
 		{
+			if (engine->thread_failure)
+				return (false);
 			if (engine->threads[i].done == true)
 				thread_finished++;
 			i++;
 		}
 		if (thread_finished == THREAD_COUNT)
-			return;
+			return (true);
 		usleep(10);
 	}
 }
