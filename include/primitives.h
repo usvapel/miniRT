@@ -45,6 +45,7 @@ void rotateX_vec3d(t_vec3d *vec, float angle);
 void rotateZ_vec3d(t_vec3d *vec, float angle);
 void rotateY_vec3d(t_vec3d *vec, float angle);
 void rotateXYZ_vec3d(t_vec3d *vec, float angle);
+void rotate_vec3d(t_vec3d *v, t_vec3d axis, float angle);
 
 // local basis
 t_vec3d vec_in_basis(t_vec3d vec, t_basis3d basis);
