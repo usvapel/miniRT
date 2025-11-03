@@ -1,5 +1,17 @@
 #include "minirt.h"
 
+// Rodrigues' rotation formula
+void rotate_vec3d(t_vec3d *v, t_vec3d axis, float angle)
+{
+	normlize_vec3d(&axis);
+	float cos_theta = cosf(angle);
+	float sin_theta = sinf(angle);
+	t_vec3d part1 = nscale_vec3d(*v, cos_theta); // v * cos(theta)
+	t_vec3d part2 = nscale_vec3d(cross_vec3d(axis, *v), sin_theta); // (k x v) * sin(theta)
+	t_vec3d part3 = nscale_vec3d(axis, dot_vec3d(axis, *v) * (1 - cos_theta)); // k * (k . v) * (1 - cos(theta))
+	*v = add2_vec3d(add2_vec3d(part1, part2), part3);
+}
+
 void rotateX_vec3d(t_vec3d *vec, float angle)
 {
     double rad = deg_to_radians(angle);
