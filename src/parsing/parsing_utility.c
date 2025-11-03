@@ -2,8 +2,8 @@
 
 void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 {
-	t_object *base;
-	
+	t_object	*base;
+
 	base = obj;
 	while (split[index])
 	{
@@ -18,7 +18,7 @@ void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 			base->material.reflect = ft_atof(split[index + 1]);
 			if (base->material.reflect > 1.0f || base->material.reflect < 0.0f)
 			{
-				free_vector(v);
+				free_split_vector(v);
 				runtime_error("invalid reflection value! (0 - 1)");
 			}
 		}
@@ -33,11 +33,13 @@ void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 
 void	runtime_error(char *s)
 {
-	t_engine *engine = get_engine();
+	t_engine	*engine;
+
+	engine = get_engine();
 	printf("Error\n");
 	printf("%s\n", s);
 	free_vector(engine->objects);
-	free_vector(engine->lights);
+	free_vector(engine->g_lights);
 	exit(EXIT_FAILURE);
 }
 
@@ -76,7 +78,7 @@ char	**safe_split(t_vector *v, char *line)
 	splitted = ft_split(line, ',');
 	if (!splitted)
 	{
-		free_vector(v);
+		free_split_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
 	return (splitted);
@@ -88,7 +90,7 @@ t_vec3d	parse_vec3d(t_vector *v, char **components)
 
 	if (!components[0] || !components[1] || !components[2])
 	{
-		free_vector(v);
+		free_split_vector(v);
 		runtime_error("invalid/missing values!");
 	}
 	vec.x = ft_atof(components[0]);
@@ -103,7 +105,7 @@ t_color	parse_color(t_vector *v, char **components)
 
 	if (!components[0] || !components[1] || !components[2])
 	{
-		free_vector(v);
+		free_split_vector(v);
 		runtime_error("invalid/missing values!");
 	}
 	color.r = ft_atof(components[0]);
