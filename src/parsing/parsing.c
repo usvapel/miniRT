@@ -9,9 +9,9 @@ static void	set_values(t_engine *engine, char **split)
 	if (ft_strcmp(split[0], "C") == 0)
 		return (init_camera(engine, split));
 	if (ft_strcmp(split[0], "L") == 0)
-		return (init_light(engine->lights, split));
+		return (init_light(engine->g_lights, split));
 	if (ft_strcmp(split[0], "LS") == 0)
-		return (init_spot_light(engine->lights, split));
+		return (init_spot_light(engine->g_lights, split));
 	if (ft_strcmp(split[0], "sp") == 0)
 		return (init_sphere(engine->objects, split));
 	if (ft_strcmp(split[0], "pl") == 0)
@@ -62,20 +62,21 @@ static char	*check_file_validity(char *file)
 	return (NULL);
 }
 
-static void map_lights_to_objects(t_vector *objects, t_vector *lights)
+static void	map_lights_to_objects(t_vector *objects, t_vector *g_lights)
 {
-	t_generic_light *light;
-	t_object *base;
-	t_object *obj_base;
-	int i;
+	t_generic_light	*light;
+	t_object		*base;
+	t_object		*obj_base;
+	int				i;
 
-	i = -1;
-	while (++i < lights->count)
+	i = 0;
+	puts("map lights to objects");
+	while (i < g_lights->count)
 	{
-		light = lights->data[i];
+		light = g_lights->data[i++];
 		base = get_base_object(light);
 		if (light->obj_index < 0)
-			continue;
+			continue ;
 		light->obj = objects->data[light->obj_index];
 		obj_base = get_base_object(light->obj);
 		obj_base->pos = base->pos;
@@ -88,17 +89,15 @@ static void map_lights_to_objects(t_vector *objects, t_vector *lights)
 
 void	input_parsing(t_engine *engine, char **av)
 {
-	int		fd;
+	int	fd;
 
 	engine->objects = new_vector(1);
-	engine->objects->owns_data = true;
-	engine->lights = new_vector(1);
-	engine->lights->owns_data = false;
+	engine->g_lights = new_vector(1);
 	engine->textures.checkers = new_vector(1);
 	engine->textures.images = new_vector(1);
 	fd = open(check_file_validity(av[1]), O_RDONLY);
 	if (fd < 0)
 		runtime_error("failure opening file!");
 	read_and_process_file(engine, fd);
-	map_lights_to_objects(engine->objects, engine->lights);
+	map_lights_to_objects(engine->objects, engine->g_lights);
 }
