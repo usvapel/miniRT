@@ -28,17 +28,18 @@ void	init_camera(t_engine *engine, char **split)
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
+	v->owns_data = true;
 	add_elem(v, safe_split(v, split[1]));
 	add_elem(v, safe_split(v, split[2]));
 	add_elem(v, safe_split(v, split[3]));
 	if (split[4])
 	{
-		free_vector(v);
+		free_split_vector(v);
 		runtime_error("too many values to camera!");
 	}
 	engine->camera.pos = parse_vec3d(v, v->data[0]);
 	engine->camera.dir = parse_vec3d(v, v->data[1]);
 	engine->camera.fov = ft_atof(((char ***)v->data)[2][0]);
-	free_vector(v);
+	free_split_vector(v);
 	validate_camera(engine);
 }

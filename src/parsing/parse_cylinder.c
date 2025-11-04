@@ -30,12 +30,12 @@ void	init_cylinder(t_vector *objects, char **split)
 	cylinder = ft_calloc(1, sizeof(t_cylinder));
 	if (!cylinder)
 	{
-		free_vector(v);
+		free_split_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
 	set_values(cylinder, v);
 	get_additional_values(v, (void *)&cylinder->base, split, 6);
-	free_vector(v);
+	free_split_vector(v);
 	validate_axis(cylinder->axis);
 	validate_color(cylinder->base.color);
 	add_elem(objects, cylinder);

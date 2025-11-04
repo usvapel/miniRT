@@ -15,24 +15,25 @@
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	unsigned char	*tmp;
+	size_t			total;
 	size_t			i;
 
 	if (size && nmemb > SIZE_MAX / size)
 		return (NULL);
-	tmp = malloc(nmemb * size);
+	total = nmemb * size;
+	tmp = malloc(total);
 	if (!tmp)
 		return (NULL);
 	i = 0;
-	while (i < nmemb * size)
+	while (i + 3 < total)
 	{
 		tmp[i] = 0;
-		if (i + 1 < nmemb * size)
-			tmp[i + 1] = 0;
-		if (i + 2 < nmemb * size)
-			tmp[i + 2] = 0;
-		if (i + 3 < nmemb * size)
-			tmp[i + 3] = 0;
+		tmp[i + 1] = 0;
+		tmp[i + 2] = 0;
+		tmp[i + 3] = 0;
 		i += 4;
 	}
+	while (i < total)
+		tmp[i++] = 0;
 	return (tmp);
 }

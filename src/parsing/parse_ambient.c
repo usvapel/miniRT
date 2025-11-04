@@ -16,7 +16,7 @@ void	init_ambient(char **split)
 	ambient.base.type = AMBIENT;
 	ambient.ratio = ft_atof(((char ***)v->data)[0][0]);
 	ambient.base.color = parse_color(v, v->data[1]);
-	free_vector(v);
+	free_split_vector(v);
 	if (ambient.ratio < 0.0 || ambient.ratio > 1.0)
 		runtime_error("Invalid ambient lighting ratio value (0-1)");
 	validate_color(ambient.base.color);
