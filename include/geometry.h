@@ -61,6 +61,36 @@ typedef struct s_spot_light {
   t_vec3d axis;
 } t_spot_light;
 
+typedef struct s_generic_light {
+  t_object base;
+  int obj_index;
+  float brightness;
+  void *light;
+  t_point_light point_light;
+  t_spot_light spot_light;
+  void *obj;
+} t_generic_light;
+
+typedef struct s_light {
+  float r;
+  float brightness;
+} t_light;
+
+typedef struct s_ambient {
+  t_object base;
+  float ratio;
+} t_ambient;
+
+typedef struct s_cube
+{
+	t_object base;
+	t_vec3d min;
+	t_vec3d max;
+	t_vec3d axis;
+	float h;
+	float w;
+} t_cube;
+
 typedef enum e_id
 {
 	AMBIENT,
