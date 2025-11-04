@@ -119,7 +119,7 @@ t_color	trace_ray(t_ray ray, int depth, int y)
 	phong_model(get_engine(), &hit);
 	reflectance = ((t_object *)hit.obj)->material.reflect;
 	indice = ((t_object *)hit.obj)->material.refract;
-	if (depth >= BOUNCES || reflectance == 0)
+	if (depth >= BOUNCES || reflectance <= 0)
 		return (hit.color);
 	rf.reflectance = reflectance;
 	rf.indice = indice;
