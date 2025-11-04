@@ -101,7 +101,7 @@ void	phong_model(t_engine *engine, t_hit *hit)
 			continue ;
 		get_diffuse(&p);
 		get_specular(engine, hit, &p, *light);
-		if (hit->type == PLANE)
+		if (hit->type == PLANE || hit->type == CUBE)
 			p.specular = nscale_vec3d(p.specular, 0.0f);
 		p.diffuse = nscale_vec3d(p.diffuse, light->brightness);
 		p.specular = nscale_vec3d(p.specular, light->brightness);
