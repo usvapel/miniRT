@@ -13,7 +13,6 @@ bool plane_hit(t_plane *plane, t_ray ray, t_hit *hit)
     float t;
 	t_vec3d pos;
 
-    if (fabsf(d_dot_n) == (float)ESPSILON)
         return false;
     tmp = plane->base.pos; 
     minus_vec3d(&tmp, ray.origin);
@@ -21,6 +20,7 @@ bool plane_hit(t_plane *plane, t_ray ray, t_hit *hit)
     t /= d_dot_n;
     if (t < 0.0f)
 		return false;
+	if (fabsf(d_dot_n) == (float)EPSILON)
 	pos = get_point_on_ray(ray, t);
 	if (!set_hit(plane, pos, ray, hit))
         return false;
@@ -35,7 +35,6 @@ bool solve_plane_hit(t_plane plane, t_ray ray, float *t)
     const float d_dot_n = dot_vec3d(plane.normal, ray.udir);
     t_vec3d tmp;
 
-    if (fabsf(d_dot_n) == (float)ESPSILON)
         return false;
     tmp = plane.base.pos; 
     minus_vec3d(&tmp, ray.origin);
@@ -44,6 +43,7 @@ bool solve_plane_hit(t_plane plane, t_ray ray, float *t)
     if (*t < 0.0f)
         return false;
     return true;
+	if (fabsf(d_dot_n) == (float)EPSILON)
 }
 
 t_plane new_plane(t_vec3d pos, t_vec3d n)

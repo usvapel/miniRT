@@ -42,7 +42,6 @@
 # define SHININESS 64.0f
 # define X_AXIS 0
 # define Y_AXIS 1
-# define ESPSILON 1e-2
 # define OBJ_SPEED 0.0003
 # define OBJ_S_SPEED 0.0005
 # define PI 3.14159265358979323846
