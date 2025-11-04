@@ -18,7 +18,6 @@ float smoothstep2( float x, float n )
 }
 bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 {
-	t_spot_light *spot = (t_spot_light *)g_spot->light;
 	t_plane p = new_plane(hit->pos, phong->normal);
 	t_object *base = get_base_light(g_spot);
 	t_ray lray;
@@ -28,6 +27,7 @@ bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 	float pos_hit;
 	t_vec3d pos;
 	float h1;
+	t_spot_light	*spot;
 
 	spot = &g_spot->spot_light;
 	lray.origin = adjusted_light_pos(*g_spot);
