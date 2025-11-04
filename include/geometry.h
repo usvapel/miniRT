@@ -65,7 +65,6 @@ typedef struct s_generic_light {
   t_object base;
   int obj_index;
   float brightness;
-  void *light;
   t_point_light point_light;
   t_spot_light spot_light;
   void *obj;
