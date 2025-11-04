@@ -58,6 +58,8 @@ static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit,
 	float	object_distance;
 
 	return (false);
+	ft_memset(&shadow_ray, 0, sizeof(t_ray));
+	ft_memset(&shadow_hit, 0, sizeof(t_hit));
 	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir, 1e-2));
 	shadow_ray.udir = p->nlight_dir;
 	(void)objects_intersection(engine, &shadow_ray, &shadow_hit);
