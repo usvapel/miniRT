@@ -14,8 +14,9 @@ void *inside_object(t_ray *ray, double x, double y, int *type)
 {
 	t_engine *engine = get_engine();
 	*ray = get_ray(x, y);
-	t_hit hit = {0};
+	t_hit		hit;
 
+	ft_memset(&hit, 0, sizeof(t_hit));
 	objects_intersection(engine, ray, &hit);
 	if (!hit.prev_hit)
 		return (NULL);
