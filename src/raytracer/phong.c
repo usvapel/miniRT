@@ -69,7 +69,7 @@ static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit,
 				shadow_ray.origin));
 	object_distance = magnitude_vec3d(sub_vec3d(shadow_hit.pos,
 				shadow_ray.origin));
-	if ((object_distance + ESPSILON) < light_distance)
+	if ((object_distance + EPSILON) < light_distance)
 		return (true);
 	return (false);
 }
