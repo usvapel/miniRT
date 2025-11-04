@@ -20,6 +20,8 @@ static void	set_values(t_engine *engine, char **split)
 		return (init_cylinder(engine->objects, split));
 	if (ft_strcmp(split[0], "pa") == 0)
 		return (init_paraboloid(engine->objects, split));
+	if (ft_strcmp(split[0], "cu") == 0)
+		return (init_cube(engine->objects, split));
 	if (ft_strcmp(split[0], "tx") == 0 && ft_strcmp(split[1], "ch") == 0)
 		return (init_checkerboard_text(engine->textures.checkers, split));
 	if (ft_strcmp(split[0], "tx") == 0 && ft_strcmp(split[1], "img") == 0)
