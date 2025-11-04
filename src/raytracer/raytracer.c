@@ -53,6 +53,8 @@ bool obj_intersection(void *obj, t_ray ray, t_hit *hit)
 		return light_hit(((t_generic_light *)obj), ray, hit);
 	else if (type == PARABOLOID)
 		return paraboloid_hit(((t_paraboloid *)obj), ray, hit);
+	else if (type == CUBE)
+		return cube_hit(((t_cube *)obj), ray, hit);
 	else
 		return false;
 }
