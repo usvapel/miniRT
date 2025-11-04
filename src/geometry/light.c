@@ -29,6 +29,7 @@ bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 	t_vec3d pos;
 	float h1;
 
+	spot = &g_spot->spot_light;
 	lray.origin = adjusted_light_pos(*g_spot);
 	lray.udir = *base->axis;
 	r = tanf(deg_to_radians(spot->fov)) * spot->range;
