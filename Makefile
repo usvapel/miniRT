@@ -94,6 +94,8 @@ SRCS_MAIN := \
 	parse_paraboloid.c \
 	parse_plane.c \
 	parse_sphere.c \
+	parse_cube.c \
+	cube_utils.c \
 	parse_textures.c \
 	parsing_utility.c \
 	color.c \
@@ -110,6 +112,7 @@ SRCS_MAIN := \
 	move_camera.c \
 	move_objects.c \
 	scale_objects.c \
+	scale_objects_utils.c \
 	vector.c \
 	light.c \
 	cylinder.c \
@@ -119,10 +122,12 @@ SRCS_MAIN := \
 	ray.c \
 	paraboloid.c \
 	plane_uv.c \
+	cube_uv.c \
 	texture.c \
 	sphere_uv.c \
 	refraction.c \
-	reflection.c
+	reflection.c \
+	cube.c
 
 # Combine all source files
 SRCS := \
