@@ -6,10 +6,10 @@ t_vector	*new_vector(size_t elem)
 
 	if (elem == 0)
 		elem = 1;
-	vector = malloc(sizeof(t_vector));
+	vector = ft_calloc(1, sizeof(t_vector));
 	if (!vector)
 		return (NULL);
-	vector->data = malloc(sizeof(void *) * (elem));
+	vector->data = ft_calloc(elem, sizeof(void *));
 	if (!vector->data)
 	{
 		free(vector);
@@ -24,10 +24,10 @@ void	expand_vector(t_vector *vector)
 {
 	void	**new;
 	void	**old;
-	int	i;
+	int		i;
 
 	i = 0;
-	new = malloc(sizeof(void *) * (vector->size * 2 + 1));
+	new = ft_calloc((vector->size * 2 + 1), sizeof(void *));
 	if (!new)
 		exit(1);
 	old = vector->data;
@@ -53,11 +53,12 @@ void	add_elem(t_vector *vector, void *elem)
 
 void	free_vector(t_vector *vector)
 {
-	int i;
+	int	i;
+
 	if (!vector)
 		return ;
 	i = 0;
-	while (i < vector->count && vector->owns_data)
+	while (i < vector->count)
 	{
 		if (vector->data[i])
 		{
@@ -70,4 +71,31 @@ void	free_vector(t_vector *vector)
 	vector->data = NULL;
 	free(vector);
 	vector = NULL;
+}
+
+void	free_split_vector(t_vector *vector)
+{
+	int		i;
+	int		j;
+	char	**arr;
+
+	if (!vector)
+		return ;
+	i = 0;
+	while (i < vector->count)
+	{
+		if (vector->data[i])
+		{
+			arr = (char **)vector->data[i];
+			j = 0;
+			while (arr[j])
+				free(arr[j++]);
+			free(arr);
+			vector->data[i] = NULL;
+		}
+		i++;
+	}
+	free(vector->data);
+	vector->data = NULL;
+	free(vector);
 }

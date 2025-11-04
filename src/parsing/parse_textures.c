@@ -15,7 +15,7 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 	check->color1 = parse_color(v, v->data[0]);
 	check->color2 = parse_color(v, v->data[1]);
 	check->block_size = ft_atof(split[4]);
-	free_vector(v);
+	free_split_vector(v);
 	printf("block size: %f\n", check->block_size);
 	print_vec(color_to_vec3d(check->color1), "Color: ");
 	add_elem(checkers, check);

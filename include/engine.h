@@ -17,8 +17,8 @@ typedef struct timeval t_time;
 typedef pthread_t t_pthread;
 typedef pthread_mutex_t t_mutex;
 
-# define THREAD_COUNT 12
-# define PIXEL_BLOCK_SIZE 8
+#define THREAD_COUNT 12
+#define PIXEL_BLOCK_SIZE 8
 
 typedef struct s_phong {
   t_vec3d model_color;
@@ -77,7 +77,7 @@ typedef struct s_engine {
   t_camera camera;
   t_ambient ambient;
   t_vector *objects;
-  t_vector *lights;
+  t_vector *g_lights;
   t_textures textures;
   t_viewport viewport;
   atomic_bool update;
