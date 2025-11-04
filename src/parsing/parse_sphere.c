@@ -8,7 +8,6 @@ void	init_sphere(t_vector *objects, char **split)
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
-	v->owns_data = true;
 	add_elem(v, safe_split(v, split[1]));
 	add_elem(v, safe_split(v, split[2]));
 	add_elem(v, safe_split(v, split[3]));
