@@ -4,17 +4,17 @@ void	apply_texture(t_hit *hit)
 {
 	t_object	*base;
 
-	if (!hit->obj)
-		return ;
-	base = get_base_object(hit->obj);
-	if (base->texture.index < 0)
-		return ;
-	if (get_engine()->textures.images->count <= base->texture.index)
-		return ;
-	if (base->type == PLANE)
-		plane_uv(*((t_plane *)hit->obj), hit);
-	else if (base->type == SPHERE)
-		sphere_uv(*((t_sphere *)hit->obj), hit);
+    if (!hit->obj)
+        return;
+    base = get_base_object(hit->obj);
+    if (base->texture.index < 0)
+        return;
+    if (base->type == PLANE)
+        plane_uv(*((t_plane *)hit->obj), hit);
+    else if (base->type == SPHERE)
+        sphere_uv(*((t_sphere *)hit->obj), hit);
+    else if (base->type == CUBE)
+        cube_uv(*((t_cube *)hit->obj), hit);
 }
 
 t_color	get_texel(mlx_texture_t *text, float u, float v)
