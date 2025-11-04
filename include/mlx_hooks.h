@@ -2,6 +2,7 @@
 # define MLX_HOOKS_H
 
 #include "primitives.h"
+#include "geometry.h"
 #include "stdbool.h"
 #include "ray.h"
 #include "camera.h"
@@ -20,6 +21,10 @@ void *inside_object(t_ray *ray, double x, double y, int *type);
 
 // objects scaling
 void scale_objects(t_engine *engine);
+void scale_cube(t_cube *cube, float dx, float dy, float dt);
+void scale_paraboloid(t_paraboloid *para, float dx, float dy, float dt);
+void scale_cylinder(t_cylinder *cy, float dx, float dy, float dt);
+void scale_sphere(t_sphere *sphere, float dx, float dt);
 
 // objects rotation
 void rotate_objects(t_engine *engine);
