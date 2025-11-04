@@ -27,9 +27,9 @@ tx  ch 255,220,80 255,200,50 0.5 # index 0
 tx  ch 180,80,60 220,100,70 0.5 # index 1
 
 # texture images
-tx  img ./earth.png 
-tx  img ./wood.png 
-tx  img ./mud.png 
+tx  img ./textures/earth.png 
+tx  img ./textures/wood.png 
+tx  img ./textures/mud.png 
 # tx  img ./sparse_grass.png
 # tx  img ./moon.png
 # tx  img ./8k_stars_milky_way.png
