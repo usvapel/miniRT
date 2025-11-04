@@ -50,7 +50,6 @@ typedef struct s_paraboloid {
 } t_paraboloid;
 
 typedef struct s_point_light {
-  float r;
   t_vec3d axis;
 } t_point_light;
 
