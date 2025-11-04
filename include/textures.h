@@ -8,6 +8,7 @@
 
 typedef struct s_plane t_plane;
 typedef struct s_sphere t_sphere;
+typedef struct s_cube t_cube;
 
 typedef struct uv_mapping
 {
@@ -55,5 +56,6 @@ void	apply_normal_bump(mlx_texture_t *txt_normal, t_hit *hit, float u, float v);
 // uv mappings
 void    plane_uv(t_plane plane, t_hit *hit);
 void    sphere_uv(t_sphere sphere, t_hit *hit);
+void    cube_uv(t_cube cube, t_hit *hit);
 
 #endif
