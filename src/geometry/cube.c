@@ -44,7 +44,6 @@ bool cube_hit(t_cube *cube, t_ray ray, t_hit *hit)
         return false;
     hit->normal = hit_normal(lray, hit->face_axis);
     hit->normal = point_from_basis(hit->normal, local, new_vec3d(0,0,0));
-    hit->cube_face_min = new_vec3d(0,0,0);
     return true;
 }
 
