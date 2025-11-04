@@ -15,19 +15,21 @@ cy  2.5,0.001,2.5   0.0,1.0,0.0      0.98    1.8      0,0,80    rl 0.9 rf 1.333
 # straw
 cy  2.4,0.0,2.8     0.0,1.0,0.1      0.1     2.2      80,60,40  rl 0.0
 
-pl  0.0,0.0,0.0     0.0,1.0,0.0                       120,85,60 rl 0.0 img 0
+pl  0.0,0.0,0.0     0.0,1.0,0.0                       120,85,60 rl 0.0 img 2
 
 sp  0.0,1.0,2.0       0.48                               120,120,140 rl 1.0 rf 1.0003
 sp  0.0,1.0,2.0       0.5                               0,0,255   rl 1.0 rf 1.333
+
+cu  0.0,0.0,0.0     0.4 0.4     50,0,255 img 2
 
 # textures checkers
 tx  ch 255,220,80 255,200,50 0.5 # index 0
 tx  ch 180,80,60 220,100,70 0.5 # index 1
 
 # texture images
-# tx  img ./textures/earth.png 
-# tx  img ./textures/wood.png 
-# tx  img ./textures/mud.png 
+tx  img ./textures/earth.png 
+tx  img ./textures/wood.png 
+tx  img ./textures/mud.png 
 # tx  img ./sparse_grass.png
 # tx  img ./moon.png
 # tx  img ./8k_stars_milky_way.png
