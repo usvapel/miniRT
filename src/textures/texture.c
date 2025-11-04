@@ -13,6 +13,8 @@ void    apply_texture(t_hit *hit)
         plane_uv(*((t_plane *)hit->obj), hit);
     else if (base->type == SPHERE)
         sphere_uv(*((t_sphere *)hit->obj), hit);
+    else if (base->type == CUBE)
+        cube_uv(*((t_cube *)hit->obj), hit);
 }
 
 t_color get_texel(mlx_texture_t *text, float u, float v)
