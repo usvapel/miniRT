@@ -137,7 +137,7 @@ bool cube_hit(t_cube *cube, t_ray ray, t_hit *hit);
 void swap_vals(float *val1, float *val2);
 float compute_axis_tbounds(t_cube cube, t_ray ray, int index, bool max);
 void set_min_max_tbounds(float *t1, float *t2, float *tmin, float *tmax);
-static t_cube new_cube(float h, float w);
+t_cube new_cube(float h, float w);
 
 // light
 bool	light_hit(t_generic_light *light, t_ray ray, t_hit *hit);
