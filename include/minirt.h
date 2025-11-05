@@ -6,7 +6,7 @@
 /*   By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:05:20 by jpelline          #+#    #+#             */
-/*   Updated: 2025/10/22 20:28:41 by zfarah           ###   ########.fr       */
+/*   Updated: 2025/11/05 21:11:46 by zfarah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,7 @@ void cleanup_and_exit();
 void draw_scene(void *eng);
 bool timer(int prev_sec, int stop);
 int get_seconds(t_engine *engine);
-float max(float val1, float val2);
 
-// color
-t_color checker_board(t_hit *hit);
-int get_rgba(int r, int g, int b, int a);
-void apply_color(t_color *color, float brightness);
-int color_gradient(t_engine *engine, int y);
-t_color vec3d_to_color(t_vec3d v);
-t_vec3d color_to_vec3d(t_color c);
-t_color mix_colors(t_color c1, t_color c2, float r);
 
 void phong_model(t_engine *engine, t_hit *hit);
 int objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
@@ -79,9 +70,6 @@ void thread_cleanup();
 
 // phong
 t_vec3d reflect(t_vec3d direction, t_vec3d normal);
-
-t_color int_to_color(int c);
-uint32_t color_to_int(t_color color);
 
 t_object *get_base_object(void *obj);
 
