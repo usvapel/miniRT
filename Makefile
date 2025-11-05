@@ -100,7 +100,11 @@ SRCS_MAIN := \
 	parsing_utility.c \
 	color.c \
 	viewport.c \
-	vec3d.c \
+	vectors.c \
+	vectors2.c \
+	vectors3.c \
+	vectors4.c \
+	maths.c \
 	raytracer.c \
 	sphere.c \
 	fps.c \
