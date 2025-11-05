@@ -54,9 +54,9 @@ bool	obj_intersection(void *obj, t_ray ray, t_hit *hit)
 	else if (type == LIGHT)
 		return (light_hit(((t_generic_light *)obj), ray, hit));
 	else if (type == PARABOLOID)
-		return paraboloid_hit(((t_paraboloid *)obj), ray, hit);
+		return (paraboloid_hit(((t_paraboloid *)obj), ray, hit));
 	else if (type == CUBE)
-		return cube_hit(((t_cube *)obj), ray, hit);
+		return (cube_hit(((t_cube *)obj), ray, hit));
 	else
 		return (false);
 }
@@ -119,7 +119,7 @@ t_color	trace_ray(t_ray ray, int depth, int y)
 	phong_model(get_engine(), &hit);
 	reflectance = ((t_object *)hit.obj)->material.reflect;
 	indice = ((t_object *)hit.obj)->material.refract;
-	if (depth >= BOUNCES || reflectance == 0)
+	if (depth >= BOUNCES || reflectance <= 0)
 		return (hit.color);
 	rf.reflectance = reflectance;
 	rf.indice = indice;
