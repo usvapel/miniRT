@@ -35,7 +35,6 @@ void	initialize_mlx(t_engine *engine)
 	mlx_get_monitor_size(0, &engine->window.width, &engine->window.height);
 	engine->window.aspect_ratio = (float)engine->window.width
 		/ engine->window.height;
-	setup_viewport();
 	mlx_terminate(engine->mlx);
 	mlx_set_setting(MLX_HEADLESS, false);
 	engine->mlx = mlx_init(engine->window.width, engine->window.height,
@@ -51,6 +50,7 @@ int	main(int ac, char **av)
 	engine = get_engine();
 	initialize_mlx(engine);
 	input_parsing(engine, av);
+	setup_viewport();
 	engine->image = mlx_new_image(engine->mlx, engine->window.width,
 			engine->window.height);
 	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width,
