@@ -31,6 +31,7 @@ typedef struct s_hit
 	float distance;
 	void *obj;
 	int face_axis;
+	int ignore_setting_face_axis;
 	t_material material;
 }	t_hit;
 
