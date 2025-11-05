@@ -56,4 +56,9 @@ t_basis3d build_TBN_basis(t_vec3d normal);
 
 t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two);
 
+// math utils
+float deg_to_radians(float angle);
+float smoothstep( float x );
+float smoothstep2( float x, float n );
+
 #endif // PRIMITIVES_H
