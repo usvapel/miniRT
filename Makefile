@@ -125,6 +125,7 @@ SRCS_MAIN := \
 	phong.c \
 	ray.c \
 	paraboloid.c \
+	paraboloid_utils.c \
 	plane_uv.c \
 	cube_uv.c \
 	texture.c \
