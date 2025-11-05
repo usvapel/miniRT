@@ -53,7 +53,7 @@ t_color	get_texel(mlx_texture_t *text, float u, float v)
 void	apply_normal_bump(mlx_texture_t *txt_normal, t_hit *hit, float u,
 		float v)
 {
-	const t_basis3d	TBN = build_TBN_basis(hit->normal);
+	const t_basis3d	TBN = build_tbn_basis(hit->normal);
 	const t_color	col = get_texel(txt_normal, u, v);
 	t_vec3d			lnormal;
 
