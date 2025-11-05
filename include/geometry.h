@@ -120,6 +120,7 @@ bool		circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 
 // paraboloid
 bool paraboloid_hit(t_paraboloid *para, t_ray ray, t_hit *hit);
+t_paraboloid new_paraboloid(t_vec3d pos, t_vec3d axis, float focal);
 
 // cube
 bool cube_hit(t_cube *cube, t_ray ray, t_hit *hit);
