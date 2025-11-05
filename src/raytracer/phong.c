@@ -57,7 +57,8 @@ static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit,
 	float	light_distance;
 	float	object_distance;
 
-	return (false);
+	ft_memset(&shadow_ray, 0, sizeof(t_ray));
+	ft_memset(&shadow_hit, 0, sizeof(t_hit));
 	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir, 1e-2));
 	shadow_ray.udir = p->nlight_dir;
 	(void)objects_intersection(engine, &shadow_ray, &shadow_hit);
@@ -68,7 +69,7 @@ static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit,
 				shadow_ray.origin));
 	object_distance = magnitude_vec3d(sub_vec3d(shadow_hit.pos,
 				shadow_ray.origin));
-	if ((object_distance + ESPSILON) < light_distance)
+	if ((object_distance + EPSILON) < light_distance)
 		return (true);
 	return (false);
 }
@@ -101,7 +102,7 @@ void	phong_model(t_engine *engine, t_hit *hit)
 			continue ;
 		get_diffuse(&p);
 		get_specular(engine, hit, &p, *light);
-		if (hit->type == PLANE)
+		if (hit->type == PLANE || hit->type == CUBE)
 			p.specular = nscale_vec3d(p.specular, 0.0f);
 		p.diffuse = nscale_vec3d(p.diffuse, light->brightness);
 		p.specular = nscale_vec3d(p.specular, light->brightness);

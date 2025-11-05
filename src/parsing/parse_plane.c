@@ -34,6 +34,8 @@ void	init_plane(t_engine *engine, char **split)
 	plane->normal = parse_vec3d(v, v->data[1]);
 	plane->base.color = parse_color(v, v->data[2]);
 	plane->base.texture.index = -1;
+	plane->base.material.reflect = -1;
+	plane->base.material.refract = -1;
 	plane->base.axis = &plane->normal;
 	get_additional_values(v, (void *)&plane->base, split, 4);
 	free_split_vector(v);
