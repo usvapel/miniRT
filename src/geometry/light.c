@@ -7,25 +7,17 @@ bool light_hit(t_generic_light *g_light, t_ray ray, t_hit *hit)
 		return false;
 	return obj_intersection(g_light->obj, ray, hit);
 }
-float smoothstep( float x )
+
+bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 {
-  return x*x*x/(3.0*x*x-3.0*x+1.0);
-}
-	
-float smoothstep2( float x, float n )
-{
-  return pow(x,n)/(pow(x,n)+pow(1.0-x,n));
-}
-bool	spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
-{
-	t_plane			p;
-	t_object		*base;
-	t_ray			lray;
-	float			t;
-	float			r;
-	float			r1;
-	float			pos_hit;
-	t_vec3d			pos;
+	t_plane p = new_plane(hit->pos, phong->normal);
+	t_object *base = get_base_light(g_spot);
+	t_ray lray;
+	float t;
+	float r1;
+	float pos_hit;
+	t_vec3d pos;
+	float h1;
 	t_spot_light	*spot;
 	float			h1;
 
@@ -34,8 +26,6 @@ bool	spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 	spot = &g_spot->spot_light;
 	lray.origin = adjusted_light_pos(*g_spot);
 	lray.udir = *base->axis;
-	r = tanf(deg_to_radians(spot->fov)) * spot->range;
-	(void)r;
 	if (!solve_plane_hit(p, lray, &t))
 		return false;
 	pos = get_point_on_ray(lray, t);
