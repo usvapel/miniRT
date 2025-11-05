@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/10/22 17:25:09 by zfarah           ###   ########.fr        #
+#    Updated: 2025/11/05 21:05:24 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,6 +99,7 @@ SRCS_MAIN := \
 	parse_textures.c \
 	parsing_utility.c \
 	color.c \
+	color2.c \
 	viewport.c \
 	vectors.c \
 	vectors2.c \
