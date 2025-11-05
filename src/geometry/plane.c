@@ -51,7 +51,7 @@ bool	solve_plane_hit(t_plane plane, t_ray ray, float *t)
 
 t_plane	new_plane(t_vec3d pos, t_vec3d n)
 {
-	t_plane p;
+	t_plane	p;
 
 	p.normal = n;
 	p.base.pos = pos;
