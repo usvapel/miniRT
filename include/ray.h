@@ -19,17 +19,19 @@ typedef struct s_ray {
   t_vec3d udir;
 } t_ray;
 
-typedef struct s_hit {
-  t_vec3d pos;
-  t_color color;
-  bool prev_hit;
-  t_vec3d normal;
-  int type;
-  float distance;
-  void *obj;
-  int face_axis;
-  t_material material;
-} t_hit;
+typedef struct s_hit
+{
+	t_vec3d pos;
+	t_color color;
+	bool prev_hit;
+	t_vec3d normal;
+	int type;
+	float distance;
+	void *obj;
+	int face_axis;
+	int ignore_setting_face_axis;
+	t_material material;
+}	t_hit;
 
 typedef struct s_refract {
   bool front_face;
