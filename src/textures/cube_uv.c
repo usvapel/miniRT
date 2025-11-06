@@ -2,14 +2,14 @@
 
 void	llchecker_board(t_hit *hit, int texture_index, float u, float v);
 void	wrap_img_cube(t_hit *hit, int text_index, float u, float v);
-void    map_uv_by_cube_face_axis(t_cube cube, t_hit *hit, float *u, float *v);
+void	map_uv_by_cube_face_axis(t_cube cube, t_hit *hit, float *u, float *v);
 
 void	cube_uv(t_cube cube, t_hit *hit)
 {
-	float			u;
-	float			v;
+	float	u;
+	float	v;
 
-    map_uv_by_cube_face_axis(cube, hit, &u, &v);
+	map_uv_by_cube_face_axis(cube, hit, &u, &v);
 	if (cube.base.texture.type == CHECKERBOARD)
 		llchecker_board(hit, cube.base.texture.index, u, v);
 	if (cube.base.texture.type == IMAGE)
@@ -22,10 +22,11 @@ void	llchecker_board(t_hit *hit, int texture_index, float u, float v)
 	const t_checker	*checkboard = (t_checker *)(checkers->data[texture_index]);
 	const int		i_u = floorf(u / checkboard->block_size);
 	const int		i_v = floorf(v / checkboard->block_size);
-	const t_color	color = ((i_u + i_v)
-				% 2 == 0) ? checkboard->color1 : checkboard->color2;
 
-	hit->color = color;
+	if (i_u + i_v % 2 == 0)
+		hit->color = checkboard->color1;
+	else
+		hit->color = checkboard->color2;
 }
 
 void	wrap_img_cube(t_hit *hit, int txt_index, float u, float v)
@@ -41,12 +42,12 @@ void	wrap_img_cube(t_hit *hit, int txt_index, float u, float v)
 		apply_normal_bump(text->bump, hit, u, v);
 }
 
-void    map_uv_by_cube_face_axis(t_cube cube, t_hit *hit, float *u, float *v)
+void	map_uv_by_cube_face_axis(t_cube cube, t_hit *hit, float *u, float *v)
 {
 	const t_basis3d	local = build_local_basis(cube.axis);
-    const t_vec3d	l_hit = point_in_basis(hit->pos, local, cube.base.pos);
+	const t_vec3d	l_hit = point_in_basis(hit->pos, local, cube.base.pos);
 
-    if (hit->face_axis == 0)
+	if (hit->face_axis == 0)
 	{
 		*u = l_hit.z / cube.h;
 		*v = l_hit.y / cube.h;
