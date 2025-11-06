@@ -4,11 +4,11 @@
 #include "MLX42.h"
 #include "camera.h"
 #include "geometry.h"
+#include "minirtthreads.h"
 #include "primitives.h"
 #include "textures.h"
 #include "vector.h"
 #include "viewport.h"
-#include <pthread.h>
 #include <stdatomic.h>
 #include <stdbool.h>
 #include <sys/time.h>
@@ -18,7 +18,7 @@ typedef pthread_t t_pthread;
 typedef pthread_mutex_t t_mutex;
 
 #define THREAD_COUNT 12
-#define PIXEL_BLOCK_SIZE 8
+#define PIXEL_BLOCK_SIZE 16
 
 typedef struct s_phong {
   t_vec3d model_color;
@@ -34,19 +34,6 @@ typedef struct s_phong {
   t_vec3d reflect_dir;
   float diffuse_strength;
 } t_phong;
-
-typedef struct s_threads {
-  pthread_t thread;
-  int index;
-  int start_y;
-  int end_y;
-  int start_x;
-  int end_x;
-  atomic_bool done;
-  atomic_bool end;
-  atomic_int block_size;
-  bool last_move;
-} t_threads;
 
 typedef struct s_window {
   int32_t width;
