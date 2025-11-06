@@ -1,14 +1,5 @@
 #include "minirt.h"
 
-static void	accumulate_transparency(t_phong *p, t_vec3d *shadow,
-		t_ray *shadow_ray, t_hit *shadow_hit)
-{
-	*shadow = color_to_vec3d(vec3d_to_color(*shadow));
-	shadow_ray->origin = add2_vec3d(shadow_hit->pos, nscale_vec3d(p->nlight_dir,
-				EPSILON));
-	*shadow = nscale_vec3d(*shadow, shadow_hit->material.refract);
-}
-
 static t_vec3d	get_shadow_attenuation(t_phong *p, t_engine *engine, t_hit hit,
 		t_generic_light light)
 {
@@ -16,27 +7,43 @@ static t_vec3d	get_shadow_attenuation(t_phong *p, t_engine *engine, t_hit hit,
 	float	light_distance;
 	t_vec3d	shadow;
 	t_ray	shadow_ray;
+	float	hit_distance;
+	float	transparency;
+	int		i;
 
-	shadow_ray = (t_ray){0};
 	shadow = (t_vec3d){1.0, 1.0, 1.0};
 	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir,
 				EPSILON));
 	shadow_ray.udir = p->nlight_dir;
 	light_distance = magnitude_vec3d(sub_vec3d(adjusted_light_pos(light),
 				shadow_ray.origin));
-	while (true)
+	i = 0;
+	while (i < BOUNCES)
 	{
 		shadow_hit = (t_hit){0};
 		objects_intersection(engine, &shadow_ray, &shadow_hit);
 		if (!shadow_hit.prev_hit
-			|| get_base_object(shadow_hit.obj)->is_light_source
-			|| magnitude_vec3d(sub_vec3d(shadow_hit.pos,
-					shadow_ray.origin)) > light_distance)
-			return (shadow);
+			|| get_base_object(shadow_hit.obj)->is_light_source)
+			break ;
+		hit_distance = magnitude_vec3d(sub_vec3d(shadow_hit.pos,
+					shadow_ray.origin));
+		if (hit_distance > light_distance)
+			break ;
 		if (shadow_hit.material.refract == -1)
-			return ((t_vec3d){0});
-		accumulate_transparency(p, &shadow, &shadow_ray, &shadow_hit);
+			return ((t_vec3d){0, 0, 0});
+		transparency = 0.8f;
+		if (shadow_hit.material.refract != -1)
+		{
+			transparency = 1.0f / shadow_hit.material.refract;
+			transparency = fmaxf(0.5f, fminf(transparency, 1.0f));
+		}
+		shadow = nscale_vec3d(shadow, transparency);
+		if (shadow.x < EPSILON && shadow.y < EPSILON && shadow.z < EPSILON)
+			return (shadow);
+		shadow_ray.origin = add2_vec3d(shadow_hit.pos,
+				nscale_vec3d(p->nlight_dir, EPSILON * 2));
 	}
+	return (shadow);
 }
 
 static void	accumulate_colors(t_phong *p, t_generic_light *light,
@@ -64,7 +71,8 @@ static void	loop_through_lights(t_phong *p, t_engine *engine, t_hit *hit)
 		base = get_base_light(light);
 		p->light_color = color_to_vec3d(base->color);
 		p->nlight_dir = normalize_vec3d(sub_vec3d(base->pos, hit->pos));
-		if (base->type == SPOT_LIGHT && !spot_light_hit(light, hit, p))
+		if (get_base_object(light)->type == SPOT_LIGHT && !spot_light_hit(light,
+				hit, p))
 			continue ;
 		shadow = get_shadow_attenuation(p, engine, *hit, *light);
 		if (shadow.x < EPSILON && shadow.y < EPSILON && shadow.z < EPSILON)
