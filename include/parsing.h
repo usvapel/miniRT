@@ -29,5 +29,15 @@ void	init_image_text(t_vector *images, char **split);
 void	link_texture(t_object *obj, char **split, int type);
 
 void	autosave_scene(void);
+void    save_light(t_generic_light l);
+void    save_sphere(t_sphere sphere, t_object b);
+void    save_cylinder(t_cylinder c, t_object b);
+void    save_plane(t_plane p, t_object b);
+void    save_paraboloid(t_paraboloid p, t_object b);
+void    save_cube(t_cube c, t_object b);
+void    save_additional_vals(t_object b);
+void    save_texture(void *txt, t_texture_type type);
+void    save_camera(t_camera c);
+void    save_ampient(t_ambient a);
 
 #endif // PARSING_H
