@@ -21,7 +21,6 @@ void	init_light(t_vector *g_lights, char **split)
 	t_generic_light	*g_light;
 	t_vector		*v;
 
-	puts("parse point light");
 	g_light = ft_calloc(1, sizeof(t_generic_light));
 	if (!g_light)
 		runtime_error("failure during memory allocation!");
@@ -66,7 +65,6 @@ void	init_spot_light(t_vector *g_lights, char **split)
 	t_generic_light	*g_light;
 	t_vector		*v;
 
-	puts("parse spot light");
 	g_light = ft_calloc(1, sizeof(t_generic_light));
 	if (!g_light)
 		runtime_error("failure during memory allocation!");

@@ -1,5 +1,4 @@
 #include "minirt.h"
-#include "parsing.h"
 
 static void	add_values(t_vector *v, t_cube *cube)
 {

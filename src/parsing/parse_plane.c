@@ -10,12 +10,24 @@ static void	validate_normal(t_vec3d normal)
 		runtime_error("Invalid normal (-1 - 1)");
 }
 
+static void	add_values(t_vector *v, t_plane *plane)
+{
+	plane->base.type = PLANE;
+	plane->base.pos = parse_vec3d(v, v->data[0]);
+	plane->normal = parse_vec3d(v, v->data[1]);
+	plane->base.color = parse_color(v, v->data[2]);
+	plane->base.texture.index = -1;
+	plane->base.texture.type = -1;
+	plane->base.material.reflect = -1;
+	plane->base.material.refract = -1;
+	plane->base.axis = &plane->normal;
+}
+
 void	init_plane(t_engine *engine, char **split)
 {
 	t_plane		*plane;
 	t_vector	*v;
 
-	printf("Initializing plane\n");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
@@ -29,15 +41,7 @@ void	init_plane(t_engine *engine, char **split)
 		free_split_vector(v);
 		runtime_error("failure during memory allocation!");
 	}
-	plane->base.type = PLANE;
-	plane->base.pos = parse_vec3d(v, v->data[0]);
-	plane->normal = parse_vec3d(v, v->data[1]);
-	plane->base.color = parse_color(v, v->data[2]);
-	plane->base.texture.index = -1;
-	plane->base.texture.type = -1;
-	plane->base.material.reflect = -1;
-	plane->base.material.refract = -1;
-	plane->base.axis = &plane->normal;
+	add_values(v, plane);
 	get_additional_values(v, (void *)&plane->base, split, 4);
 	free_split_vector(v);
 	validate_color(plane->base.color);
