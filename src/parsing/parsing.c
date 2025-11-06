@@ -77,7 +77,8 @@ static void	map_lights_to_objects(t_vector *objects, t_vector *g_lights)
 	{
 		light = g_lights->data[i++];
 		base = get_base_object(light);
-		if (light->obj_index < 0)
+		if (light->obj_index < 0
+			|| light->obj_index >= get_engine()->objects->count)
 			continue ;
 		light->obj = objects->data[light->obj_index];
 		obj_base = get_base_object(light->obj);
