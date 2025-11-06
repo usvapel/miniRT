@@ -25,7 +25,7 @@ void	save_texture(void *txt, t_texture_type type)
 void	save_camera(t_camera c)
 {
 	printf("# Camera\n");
-	printf("C  %.1f,%.1f,%.1f  %.1f,%.1f,%.1f  %d\n", c.pos.x, c.pos.y, c.pos.z,
+	printf("C  %.2f,%.2f,%.2f  %.2f,%.2f,%.2f  %d\n", c.pos.x, c.pos.y, c.pos.z,
 		c.dir.x, c.dir.y, c.dir.z, c.fov);
 }
 
@@ -42,7 +42,7 @@ void	save_light(t_generic_light l)
 
 	if (b.type == POINT_LIGHT)
 	{
-		printf("L  %.1f,%.1f,%.1f  %.1f  %.0f,%.0f,%.0f  ", b.pos.x, b.pos.y,
+		printf("L  %.2f,%.2f,%.2f  %.1f  %.0f,%.0f,%.0f  ", b.pos.x, b.pos.y,
 			b.pos.z, l.brightness, b.color.r, b.color.g, b.color.b);
 		if (l.obj_index >= 0)
 			printf("obj %d\n", l.obj_index);
@@ -52,7 +52,7 @@ void	save_light(t_generic_light l)
 	if (b.type == SPOT_LIGHT)
 	{
 		s = l.spot_light;
-		printf("LS  %.1f,%.1f,%.1f  %.1f,%.1f,%1.f  %.1f  %.1f  %.0f \
+		printf("LS  %.2f,%.2f,%.2f  %.2f,%.2f,%.2f  %.1f  %.1f  %.0f \
 			%.0f,%.0f,%.0f  ", b.pos.x, b.pos.y, b.pos.z, b.axis->x, b.axis->y,
 			b.axis->z, l.brightness, s.range, s.fov, b.color.r, b.color.g,
 			b.color.b);
