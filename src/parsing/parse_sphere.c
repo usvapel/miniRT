@@ -20,11 +20,14 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->base.type = SPHERE;
 	sphere->base.pos = parse_vec3d(v, v->data[0]);
 	sphere->r = ft_atof(((char ***)v->data)[1][0]) / 2.0f;
+	sphere->base.r = sphere->r;
 	sphere->base.color = parse_color(v, v->data[2]);
 	sphere->base.texture.index = -1;
 	sphere->base.texture.type = -1;
 	sphere->axis = new_vec3d(0, 1, 0);
 	sphere->base.axis = &sphere->axis;
+	sphere->base.material.reflect = -1;
+	sphere->base.material.refract = -1;
 	get_additional_values(v, (void *)&sphere->base, split, 4);
 	free_split_vector(v);
 	validate_color(sphere->base.color);

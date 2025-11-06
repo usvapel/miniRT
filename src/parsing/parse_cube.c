@@ -12,6 +12,8 @@ static void	add_values(t_vector *v, t_cube *cube)
 	cube->base.texture.type = -1;
 	cube->axis = parse_vec3d(v, v->data[3]);
 	cube->base.axis = &cube->axis;
+	cube->base.material.reflect = -1;
+	cube->base.material.refract = -1;
 }
 
 void	init_cube(t_vector *objects, char **split)
