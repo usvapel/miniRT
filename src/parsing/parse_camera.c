@@ -24,7 +24,6 @@ void	init_camera(t_engine *engine, char **split)
 {
 	t_vector	*v;
 
-	puts("parse camera");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed");
