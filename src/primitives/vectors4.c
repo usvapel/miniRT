@@ -1,11 +1,11 @@
 #include "minirt.h"
 
-float dot_vec3d(t_vec3d vec, t_vec3d vec2)
+inline float dot_vec3d(t_vec3d vec, t_vec3d vec2)
 {
     return ((vec.x * vec2.x) + (vec.y * vec2.y) + (vec.z * vec2.z));
 }
 
-t_vec3d cross_vec3d(t_vec3d a, t_vec3d b)
+inline t_vec3d cross_vec3d(t_vec3d a, t_vec3d b)
 {
     t_vec3d cross;
 
@@ -15,7 +15,7 @@ t_vec3d cross_vec3d(t_vec3d a, t_vec3d b)
     return cross;
 }
 
-t_vec3d project_vec3d(t_vec3d vec, t_vec3d to)
+inline t_vec3d project_vec3d(t_vec3d vec, t_vec3d to)
 {
     t_vec3d tmp;
     float scale;
@@ -26,7 +26,7 @@ t_vec3d project_vec3d(t_vec3d vec, t_vec3d to)
     return tmp; 
 }
 
-t_vec3d sub_vec3d(t_vec3d vec, t_vec3d vec2)
+inline t_vec3d sub_vec3d(t_vec3d vec, t_vec3d vec2)
 {
     t_vec3d res;
 
@@ -35,7 +35,7 @@ t_vec3d sub_vec3d(t_vec3d vec, t_vec3d vec2)
     return res;
 }
 
-t_vec3d add2_vec3d(t_vec3d vec, t_vec3d vec2)
+inline t_vec3d add2_vec3d(t_vec3d vec, t_vec3d vec2)
 {
     t_vec3d res;
 
