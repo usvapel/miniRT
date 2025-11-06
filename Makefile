@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/11/05 21:05:24 by zfarah           ###   ########.fr        #
+#    Updated: 2025/11/06 15:48:05 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,6 +96,8 @@ SRCS_MAIN := \
 	parse_sphere.c \
 	parse_cube.c \
 	autosave.c \
+	autosave_utils.c \
+	autosave_utils2.c \
 	cube_utils.c \
 	parse_textures.c \
 	parsing_utility.c \
