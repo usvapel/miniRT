@@ -16,19 +16,21 @@ float smoothstep2( float x, float n )
 {
   return pow(x,n)/(pow(x,n)+pow(1.0-x,n));
 }
-bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
+bool	spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 {
-	t_plane p = new_plane(hit->pos, phong->normal);
-	t_object *base = get_base_light(g_spot);
-	t_ray lray;
-	float t;
-	float r;
-	float r1;
-	float pos_hit;
-	t_vec3d pos;
-	float h1;
+	t_plane			p;
+	t_object		*base;
+	t_ray			lray;
+	float			t;
+	float			r;
+	float			r1;
+	float			pos_hit;
+	t_vec3d			pos;
 	t_spot_light	*spot;
+	float			h1;
 
+	p = new_plane(hit->pos, phong->normal);
+	base = get_base_light(g_spot);
 	spot = &g_spot->spot_light;
 	lray.origin = adjusted_light_pos(*g_spot);
 	lray.udir = *base->axis;
@@ -37,31 +39,33 @@ bool spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 	if (!solve_plane_hit(p, lray, &t))
 		return false;
 	pos = get_point_on_ray(lray, t);
-	r1 = tanf(deg_to_radians(spot->fov)) * magnitude_vec3d(sub_vec3d(lray.origin, pos));
+	r1 = tanf(deg_to_radians(spot->fov))
+		* magnitude_vec3d(sub_vec3d(lray.origin, pos));
 	h1 = magnitude_vec3d(sub_vec3d(lray.origin, pos));
 	pos_hit = magnitude_vec3d(sub_vec3d(pos, hit->pos));
-	if (pos_hit > r1)	
-		return false;
+	if (pos_hit > r1)
+		return (false);
 	scale_vec3d(&phong->light_color, smoothstep2(1 - pos_hit / r1, 0.5));
-	scale_vec3d(&phong->light_color,smoothstep(1 - h1 / spot->range));
-	return true;
+	scale_vec3d(&phong->light_color, smoothstep(1 - h1 / spot->range));
+	phong->light_color = color_to_vec3d(vec3d_to_color(phong->light_color));
+	return (true);
 }
 
 // t_vec3d	opague_by_distance(t_vec3d color, float d, float d_max)
 // {
 // 	t_color col = vec3d_to_color(color);
-	
+
 // 	col.a *= d_max / d;
-// 	return color_to_vec3d();
+// 	return (color_to_vec3d());
 // }
 t_vec3d	adjusted_light_pos(t_generic_light light)
 {
-	t_object obj_base;
-	t_ray r;
-	float offset;
+	t_object	obj_base;
+	t_ray		r;
+	float		offset;
 
 	if (!light.obj)
-		return light.base.pos;
+		return (light.base.pos);
 	obj_base = *get_base_object(light.obj);
 	r.origin = obj_base.pos;
 	r.udir = *obj_base.axis;
@@ -72,13 +76,13 @@ t_vec3d	adjusted_light_pos(t_generic_light light)
 		offset = ((t_cylinder *)light.obj)->h / 2;
 	else if (obj_base.type == PARABOLOID)
 		offset = ((t_paraboloid *)light.obj)->h;
-	return get_point_on_ray(r, offset + 2 * 1e-2);
+	return (get_point_on_ray(r, offset + 2 * 1e-2));
 }
 
-t_object *get_base_light(t_generic_light *light)
+t_object	*get_base_light(t_generic_light *light)
 {
 	if (!light->obj)
-		return get_base_object(light);
+		return (get_base_object(light));
 	else
-		return get_base_object(light->obj);
+		return (get_base_object(light->obj));
 }

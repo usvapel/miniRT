@@ -6,10 +6,14 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 	t_vector	*v;
 
 	check = ft_calloc(1, sizeof(t_checker));
-	puts("parse checkerboard");
+	if (!check)
+		runtime_error("allocation failed");
 	v = new_vector(1);
 	if (!v)
+	{
+		free(check);
 		runtime_error("allocation failed");
+	}
 	add_elem(v, safe_split(v, split[2]));
 	add_elem(v, safe_split(v, split[3]));
 	check->color1 = parse_color(v, v->data[0]);
@@ -19,7 +23,6 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 	printf("block size: %f\n", check->block_size);
 	print_vec(color_to_vec3d(check->color1), "Color: ");
 	add_elem(checkers, check);
-	// exit(1);
 }
 
 void	init_image_text(t_vector *images, char **split)
@@ -27,10 +30,15 @@ void	init_image_text(t_vector *images, char **split)
 	t_image_text	*text;
 
 	text = ft_calloc(1, sizeof(t_image_text));
+	if (!text)
+		runtime_error("allocation failed");
 	printf("Initializing image texture: %s\n", split[2]);
 	text->texture = mlx_load_png(split[2]);
 	if (!text->texture)
+	{
+		free(text);
 		runtime_error(ft_strjoin("failed to load ", split[2]));
+	}
 	text->bump = NULL;
 	if (split[3])
 		text->bump = mlx_load_png(split[3]);

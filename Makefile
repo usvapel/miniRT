@@ -98,15 +98,18 @@ SRCS_MAIN := \
 	cube_utils.c \
 	parse_textures.c \
 	parsing_utility.c \
+	parsing_utility2.c \
 	color.c \
 	viewport.c \
 	vec3d.c \
 	raytracer.c \
+	intersection.c \
 	sphere.c \
 	fps.c \
 	key_hooks.c \
 	plane.c \
 	hit.c \
+	draw.c \
 	threads.c \
 	rotation.c \
 	move_camera.c \
@@ -119,6 +122,7 @@ SRCS_MAIN := \
 	circle.c \
 	orthonormal_basis.c \
 	phong.c \
+	phong_utils.c \
 	ray.c \
 	paraboloid.c \
 	plane_uv.c \

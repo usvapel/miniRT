@@ -10,6 +10,8 @@ static void	set_values(t_paraboloid *para, t_vector *v)
 	para->base.color = parse_color(v, v->data[4]);
 	para->base.texture.index = -1;
 	para->base.texture.type = -1;
+	para->base.material.reflect = -1;
+	para->base.material.refract = -1;
 	para->base.axis = &para->axis;
 }
 
