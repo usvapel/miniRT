@@ -72,7 +72,6 @@ static void	map_lights_to_objects(t_vector *objects, t_vector *g_lights)
 	int				i;
 
 	i = 0;
-	puts("map lights to objects");
 	while (i < g_lights->count)
 	{
 		light = g_lights->data[i++];
