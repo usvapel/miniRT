@@ -6,7 +6,6 @@ void	init_ambient(char **split)
 	t_ambient	ambient;
 	t_vector	*v;
 
-	puts("parse ambient");
 	v = new_vector(1);
 	if (!v)
 		runtime_error("allocation failed!");
