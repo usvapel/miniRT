@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-inline t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two)
+inline t_vec3d	multiply_vec3d(t_vec3d one, t_vec3d two)
 {
 	t_vec3d	new;
 
@@ -10,7 +10,7 @@ inline t_vec3d multiply_vec3d(t_vec3d one, t_vec3d two)
 	return (new);
 }
 
-inline t_vec3d new_vec3d(float x, float y, float z)
+inline t_vec3d	new_vec3d(float x, float y, float z)
 {
 	t_vec3d	vec3d;
 
@@ -20,7 +20,7 @@ inline t_vec3d new_vec3d(float x, float y, float z)
 	return (vec3d);
 }
 
-inline void scale_vec3d(t_vec3d *vec, float scaler)
+inline void	scale_vec3d(t_vec3d *vec, float scaler)
 {
 	vec->x *= scaler;
 	vec->y *= scaler;
