@@ -48,8 +48,8 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (0);
 	engine = get_engine();
-	initialize_mlx(engine);
 	input_parsing(engine, av);
+	initialize_mlx(engine);
 	setup_viewport();
 	engine->image = mlx_new_image(engine->mlx, engine->window.width,
 			engine->window.height);
