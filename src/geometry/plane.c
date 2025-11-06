@@ -38,13 +38,13 @@ bool	solve_plane_hit(t_plane plane, t_ray ray, float *t)
 	const float	d_dot_n = dot_vec3d(plane.normal, ray.udir);
 	t_vec3d		tmp;
 
-	if (fabsf(d_dot_n) == (float)EPSILON)
+	if (fabsf(d_dot_n) < (float)EPSILON)
 		return (false);
 	tmp = plane.base.pos;
 	minus_vec3d(&tmp, ray.origin);
 	*t = dot_vec3d(plane.normal, tmp);
 	*t /= d_dot_n;
-	if (*t < 0.0f)
+	if (*t < 0.001f)
 		return (false);
 	return (true);
 }
