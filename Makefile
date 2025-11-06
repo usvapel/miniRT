@@ -102,11 +102,13 @@ SRCS_MAIN := \
 	viewport.c \
 	vec3d.c \
 	raytracer.c \
+	intersection.c \
 	sphere.c \
 	fps.c \
 	key_hooks.c \
 	plane.c \
 	hit.c \
+	draw.c \
 	threads.c \
 	rotation.c \
 	move_camera.c \
