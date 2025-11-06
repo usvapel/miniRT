@@ -27,18 +27,7 @@ inline void scale_vec3d(t_vec3d *vec, float scaler)
 	vec->z *= scaler;
 }
 
-inline t_vec3d nscale_vec3d(t_vec3d vec, float scaler)
-{
-    t_vec3d scaled;
-
-    scaled = vec;
-    scaled.x *= scaler;
-    scaled.y *= scaler;
-    scaled.z *= scaler;
-    return scaled;
-}
-
-inline void    add_vec3d(t_vec3d *vec1, t_vec3d vec2)
+inline t_vec3d	nscale_vec3d(t_vec3d vec, float scaler)
 {
 	t_vec3d	scaled;
 
@@ -49,7 +38,7 @@ inline void    add_vec3d(t_vec3d *vec1, t_vec3d vec2)
 	return (scaled);
 }
 
-void	add_vec3d(t_vec3d *vec1, t_vec3d vec2)
+inline void	add_vec3d(t_vec3d *vec1, t_vec3d vec2)
 {
 	vec1->x += vec2.x;
 	vec1->y += vec2.y;
