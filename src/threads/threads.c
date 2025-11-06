@@ -55,6 +55,21 @@ void	setup_threads(void *eng)
 	}
 }
 
+bool	should_recalculate(t_engine *eng)
+{
+	int	i;
+
+	i = 0;
+	if (eng->moving)
+		return (true);
+	while (i < THREAD_COUNT)
+	{
+		if (eng->threads[i++].block_size != 1)
+			return (true);
+	}
+	return (false);
+}
+
 bool	wait_for_threads(void)
 {
 	t_engine	*engine;

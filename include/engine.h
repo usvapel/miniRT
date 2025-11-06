@@ -77,4 +77,5 @@ typedef struct s_engine {
   t_phong p;
 } t_engine;
 
+bool should_recalculate(t_engine *eng);
 #endif // ENGINE_H
