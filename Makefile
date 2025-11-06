@@ -119,6 +119,7 @@ SRCS_MAIN := \
 	circle.c \
 	orthonormal_basis.c \
 	phong.c \
+	phong_utils.c \
 	ray.c \
 	paraboloid.c \
 	plane_uv.c \
