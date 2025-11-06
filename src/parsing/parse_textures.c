@@ -29,11 +29,15 @@ void	init_image_text(t_vector *images, char **split)
 	text = ft_calloc(1, sizeof(t_image_text));
 	printf("Initializing image texture: %s\n", split[2]);
 	text->texture = mlx_load_png(split[2]);
+	text->txt_source = ft_strdup(split[2]); 
 	if (!text->texture)
 		runtime_error(ft_strjoin("failed to load ", split[2]));
 	text->bump = NULL;
 	if (split[3])
+	{
 		text->bump = mlx_load_png(split[3]);
+		text->bump_source = ft_strdup(split[2]);
+	}
 	add_elem(images, text);
 }
 
