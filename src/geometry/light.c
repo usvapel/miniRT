@@ -47,6 +47,7 @@ bool	spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 		return (false);
 	scale_vec3d(&phong->light_color, smoothstep2(1 - pos_hit / r1, 0.5));
 	scale_vec3d(&phong->light_color, smoothstep(1 - h1 / spot->range));
+	phong->light_color = color_to_vec3d(vec3d_to_color(phong->light_color));
 	return (true);
 }
 
