@@ -17,6 +17,8 @@ typedef struct s_threads {
   atomic_bool end;
   atomic_int block_size;
   bool last_move;
+  int depth;
+  int y;
 } t_threads;
 
 #endif // MINIRT_THREADS_H

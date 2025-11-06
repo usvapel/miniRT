@@ -58,6 +58,7 @@ t_engine *get_engine(void);
 float clamp(float value, float min, float max);
 void cleanup_and_exit();
 void draw_scene(void *eng);
+void draw_to_buffer(t_threads *t, int x, int y, int color);
 bool timer(int prev_sec, int stop);
 int get_seconds(t_engine *engine);
 float max(float val1, float val2);
