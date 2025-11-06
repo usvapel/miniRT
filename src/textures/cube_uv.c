@@ -23,7 +23,7 @@ void	llchecker_board(t_hit *hit, int texture_index, float u, float v)
 	const int		i_u = floorf(u / checkboard->block_size);
 	const int		i_v = floorf(v / checkboard->block_size);
 
-	if (i_u + i_v % 2 == 0)
+	if ((i_u + i_v) % 2 == 0)
 		hit->color = checkboard->color1;
 	else
 		hit->color = checkboard->color2;
