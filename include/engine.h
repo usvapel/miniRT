@@ -75,6 +75,8 @@ typedef struct s_engine {
   t_frame frame;
   t_mouse mouse;
   t_phong p;
+  char *scene;
+  bool autosave;
 } t_engine;
 
 bool should_recalculate(t_engine *eng);

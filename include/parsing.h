@@ -28,4 +28,6 @@ void	init_checkerboard_text(t_vector *checkers, char **split);
 void	init_image_text(t_vector *images, char **split);
 void	link_texture(t_object *obj, char **split, int type);
 
+void	autosave_scene(void);
+
 #endif // PARSING_H
