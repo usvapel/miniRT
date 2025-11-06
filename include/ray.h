@@ -11,7 +11,6 @@
 typedef struct s_material {
   float reflect;
   float refract;
-  bool should_refract;
   bool ignore;
 } t_material;
 
