@@ -10,10 +10,10 @@ void	apply_texture(t_hit *hit)
 	if (base->texture.index < 0)
 		return ;
 	if (base->texture.type == CHECKERBOARD
-		&& base->texture.index > get_engine()->textures.checkers->count)
+		&& base->texture.index >= get_engine()->textures.checkers->count)
 		return ;
 	if (base->texture.type == IMAGE
-		&& base->texture.index > get_engine()->textures.images->count)
+		&& base->texture.index >= get_engine()->textures.images->count)
 		return ;
 	if (base->type == PLANE)
 		plane_uv(*((t_plane *)hit->obj), hit);
