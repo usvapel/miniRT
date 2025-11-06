@@ -20,7 +20,6 @@ void	init_sphere(t_vector *objects, char **split)
 	sphere->base.type = SPHERE;
 	sphere->base.pos = parse_vec3d(v, v->data[0]);
 	sphere->r = ft_atof(((char ***)v->data)[1][0]) / 2.0f;
-	sphere->base.r = sphere->r;
 	sphere->base.color = parse_color(v, v->data[2]);
 	sphere->base.texture.index = -1;
 	sphere->base.texture.type = -1;
