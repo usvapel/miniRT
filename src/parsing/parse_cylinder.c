@@ -5,13 +5,15 @@ static void	set_values(t_cylinder *cylinder, t_vector *v)
 	cylinder->base.type = CYLINDER;
 	cylinder->base.pos = parse_vec3d(v, v->data[0]);
 	cylinder->axis = parse_vec3d(v, v->data[1]);
+	cylinder->axis = normalize_vec3d(cylinder->axis);
+	cylinder->base.axis = &cylinder->axis;
 	cylinder->r = ft_atof(((char ***)v->data)[2][0]) / 2.0f;
 	cylinder->h = ft_atof(((char ***)v->data)[3][0]);
 	cylinder->base.color = parse_color(v, v->data[4]);
-	cylinder->axis = normalize_vec3d(cylinder->axis);
 	cylinder->base.texture.index = -1;
 	cylinder->base.texture.type = -1;
-	cylinder->base.axis = &cylinder->axis;
+	cylinder->base.material.reflect = -1;
+	cylinder->base.material.refract = -1;
 }
 
 void	init_cylinder(t_vector *objects, char **split)
