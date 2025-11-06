@@ -98,6 +98,7 @@ SRCS_MAIN := \
 	cube_utils.c \
 	parse_textures.c \
 	parsing_utility.c \
+	parsing_utility2.c \
 	color.c \
 	viewport.c \
 	vec3d.c \
