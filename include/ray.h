@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 #define EPSILON 1e-4
-#define BOUNCES 100
+#define BOUNCES 16
 
 typedef struct s_material {
   float reflect;
