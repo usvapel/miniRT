@@ -45,7 +45,7 @@ int	main(int ac, char **av)
 {
 	t_engine	*engine;
 
-	if (ac != 2)
+	if (ac < 2)
 		return (0);
 	engine = get_engine();
 	input_parsing(engine, av);

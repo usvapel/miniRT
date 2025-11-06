@@ -95,6 +95,7 @@ SRCS_MAIN := \
 	parse_plane.c \
 	parse_sphere.c \
 	parse_cube.c \
+	autosave.c \
 	cube_utils.c \
 	parse_textures.c \
 	parsing_utility.c \
