@@ -97,6 +97,8 @@ void	input_parsing(t_engine *engine, char **av)
 	engine->g_lights = new_vector(1);
 	engine->textures.checkers = new_vector(1);
 	engine->textures.images = new_vector(1);
+	engine->scene = av[1];
+	engine->autosave = av[2] && !ft_strcmp(av[2], "--autosave");
 	fd = open(check_file_validity(av[1]), O_RDONLY);
 	if (fd < 0)
 		runtime_error("failure opening file!");
