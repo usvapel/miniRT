@@ -1,85 +1,84 @@
 #include "minirt.h"
 
-/*
-	R = L - 2(N * L),
-		where N is normal surface and L is the incoming vector from the light source to the hit
-*/
-t_vec3d	reflect(t_vec3d direction, t_vec3d normal)
+static void	accumulate_transparency(t_phong *p, t_vec3d *shadow,
+		t_ray *shadow_ray, t_hit *shadow_hit)
 {
-	float	dot;
-	t_vec3d	tmp;
-
-	dot = dot_vec3d(direction, normal);
-	tmp = nscale_vec3d(normal, dot);
-	tmp = nscale_vec3d(tmp, 2);
-	tmp = sub_vec3d(direction, tmp);
-	return (tmp);
+	*shadow = color_to_vec3d(vec3d_to_color(*shadow));
+	shadow_ray->origin = add2_vec3d(shadow_hit->pos, nscale_vec3d(p->nlight_dir,
+				EPSILON));
+	*shadow = nscale_vec3d(*shadow, shadow_hit->material.refract);
 }
-/*
-	S = (V * R)^n, where V is view and R is the reflection of the light
-*/
-static void	get_specular(t_engine *engine, t_hit *hit, t_phong *p,
+
+static t_vec3d	get_shadow_attenuation(t_phong *p, t_engine *engine, t_hit hit,
 		t_generic_light light)
 {
-	float	specular_strength;
-	float	light_distance;
-
-	p->view_dir = sub_vec3d(engine->camera.pos, hit->pos);
-	p->view_dir = normalize_vec3d(p->view_dir);
-	p->reflect_dir = reflect(nscale_vec3d(p->nlight_dir, -1.0f), p->normal);
-	p->reflect_dir = normalize_vec3d(p->reflect_dir);
-	specular_strength = powf(fmaxf(0.0f, dot_vec3d(p->view_dir,
-					p->reflect_dir)), SHININESS);
-	p->specular = nscale_vec3d(p->light_color, specular_strength);
-	light_distance = magnitude_vec3d(sub_vec3d(light.base.pos, hit->pos));
-	p->specular = nscale_vec3d(p->specular, 1.0f / (light_distance));
-}
-
-static void	get_diffuse(t_phong *p)
-{
-	float	distance;
-	float	attenuation;
-
-	distance = magnitude_vec3d(p->nlight_dir);
-	attenuation = A_CONSTANT / (A_CONSTANT + LINEAR_COEFFICIENT * distance
-			+ QUADRATIC_COEFFICIENT * distance * distance);
-	p->diffuse_strength = dot_vec3d(p->normal, p->nlight_dir);
-	p->diffuse_strength = fmaxf(0.0f, p->diffuse_strength);
-	p->diffuse = nscale_vec3d(multiply_vec3d(p->light_color, p->model_color),
-			p->diffuse_strength * attenuation);
-}
-
-static bool	is_in_shadow(t_phong *p, t_engine *engine, t_hit hit,
-		t_generic_light light)
-{
-	t_ray	shadow_ray;
 	t_hit	shadow_hit;
 	float	light_distance;
-	float	object_distance;
+	t_vec3d	shadow;
+	t_ray	shadow_ray;
 
-	ft_memset(&shadow_ray, 0, sizeof(t_ray));
-	ft_memset(&shadow_hit, 0, sizeof(t_hit));
-	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir, 1e-2));
+	shadow_ray = (t_ray){0};
+	shadow = (t_vec3d){1.0, 1.0, 1.0};
+	shadow_ray.origin = add2_vec3d(hit.pos, nscale_vec3d(p->nlight_dir,
+				EPSILON));
 	shadow_ray.udir = p->nlight_dir;
-	(void)objects_intersection(engine, &shadow_ray, &shadow_hit);
-	if (!shadow_hit.prev_hit
-		|| get_base_object(shadow_hit.obj)->is_light_source)
-		return (false);
 	light_distance = magnitude_vec3d(sub_vec3d(adjusted_light_pos(light),
 				shadow_ray.origin));
-	object_distance = magnitude_vec3d(sub_vec3d(shadow_hit.pos,
-				shadow_ray.origin));
-	if ((object_distance + EPSILON) < light_distance)
-		return (true);
-	return (false);
+	while (true)
+	{
+		shadow_hit = (t_hit){0};
+		objects_intersection(engine, &shadow_ray, &shadow_hit);
+		if (!shadow_hit.prev_hit
+			|| get_base_object(shadow_hit.obj)->is_light_source
+			|| magnitude_vec3d(sub_vec3d(shadow_hit.pos,
+					shadow_ray.origin)) > light_distance)
+			return (shadow);
+		if (shadow_hit.material.refract == -1)
+			return ((t_vec3d){0});
+		accumulate_transparency(p, &shadow, &shadow_ray, &shadow_hit);
+	}
+}
+
+static void	accumulate_colors(t_phong *p, t_generic_light *light,
+		t_vec3d shadow)
+{
+	p->diffuse = nscale_vec3d(p->diffuse, light->brightness);
+	p->specular = nscale_vec3d(p->specular, light->brightness);
+	p->diffuse = multiply_vec3d(p->diffuse, shadow);
+	p->specular = multiply_vec3d(p->specular, shadow);
+	p->final_color = add2_vec3d(p->final_color, p->diffuse);
+	p->final_color = add2_vec3d(p->final_color, p->specular);
+}
+
+static void	loop_through_lights(t_phong *p, t_engine *engine, t_hit *hit)
+{
+	t_generic_light	*light;
+	t_object		*base;
+	t_vec3d			shadow;
+	int				i;
+
+	i = 0;
+	while (i < engine->g_lights->count)
+	{
+		light = engine->g_lights->data[i++];
+		base = get_base_light(light);
+		p->light_color = color_to_vec3d(base->color);
+		p->nlight_dir = normalize_vec3d(sub_vec3d(base->pos, hit->pos));
+		if (base->type == SPOT_LIGHT && !spot_light_hit(light, hit, p))
+			continue ;
+		shadow = get_shadow_attenuation(p, engine, *hit, *light);
+		if (shadow.x < EPSILON && shadow.y < EPSILON && shadow.z < EPSILON)
+			continue ;
+		get_diffuse(p);
+		if (hit->type != PLANE && hit->type != CUBE)
+			get_specular(engine, hit, p, *light);
+		accumulate_colors(p, light, shadow);
+	}
 }
 
 void	phong_model(t_engine *engine, t_hit *hit)
 {
-	t_generic_light	*light;
-	t_phong			p;
-	t_object		*base;
-	int				i;
+	t_phong	p;
 
 	if (get_base_object(hit->obj)->is_light_source)
 		return ;
@@ -87,27 +86,6 @@ void	phong_model(t_engine *engine, t_hit *hit)
 	p.ambient = color_to_vec3d(engine->ambient.base.color);
 	p.final_color = nscale_vec3d(p.ambient, engine->ambient.ratio);
 	p.normal = hit->normal;
-	i = 0;
-	while (i < engine->g_lights->count)
-	{
-		light = engine->g_lights->data[i++];
-		base = get_base_light(light);
-		p.light_color = color_to_vec3d(base->color);
-		p.light_dir = sub_vec3d(base->pos, hit->pos);
-		p.nlight_dir = normalize_vec3d(p.light_dir);
-		if (get_base_object(light)->type == SPOT_LIGHT && !spot_light_hit(light,
-				hit, &p))
-			continue ;
-		if (is_in_shadow(&p, engine, *hit, *light))
-			continue ;
-		get_diffuse(&p);
-		get_specular(engine, hit, &p, *light);
-		if (hit->type == PLANE || hit->type == CUBE)
-			p.specular = nscale_vec3d(p.specular, 0.0f);
-		p.diffuse = nscale_vec3d(p.diffuse, light->brightness);
-		p.specular = nscale_vec3d(p.specular, light->brightness);
-		p.final_color = add2_vec3d(p.final_color, p.diffuse);
-		p.final_color = add2_vec3d(p.final_color, p.specular);
-	}
+	loop_through_lights(&p, engine, hit);
 	hit->color = vec3d_to_color(p.final_color);
 }

@@ -1,10 +1,10 @@
 #include "minirt.h"
 
-inline static float schlick_reflectance(float cosine, float ref_idx)
+inline static float	schlick_reflectance(float cosine, float ref_idx)
 {
-	float r0;
-	float x;
-	float x2;
+	float	r0;
+	float	x;
+	float	x2;
 
 	r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
 	r0 = r0 * r0;
@@ -13,7 +13,7 @@ inline static float schlick_reflectance(float cosine, float ref_idx)
 	return (r0 + (1.0 - r0) * x2 * x2 * x);
 }
 
-static void calculate_face_normal(t_ray ray, t_hit *hit, t_refract *rf)
+static void	calculate_face_normal(t_ray ray, t_hit *hit, t_refract *rf)
 {
 	rf->front_face = dot_vec3d(ray.udir, hit->normal) < 0.0f;
 	if (rf->front_face)
@@ -28,23 +28,24 @@ static void calculate_face_normal(t_ray ray, t_hit *hit, t_refract *rf)
 	}
 }
 
-static t_vec3d refract(t_vec3d uv, t_vec3d n, float etai_over_etat, bool *total_ir)
+static t_vec3d	refract(t_vec3d uv, t_vec3d n, float etai_over_etat,
+		bool *total_ir)
 {
-	const float cos_theta = fminf(dot_vec3d(nscale_vec3d(uv, -1.0f), n), 1.0f);
-	const float sin_theta = 1.0f - cos_theta * cos_theta;
-	t_vec3d r_out_perp;
-	float length_squared;
-	t_vec3d r_out_parallel;
+	const float	cos_theta = fminf(dot_vec3d(nscale_vec3d(uv, -1.0f), n), 1.0f);
+	const float	sin_theta = 1.0f - cos_theta * cos_theta;
+	t_vec3d		r_out_perp;
+	float		length_squared;
+	t_vec3d		r_out_parallel;
 
 	if (etai_over_etat * etai_over_etat * sin_theta > 1.0f)
 	{
-		*total_ir =  true;
-		return (new_vec3d(0,0,0));
+		*total_ir = true;
+		return ((t_vec3d){0});
 	}
-	if (schlick_reflectance(cos_theta, etai_over_etat) > 0.5f) // magic number
+	if (schlick_reflectance(cos_theta, etai_over_etat) > 0.5f)
 	{
 		*total_ir = true;
-		return (new_vec3d(0,0,0));
+		return ((t_vec3d){0});
 	}
 	r_out_perp = nscale_vec3d(n, cos_theta);
 	r_out_perp = add2_vec3d(uv, r_out_perp);
@@ -55,8 +56,7 @@ static t_vec3d refract(t_vec3d uv, t_vec3d n, float etai_over_etat, bool *total_
 	return (add2_vec3d(r_out_perp, r_out_parallel));
 }
 
-
-t_color handle_refraction(t_refract *rf, t_ray ray, t_hit *hit, int depth, int y)
+t_color	handle_refraction(t_threads *t, t_refract *rf, t_ray ray, t_hit *hit)
 {
 	calculate_face_normal(ray, hit, rf);
 	rf->should_reflect = false;
@@ -67,7 +67,8 @@ t_color handle_refraction(t_refract *rf, t_ray ray, t_hit *hit, int depth, int y
 		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->R, true);
 	}
 	else
-		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->R, false);
-	rf->reflect_color = trace_ray(rf->reflected, depth + 1, y);
+		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->R,
+				false);
+	rf->reflect_color = trace_ray(t, rf->reflected, t->depth + 1);
 	return (mix_colors(hit->color, rf->reflect_color, rf->reflectance));
 }
