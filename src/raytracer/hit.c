@@ -2,10 +2,10 @@
 
 bool	set_hit(void *object, t_vec3d new_hit, t_ray ray, t_hit *hit)
 {
-	t_object *base;
+	t_object	*base;
 
 	if (hit->prev_hit && closest_hit(ray.origin, hit->pos, new_hit))
-	   return (false);
+		return (false);
 	if (object)
 	{
 		base = (t_object *)object;
@@ -22,6 +22,7 @@ bool	closest_hit(t_vec3d pos, t_vec3d hit1, t_vec3d hit2)
 {
 	const float	pow_mag1 = pow_magnitude_vec3d(sub_vec3d(hit1, pos));
 	const float	pow_mag2 = pow_magnitude_vec3d(sub_vec3d(hit2, pos));
+
 	return (pow_mag1 < pow_mag2);
 }
 

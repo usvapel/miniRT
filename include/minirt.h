@@ -58,6 +58,7 @@ t_engine *get_engine(void);
 float clamp(float value, float min, float max);
 void cleanup_and_exit();
 void draw_scene(void *eng);
+void draw_to_buffer(t_threads *t, int x, int y, int color);
 bool timer(int prev_sec, int stop);
 int get_seconds(t_engine *engine);
 float max(float val1, float val2);
@@ -85,6 +86,10 @@ t_vec3d reflect(t_vec3d direction, t_vec3d normal);
 
 t_color int_to_color(int c);
 uint32_t color_to_int(t_color color);
+
+void get_specular(t_engine *engine, t_hit *hit, t_phong *p,
+                  t_generic_light light);
+void get_diffuse(t_phong *p);
 
 t_object *get_base_object(void *obj);
 

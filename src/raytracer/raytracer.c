@@ -1,110 +1,6 @@
 #include "minirt.h"
 
-bool				should_recalculate(t_engine *eng);
-
-void	draw_scene(void *eng)
-{
-	t_engine	*engine;
-	int			i;
-
-	i = 0;
-	engine = eng;
-	usleep(1000);
-	wait_for_threads();
-	while (engine->update == true)
-		usleep(10);
-	engine->image->pixels = engine->image_buffer->pixels;
-	engine->frame.delta = time_in_ms() - engine->frame.t_last_frame;
-	engine->frame.t_last_frame = time_in_ms();
-	engine->frame.fps++;
-	engine->recalculate = should_recalculate(engine);
-	while (engine->moving && i < THREAD_COUNT)
-		engine->threads[i++].block_size = PIXEL_BLOCK_SIZE;
-	engine->moving = false;
-}
-
-bool	should_recalculate(t_engine *eng)
-{
-	int	i;
-
-	i = 0;
-	if (eng->moving)
-		return (true);
-	while (i < THREAD_COUNT)
-	{
-		if (eng->threads[i++].block_size != 1)
-			return (true);
-	}
-	return (false);
-}
-
-bool	obj_intersection(void *obj, t_ray ray, t_hit *hit)
-{
-	t_object	*base;
-	int			type;
-
-	base = (t_object *)obj;
-	type = base->type;
-	if (type == PLANE)
-		return (plane_hit(((t_plane *)obj), ray, hit));
-	if (type == SPHERE)
-		return (sphere_hit(((t_sphere *)obj), ray, hit));
-	else if (type == CYLINDER)
-		return (cylinder_hit(((t_cylinder *)obj), ray, hit));
-	else if (type == LIGHT)
-		return (light_hit(((t_generic_light *)obj), ray, hit));
-	else if (type == PARABOLOID)
-		return (paraboloid_hit(((t_paraboloid *)obj), ray, hit));
-	else if (type == CUBE)
-		return (cube_hit(((t_cube *)obj), ray, hit));
-	else
-		return (false);
-}
-
-int	objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit)
-{
-	int	i;
-
-	i = 0;
-	while (i < engine->objects->count)
-	{
-		obj_intersection(engine->objects->data[i], *ray, hit);
-		i++;
-	}
-	if (hit->prev_hit)
-		normlize_vec3d(&hit->normal);
-	return (hit->type);
-}
-
-static void	draw_to_buffer(t_threads *t, int x, int y, int color)
-{
-	const t_engine	*engine = get_engine();
-	int				block_end_x;
-	int				block_end_y;
-	int				init_x;
-
-	init_x = x;
-	if (y + t->block_size > t->end_y)
-		block_end_y = t->end_y;
-	else
-		block_end_y = y + t->block_size;
-	if (x + t->block_size > t->end_x)
-		block_end_x = t->end_x;
-	else
-		block_end_x = x + t->block_size;
-	while (y < block_end_y)
-	{
-		x = init_x;
-		while (x < block_end_x)
-		{
-			mlx_put_pixel(engine->image_buffer, x, y, color);
-			x++;
-		}
-		y++;
-	}
-}
-
-t_color	trace_ray(t_ray ray, int depth, int y)
+t_color	trace_ray(t_threads *t, t_ray ray, int depth)
 {
 	t_refract	rf;
 	t_hit		hit;
@@ -114,18 +10,21 @@ t_color	trace_ray(t_ray ray, int depth, int y)
 	hit.prev_hit = false;
 	(void)objects_intersection(get_engine(), &ray, &hit);
 	if (!hit.prev_hit)
-		return (int_to_color(color_gradient(get_engine(), y)));
+		return (int_to_color(color_gradient(get_engine(), t->y)));
 	apply_texture(&hit);
 	phong_model(get_engine(), &hit);
-	reflectance = ((t_object *)hit.obj)->material.reflect;
-	indice = ((t_object *)hit.obj)->material.refract;
-	if (depth >= BOUNCES || reflectance <= 0)
+	reflectance = get_base_object(hit.obj)->material.reflect;
+	indice = get_base_object(hit.obj)->material.refract;
+	t->depth = depth;
+	if (t->depth >= BOUNCES)
+		return (int_to_color(color_gradient(get_engine(), t->y)));
+	if (reflectance == -1 && indice == -1)
 		return (hit.color);
 	rf.reflectance = reflectance;
 	rf.indice = indice;
-	if (indice > 1.0f)
-		return (handle_refraction(&rf, ray, &hit, depth, y));
-	return (handle_reflection(ray, &hit, reflectance, depth, y));
+	if (indice != -1)
+		return (handle_refraction(t, &rf, ray, &hit));
+	return (handle_reflection(t, ray, &hit, reflectance));
 }
 
 inline static float	get_sample(int value, t_threads *t, int axis)
@@ -145,6 +44,7 @@ static void	calculate_scene(t_threads *t)
 	t_ray	ray;
 	int		x;
 	int		y;
+	t_color	final_color;
 
 	y = t->start_y;
 	while (y < t->end_y)
@@ -153,7 +53,10 @@ static void	calculate_scene(t_threads *t)
 		while (x < t->end_x)
 		{
 			ray = get_ray(get_sample(x, t, X_AXIS), get_sample(y, t, Y_AXIS));
-			draw_to_buffer(t, x, y, color_to_int(trace_ray(ray, 0, y)));
+			t->depth = 0;
+			t->y = y;
+			final_color = trace_ray(t, ray, t->depth);
+			draw_to_buffer(t, x, y, color_to_int(final_color));
 			x += t->block_size;
 		}
 		y += t->block_size;
@@ -172,12 +75,8 @@ void	*raytracer(void *thread)
 		return (NULL);
 	while (!t->end)
 	{
-		while (engine->recalculate == false)
-		{
-			if (t->end)
-				return (NULL);
+		while (engine->recalculate == false && !t->end)
 			usleep(10);
-		}
 		t->done = false;
 		t->last_move = timer(engine->last_move_time, QUALITY_DELAY_SECONDS);
 		calculate_scene(t);
