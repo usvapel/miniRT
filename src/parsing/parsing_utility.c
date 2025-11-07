@@ -49,38 +49,6 @@ void	get_additional_texture_values(void *txt, t_texture_type type,
 	}
 }
 
-void	cleanup_data(void)
-{
-	t_engine	*engine;
-	int			i;
-
-	engine = get_engine();
-	free_vector(engine->objects);
-	free_vector(engine->g_lights);
-	if (engine->textures.checkers)
-	{
-		i = 0;
-		while (i < engine->textures.checkers->count)
-		{
-			free(((t_image_text *)engine->textures.checkers->data)[i].bump_source);
-			free(((t_image_text *)engine->textures.checkers->data)[i].txt_source);
-			mlx_delete_texture(((t_image_text *)engine->textures.checkers->data)[i].bump);
-			mlx_delete_texture(((t_image_text *)engine->textures.checkers->data)[i].texture);
-			i++;
-		}
-		free_vector(engine->textures.checkers);
-	}
-	if (engine->skybox.txt)
-		mlx_delete_texture(engine->skybox.txt);
-	free(engine->skybox.src);
-	free_vector(engine->textures.images);
-	if (engine->image)
-		mlx_delete_image(engine->mlx, engine->image);
-	if (engine->image_buffer)
-		mlx_delete_image(engine->mlx, engine->image_buffer);
-	close(engine->scene_fd);
-}
-
 void	runtime_error(char *s)
 {
 	printf("Error\n");
