@@ -2,17 +2,19 @@
 
 void	clean_textures(const t_engine *engine)
 {
-	int	i;
+	int				i;
+	t_image_text	*txt_data;
 
+	txt_data = (((t_image_text *)engine->textures.checkers->data));
 	if (engine->textures.checkers)
 	{
 		i = -1;
 		while (++i < engine->textures.checkers->count)
 		{
-			free(((t_image_text *)engine->textures.checkers->data)[i].bump_source);
-			free(((t_image_text *)engine->textures.checkers->data)[i].txt_source);
-			mlx_delete_texture(((t_image_text *)engine->textures.checkers->data)[i].bump);
-			mlx_delete_texture(((t_image_text *)engine->textures.checkers->data)[i].texture);
+			free(txt_data[i].bump_source);
+			free(txt_data[i].txt_source);
+			mlx_delete_texture(txt_data[i].bump);
+			mlx_delete_texture(txt_data[i].texture);
 		}
 		free_vector(engine->textures.checkers);
 	}
