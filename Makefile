@@ -110,6 +110,7 @@ SRCS_MAIN := \
 	color2.c \
 	viewport.c \
 	vectors.c \
+	utility.c \
 	vectors2.c \
 	vectors3.c \
 	vectors4.c \
