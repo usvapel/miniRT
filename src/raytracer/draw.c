@@ -2,16 +2,23 @@
 
 void	draw_scene(void *eng)
 {
-	t_engine	*engine;
-	int			i;
+	t_engine		*engine;
+	int				i;
+	static uint8_t	*original_image_pixels = NULL;
+	uint8_t			*temp;
 
 	i = 0;
 	engine = eng;
+	if (original_image_pixels == NULL)
+		original_image_pixels = engine->image->pixels;
 	usleep(1000);
 	wait_for_threads();
 	while (engine->update == true)
 		usleep(10);
+	temp = original_image_pixels;
 	engine->image->pixels = engine->image_buffer->pixels;
+	engine->image_buffer->pixels = temp;
+	original_image_pixels = engine->image->pixels;
 	engine->frame.delta = time_in_ms() - engine->frame.t_last_frame;
 	engine->frame.t_last_frame = time_in_ms();
 	engine->frame.fps++;
