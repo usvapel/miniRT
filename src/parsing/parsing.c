@@ -81,7 +81,6 @@ static void	map_lights_to_objects(t_vector *objects, t_vector *g_lights)
 			continue ;
 		light->obj = objects->data[light->obj_index];
 		obj_base = get_base_object(light->obj);
-		obj_base->pos = base->pos;
 		obj_base->is_light_source = base->type == POINT_LIGHT;
 		obj_base->semi_light_source = base->type == SPOT_LIGHT;
 		if (obj_base->axis)
@@ -97,6 +96,8 @@ void	input_parsing(t_engine *engine, char **av)
 	engine->g_lights = new_vector(1);
 	engine->textures.checkers = new_vector(1);
 	engine->textures.images = new_vector(1);
+	engine->scene = av[1];
+	engine->autosave = av[2] && !ft_strcmp(av[2], "--autosave");
 	fd = open(check_file_validity(av[1]), O_RDONLY);
 	if (fd < 0)
 		runtime_error("failure opening file!");
