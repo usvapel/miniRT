@@ -10,8 +10,6 @@ bool	aabb_intersection(t_cube cube, t_ray ray, float *tnear, int *axis)
 	float	t2;
 	int		i;
 
-	tmin = -FLT_MAX;
-	tmax = FLT_MAX;
 	i = -1;
 	tmin = -FLT_MAX;
 	tmax = FLT_MAX;
