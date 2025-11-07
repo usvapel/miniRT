@@ -1,0 +1,46 @@
+C   0.0,1.0,0.0     0.0,0.0,1.0              70
+
+L   0.0,2030.0,0.0     0.7              254,243,226 obj 7
+sp  0.0,0.0,1.0       0.5                               0,130,255 rl 1.0
+# pl  0.0,0.1,0.0     0.0,1.0,0.0                       120,85,60 rl 0.5
+pl  0.0,0.0,0.0     0.0,1.0,0.0                       120,85,60 img 1
+
+sky ./textures/sky.png
+sky ./textures/space2.png
+sky ./textures/space3.png
+sky ./textures/space2.png
+sky ./textures/space.png
+sky ./textures/skybox.png
+
+# textures checkers
+tx  ch 255,220,80 255,200,50 0.5 # index 0
+tx  ch 180,80,60 220,100,70 0.5 # index 1
+
+# texture images
+tx  img ./textures/earth.png 
+# tx  img ./textures/wood.png 
+tx  img ./textures/mud.png ./textures/mud_normal.png
+# tx  img ./sparse_grass.png
+# tx  img ./moon.png
+# tx  img ./8k_stars_milky_way.png
+
+# Material	Index of Refraction
+# Vacuum	           1.0000
+# Air	               1.0003
+# Ice	               1.309
+# Water	               1.333
+# Ethyl Alcohol        1.361
+# Teflon	           1.38
+# Fluorite	           1.434
+# Glycerine	           1.473
+# Benzene	           1.501
+# Plexiglas	           1.51
+# Crown Glass	       1.52
+# Light Flint Glass    1.58
+# Polycarbonate Glass  1.59
+# Dense Flint Glass    1.66
+# Sapphire gemstone    1.77
+# Zircon               1.923
+# Diamond              2.417
+# Rutile               2.907
+# Gallium phosphide    3.50
