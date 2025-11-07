@@ -41,6 +41,7 @@ typedef struct s_image_text
    mlx_texture_t *bump;
    char *txt_source;
    char *bump_source;
+   float     block_size;
 } t_image_text;
 
 typedef enum e_texture_type
