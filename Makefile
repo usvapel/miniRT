@@ -102,6 +102,8 @@ SRCS_MAIN := \
 	parse_textures.c \
 	parsing_utility.c \
 	parsing_utility2.c \
+	parse_skybox.c \
+	skybox.c \
 	color.c \
 	color2.c \
 	viewport.c \
