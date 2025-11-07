@@ -9,6 +9,7 @@ void	free_array(void **array);
 void	free_values(char **values[], int count);
 char	**safe_split(t_vector *v, char *line);
 void	get_additional_values(t_vector *v, void *base, char **split, int index);
+void	get_additional_texture_values(void *txt, t_texture_type type, char **split, int index);
 
 t_vec3d	parse_vec3d(t_vector *v, char **components);
 t_color	parse_color(t_vector *v, char **components);
