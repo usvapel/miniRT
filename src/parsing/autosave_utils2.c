@@ -29,7 +29,7 @@ void	save_camera(t_camera c)
 		c.dir.x, c.dir.y, c.dir.z, c.fov);
 }
 
-void	save_ampient(t_ambient a)
+void	save_ambient(t_ambient a)
 {
 	printf("A  %.1f  %.0f,%.0f,%.0f\n", a.ratio, a.base.color.r, a.base.color.g,
 		a.base.color.b);
