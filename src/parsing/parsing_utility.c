@@ -28,6 +28,27 @@ void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 	}
 }
 
+void	get_additional_texture_values(void *txt, t_texture_type type,
+		char **split, int index)
+{
+	float	*block_size;
+
+	if (type == CHECKERBOARD)
+		block_size = &(((t_checker *)txt)->block_size);
+	else if (type == IMAGE)
+		block_size = &((t_image_text *)txt)->block_size;
+	while (split[index])
+	{
+		if (ft_strcmp(split[index], "s") == 0 && split[index + 1])
+		{
+			*block_size = ft_atof(split[index + 1]);
+			if (*block_size <= 0)
+				runtime_error("invalid texture size value! ( size > 0)");
+		}
+		index++;
+	}
+}
+
 void	runtime_error(char *s)
 {
 	t_engine	*engine;
