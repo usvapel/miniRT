@@ -10,7 +10,6 @@ bool	sphere_hit(t_sphere *sphere, t_ray ray, t_hit *hit)
 	float		disc;
 	t_vec3d		n_hit_pos;
 
-	ft_memset(&t, 0, sizeof(float) * 2);
 	local = build_local_basis(sphere->axis);
 	lray = local_ray(ray, local, sphere->base.pos);
 	t[0] = -1;

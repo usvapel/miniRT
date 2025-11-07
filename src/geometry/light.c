@@ -15,7 +15,6 @@ bool	spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 	float	pos_hit;
 	t_vec3d	pos;
 
-	ft_memset(&t_h, 0, sizeof(float) * 2);
 	lray.origin = adjusted_light_pos(*g_spot);
 	lray.udir = *get_base_light(g_spot)->axis;
 	t_h[0] = -1;
