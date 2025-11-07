@@ -78,6 +78,7 @@ void	*raytracer(void *thread)
 		while (engine->recalculate == false && !t->end)
 			usleep(10);
 		t->done = false;
+		t->target_buffer = engine->image_buffer;
 		t->last_move = timer(engine->last_move_time, QUALITY_DELAY_SECONDS);
 		calculate_scene(t);
 		if (engine->moving == false && t->last_move == true
