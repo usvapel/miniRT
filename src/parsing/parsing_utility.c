@@ -53,8 +53,11 @@ void	cleanup_data(void)
 		mlx_delete_texture(engine->skybox.txt);
 	free(engine->skybox.src);
 	free_vector(engine->textures.images);
-	mlx_delete_image(engine->mlx, engine->image);
-	mlx_delete_image(engine->mlx, engine->image_buffer);
+	if (engine->image)
+		mlx_delete_image(engine->mlx, engine->image);
+	if (engine->image_buffer)
+		mlx_delete_image(engine->mlx, engine->image_buffer);
+	close(engine->scene_fd);
 }
 
 void	runtime_error(char *s)
