@@ -23,7 +23,6 @@ void	autosave_scene(void)
 	auto_save_textures(engine->textures);
 	auto_save_skybox(engine->skybox);
 	close(fd);
-	exit(1);
 }
 
 void	auto_save_lights(t_vector lights, t_ambient ambient)
