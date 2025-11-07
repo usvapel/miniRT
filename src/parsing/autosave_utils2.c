@@ -66,9 +66,9 @@ void	save_light(t_generic_light l)
 void	save_additional_vals(t_object b)
 {
 	if (b.material.reflect > 0)
-		printf("rl %1.f  ", b.material.reflect);
+		printf("rl %.1f  ", b.material.reflect);
 	if (b.material.refract > 0)
-		printf("rf %1.f  ", b.material.refract);
+		printf("rf %.1f  ", b.material.refract);
 	if (b.texture.index > -1 && b.texture.type == CHECKERBOARD)
 		printf("ch %d", b.texture.index);
 	if (b.texture.index > -1 && b.texture.type == IMAGE)
