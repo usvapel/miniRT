@@ -79,42 +79,44 @@ typedef struct s_ambient {
   float ratio;
 } t_ambient;
 
-typedef struct s_cube {
-  t_object base;
-  t_vec3d min;
-  t_vec3d max;
-  t_vec3d axis;
-  float h;
-  float w;
+typedef struct s_cube
+{
+	t_object base;
+	t_vec3d min;
+	t_vec3d max;
+	t_vec3d axis;
+	float h;
+	float w;
 } t_cube;
 
-typedef enum e_id {
-  AMBIENT,
-  CAMERA,
-  LIGHT,
-  SPHERE,
-  PLANE,
-  CYLINDER,
-  PARABOLOID,
-  CUBE,
-  SPOT_LIGHT,
-  POINT_LIGHT
-} t_id;
+typedef enum e_id
+{
+	AMBIENT,
+	CAMERA,
+	LIGHT,
+	SPHERE,
+	PLANE,
+	CYLINDER, 
+	PARABOLOID,
+	CUBE,
+	SPOT_LIGHT,
+	POINT_LIGHT
+} t_id ;
 
 // sphere
-t_sphere new_sphere(t_vec3d pos, float r);
-bool sphere_hit(t_sphere *sphere, t_ray ray, t_hit *hit);
-float solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
+t_sphere	new_sphere(t_vec3d pos, float r);
+bool		sphere_hit(t_sphere *sphere, t_ray ray, t_hit *hit);
+float		solve_sphere_hit(t_ray ray, t_sphere sphere, float *t0, float *t1);
 
 // plane
-bool plane_hit(t_plane *plane, t_ray ray, t_hit *hit);
-bool solve_plane_hit(t_plane plane, t_ray ray, float *t);
+bool		plane_hit(t_plane *plane, t_ray ray, t_hit *hit);
+bool		solve_plane_hit(t_plane plane, t_ray ray, float *t);
 t_plane new_plane(t_vec3d pos, t_vec3d n);
 
 // cylinder
-bool cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit);
-t_circle new_circle(t_vec3d pos, float r);
-bool circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
+bool		cylinder_hit(t_cylinder *cy, t_ray ray, t_hit *hit);
+t_circle	new_circle(t_vec3d pos, float r);
+bool		circle_hit(t_circle circ, t_ray ray, float *t0, float *t1);
 
 // paraboloid
 bool paraboloid_hit(t_paraboloid *para, t_ray ray, t_hit *hit);
@@ -128,10 +130,9 @@ void set_min_max_tbounds(float *t1, float *t2, float *tmin, float *tmax);
 t_cube new_cube(float h, float w);
 
 // light
-bool light_hit(t_generic_light *light, t_ray ray, t_hit *hit);
+bool	light_hit(t_generic_light *light, t_ray ray, t_hit *hit);
 bool spot_light_hit(t_generic_light *spot, t_hit *hit, t_phong *phong);
 t_vec3d adjusted_light_pos(t_generic_light light);
 t_object *get_base_light(t_generic_light *light);
 
-t_vec3d get_shadow_attenuation(t_phong *p, t_hit hit, t_generic_light light);
 #endif // GEOMETRY_H
