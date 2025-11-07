@@ -35,5 +35,6 @@ void	cleanup_data(void)
 	free_vector(engine->objects);
 	free_vector(engine->g_lights);
 	free_vector(engine->textures.images);
-	close(engine->scene_fd);
+	if (engine->scene_fd != -1)
+		close(engine->scene_fd);
 }

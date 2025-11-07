@@ -93,6 +93,7 @@ void	input_parsing(t_engine *engine, char **av)
 {
 	char	*filename;
 
+	engine->scene_fd = -1;
 	engine->objects = new_vector(1);
 	engine->g_lights = new_vector(1);
 	engine->textures.checkers = new_vector(1);
