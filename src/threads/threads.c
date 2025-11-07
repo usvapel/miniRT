@@ -20,6 +20,19 @@ void	thread_cleanup(void)
 	}
 }
 
+static void	init_values(t_engine *engine, int i, int x_step, int y_step)
+{
+	engine->threads[i].index = i;
+	engine->threads[i].start_y = y_step * i;
+	engine->threads[i].end_y = y_step * (i + 1);
+	engine->threads[i].start_x = 0;
+	engine->threads[i].end_x = x_step;
+	engine->threads[i].done = false;
+	engine->threads[i].end = false;
+	engine->threads[i].block_size = PIXEL_BLOCK_SIZE;
+	engine->threads[i].last_move = 0;
+}
+
 void	setup_threads(void *eng)
 {
 	t_engine	*engine;
@@ -34,15 +47,7 @@ void	setup_threads(void *eng)
 	i = 0;
 	while (i < THREAD_COUNT)
 	{
-		engine->threads[i].index = i;
-		engine->threads[i].start_y = y_step * i;
-		engine->threads[i].end_y = y_step * (i + 1);
-		engine->threads[i].start_x = 0;
-		engine->threads[i].end_x = x_step;
-		engine->threads[i].done = false;
-		engine->threads[i].end = false;
-		engine->threads[i].block_size = PIXEL_BLOCK_SIZE;
-		engine->threads[i].last_move = 0;
+		init_values(engine, i, x_step, y_step);
 		if (pthread_create(&engine->threads[i].thread, NULL, raytracer,
 				&engine->threads[i]))
 		{
