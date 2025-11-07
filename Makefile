@@ -99,6 +99,7 @@ SRCS_MAIN := \
 	autosave_utils.c \
 	autosave_utils2.c \
 	cube_utils.c \
+	cleanup.c \
 	shadow.c \
 	parse_textures.c \
 	parsing_utility.c \
