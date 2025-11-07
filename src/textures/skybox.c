@@ -8,7 +8,7 @@ t_color	skycolor(t_ray *ray, int y)
 	float			u;
 	float			v;
 
-	if (!skybox)
+	if (!skybox->txt)
 		return (int_to_color(color_gradient(get_engine(), y)));
 	theta = atan2(ray->udir.z, ray->udir.x);
 	phi = acos(ray->udir.y);
