@@ -236,7 +236,7 @@ $(MLX):
 	git clone -q --depth 1 \
 	--branch v2.4.1 \
 	--single-branch \
-	https://github.com/codam-coding-college/MLX42.git > /dev/null 2>&1
+	git@github.com:codam-coding-college/MLX42.git> /dev/null 2>&1
 	@echo "$(BOLD)$(GREEN)✅ MLX42 successfully cloned!$(RESET)"
 	@cd $(LIB_DIR)/$(MLX_BPATH) && cmake -B build > /dev/null 2>&1
 	@echo "$(BOLD)$(GREEN)✅ MLX42 successfully built to ./lib/MLX42/build$(RESET)"
