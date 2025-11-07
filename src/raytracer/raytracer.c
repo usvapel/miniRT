@@ -1,3 +1,4 @@
+#include "MLX42.h"
 #include "minirt.h"
 
 t_color	trace_ray(t_threads *t, t_ray ray, int depth)
@@ -75,8 +76,12 @@ void	*raytracer(void *thread)
 		return (NULL);
 	while (!t->end)
 	{
-		while (engine->recalculate == false && !t->end)
+		while (engine->recalculate == false)
+		{
+			if (t->end)
+				return (NULL);
 			usleep(10);
+		}
 		t->done = false;
 		t->last_move = timer(engine->last_move_time, QUALITY_DELAY_SECONDS);
 		calculate_scene(t);
