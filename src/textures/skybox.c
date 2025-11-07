@@ -2,7 +2,7 @@
 
 t_color skycolor(t_ray *ray, int y)
 {
-    const mlx_texture_t *skybox = get_engine()->skybox;
+    const t_skybox *skybox = &get_engine()->skybox;
     float theta;
     float phi;
     float u;
@@ -14,5 +14,5 @@ t_color skycolor(t_ray *ray, int y)
     phi = acos(ray->udir.y);
     u = (theta + PI) / (2*PI);
     v = phi / PI;
-    return get_texel(get_engine()->skybox, u, v);
+    return get_texel(skybox->txt, u, v);
 }
