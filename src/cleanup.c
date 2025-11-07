@@ -5,18 +5,18 @@ void	clean_textures(const t_engine *engine)
 	int				i;
 	t_image_text	*txt_data;
 
-	txt_data = (((t_image_text *)engine->textures.checkers->data));
-	if (engine->textures.checkers)
+	txt_data = (((t_image_text *)engine->textures.images->data));
+	if (engine->textures.images)
 	{
 		i = -1;
-		while (++i < engine->textures.checkers->count)
+		while (++i < engine->textures.images->count)
 		{
 			free(txt_data[i].bump_source);
 			free(txt_data[i].txt_source);
-			mlx_delete_texture(txt_data[i].bump);
+			if (txt_data[i].bump)
+				mlx_delete_texture(txt_data[i].bump);
 			mlx_delete_texture(txt_data[i].texture);
 		}
-		free_vector(engine->textures.checkers);
 	}
 	if (engine->skybox.txt)
 		mlx_delete_texture(engine->skybox.txt);
@@ -34,6 +34,7 @@ void	cleanup_data(void)
 	clean_textures(engine);
 	free_vector(engine->objects);
 	free_vector(engine->g_lights);
+	free_vector(engine->textures.checkers);
 	free_vector(engine->textures.images);
 	if (engine->scene_fd != -1)
 		close(engine->scene_fd);
