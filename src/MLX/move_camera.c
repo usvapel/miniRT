@@ -61,19 +61,6 @@ static void	look_up_down(t_camera *camera, float dy)
 	normlize_vec3d(&camera->dir);
 }
 
-void	update_camera(void)
-{
-	t_engine	*engine;
-
-	engine = get_engine();
-	engine->update = true;
-	update_viewport(&engine->viewport, engine->window);
-	engine->update = false;
-	engine->moving = true;
-	engine->last_move_time = get_seconds(engine);
-	engine->recalculate = true;
-}
-
 static bool	orient_camera(t_engine *engine)
 {
 	float	dt;
