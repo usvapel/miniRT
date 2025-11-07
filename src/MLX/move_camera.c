@@ -85,7 +85,7 @@ static bool	orient_camera(t_engine *engine)
 	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
 	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
 	dt = fminf(get_engine()->frame.delta, 1.0f / 30.0f);
-	rotateY_vec3d(&engine->camera.dir, CAM_SENS * -dx * dt);
+	rotatey_vec3d(&engine->camera.dir, CAM_SENS * -dx * dt);
 	look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.001f);
 	engine->mouse.prev_pos.x = engine->mouse.pos.x;
 	engine->mouse.prev_pos.y = engine->mouse.pos.y;

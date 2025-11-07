@@ -7,8 +7,13 @@ void	apply_texture(t_hit *hit)
 	if (!hit->obj)
 		return ;
 	base = get_base_object(hit->obj);
-	if (base->texture.index < 0
-		|| base->texture.index >= get_engine()->textures.images->count)
+	if (base->texture.index < 0)
+		return ;
+	if (base->texture.type == CHECKERBOARD
+		&& base->texture.index >= get_engine()->textures.checkers->count)
+		return ;
+	if (base->texture.type == IMAGE
+		&& base->texture.index >= get_engine()->textures.images->count)
 		return ;
 	if (base->type == PLANE)
 		plane_uv(*((t_plane *)hit->obj), hit);
@@ -35,12 +40,13 @@ t_color	get_texel(mlx_texture_t *text, float u, float v)
 	if (y >= text->height)
 		y = text->height - 1;
 	pixel_i = (y * text->width + x) * text->bytes_per_pixel;
-	color = (pixels[pixel_i + 0] << 24) // r
-		| (pixels[pixel_i + 1] << 16)   // g
-		| (pixels[pixel_i + 2] << 8)    // b
-		| pixels[pixel_i + 3];          // a
+	color = (pixels[pixel_i + 0] << 24)
+		| (pixels[pixel_i + 1] << 16)
+		| (pixels[pixel_i + 2] << 8)
+		| pixels[pixel_i + 3];
 	return (int_to_color(color));
 }
+
 /*
 	TBN space:
 		T: u, (right, x-axis)
@@ -53,12 +59,12 @@ t_color	get_texel(mlx_texture_t *text, float u, float v)
 void	apply_normal_bump(mlx_texture_t *txt_normal, t_hit *hit, float u,
 		float v)
 {
-	const t_basis3d	TBN = build_TBN_basis(hit->normal);
+	const t_basis3d	tbn = build_tbn_basis(hit->normal);
 	const t_color	col = get_texel(txt_normal, u, v);
 	t_vec3d			lnormal;
 
 	lnormal = new_vec3d(col.r / 255, col.g / 255, col.b / 255);
 	lnormal = sub_vec3d(nscale_vec3d(lnormal, 2), new_vec3d(1, 1, 1));
-	hit->normal = point_from_basis(lnormal, TBN, hit->pos);
+	hit->normal = point_from_basis(lnormal, tbn, hit->pos);
 	normlize_vec3d(&hit->normal);
 }

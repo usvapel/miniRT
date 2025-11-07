@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/10/22 17:25:09 by zfarah           ###   ########.fr        #
+#    Updated: 2025/11/06 15:48:05 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,13 +95,21 @@ SRCS_MAIN := \
 	parse_plane.c \
 	parse_sphere.c \
 	parse_cube.c \
+	autosave.c \
+	autosave_utils.c \
+	autosave_utils2.c \
 	cube_utils.c \
 	parse_textures.c \
 	parsing_utility.c \
 	parsing_utility2.c \
 	color.c \
+	color2.c \
 	viewport.c \
-	vec3d.c \
+	vectors.c \
+	vectors2.c \
+	vectors3.c \
+	vectors4.c \
+	maths.c \
 	raytracer.c \
 	intersection.c \
 	sphere.c \
@@ -125,6 +133,7 @@ SRCS_MAIN := \
 	phong_utils.c \
 	ray.c \
 	paraboloid.c \
+	paraboloid_utils.c \
 	plane_uv.c \
 	cube_uv.c \
 	texture.c \

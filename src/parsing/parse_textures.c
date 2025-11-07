@@ -34,6 +34,7 @@ void	init_image_text(t_vector *images, char **split)
 		runtime_error("allocation failed");
 	printf("Initializing image texture: %s\n", split[2]);
 	text->texture = mlx_load_png(split[2]);
+	text->txt_source = ft_strdup(split[2]);
 	if (!text->texture)
 	{
 		free(text);
@@ -41,7 +42,10 @@ void	init_image_text(t_vector *images, char **split)
 	}
 	text->bump = NULL;
 	if (split[3])
+	{
 		text->bump = mlx_load_png(split[3]);
+		text->bump_source = ft_strdup(split[3]);
+	}
 	add_elem(images, text);
 }
 
