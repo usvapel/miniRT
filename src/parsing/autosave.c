@@ -3,6 +3,7 @@
 void	auto_save_objects(t_vector *objects);
 void	auto_save_textures(t_textures textures);
 void	auto_save_lights(t_vector lights, t_ambient ambient);
+void	auto_save_skybox(t_skybox skybox);
 
 void	autosave_scene(void)
 {
@@ -20,6 +21,7 @@ void	autosave_scene(void)
 	auto_save_lights(*engine->g_lights, engine->ambient);
 	auto_save_objects(engine->objects);
 	auto_save_textures(engine->textures);
+	auto_save_skybox(engine->skybox);
 	close(fd);
 	exit(1);
 }
@@ -72,4 +74,12 @@ void	auto_save_textures(t_textures textures)
 	printf("\n# Texture checkerboards\n");
 	while (++i < textures.checkers->count)
 		save_texture(textures.checkers->data[i], CHECKERBOARD);
+}
+
+void	auto_save_skybox(t_skybox skybox)
+{
+	printf("\n# Skybox images\n");
+	if (skybox.txt)
+		printf("sky %s", skybox.src);
+	printf("\n");
 }
