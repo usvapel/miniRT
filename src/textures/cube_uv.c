@@ -33,8 +33,8 @@ void	wrap_img_cube(t_hit *hit, int txt_index, float u, float v)
 {
 	const t_image_text	*text = get_engine()->textures.images->data[txt_index];
 
-	u /= 6.0;
-	v /= 6.0;
+	u /= text->block_size;
+	v /= text->block_size;
 	u -= floor(u);
 	v -= floor(v);
 	hit->color = get_texel(text->texture, u, v);
