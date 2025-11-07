@@ -30,11 +30,12 @@ void	draw_scene(void *eng)
 
 void	draw_to_buffer(t_threads *t, int x, int y, int color)
 {
-	const t_engine	*engine = get_engine();
+	mlx_image_t		*buffer;
 	int				block_end_x;
 	int				block_end_y;
 	int				init_x;
 
+	buffer = t->target_buffer;
 	init_x = x;
 	if (y + t->block_size > t->end_y)
 		block_end_y = t->end_y;
@@ -49,7 +50,7 @@ void	draw_to_buffer(t_threads *t, int x, int y, int color)
 		x = init_x;
 		while (x < block_end_x)
 		{
-			mlx_put_pixel(engine->image_buffer, x, y, color);
+			mlx_put_pixel(buffer, x, y, color);
 			x++;
 		}
 		y++;

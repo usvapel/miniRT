@@ -19,6 +19,7 @@ typedef struct s_threads {
   bool last_move;
   int depth;
   int y;
+  void *target_buffer;
 } t_threads;
 
 #endif // MINIRT_THREADS_H
