@@ -11,7 +11,7 @@ void	key_hook(void *param)
 	{
 		if (engine->autosave)
 			autosave_scene();
-		cleanup_and_exit();
+		mlx_close_window(engine->mlx);
 	}
 	mlx_get_mouse_pos(engine->mlx, &x, &y);
 	engine->mouse.prev_pos = engine->mouse.pos;

@@ -78,6 +78,7 @@ typedef struct s_engine {
   t_phong p;
   char *scene;
   bool autosave;
+  int scene_fd;
 } t_engine;
 
 bool should_recalculate(t_engine *eng);
