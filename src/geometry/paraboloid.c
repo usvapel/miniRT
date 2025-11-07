@@ -15,6 +15,8 @@ bool	paraboloid_hit(t_paraboloid *para, t_ray ray, t_hit *hit)
 	float			disc;
 	t_vec3d			n_hit_pos;
 
+	t[0] = -1;
+	t[1] = -1;
 	disc = solve_paraboloid_hit(r, new_paraboloid(new_vec3d(0, 0, 0),
 				new_vec3d(0, 1, 0), para->focal), &t[0], &t[1]);
 	if (disc < 0.0f || (t[0] < 0.0f && t[1] < 0.0f))
