@@ -38,6 +38,6 @@ void    save_cube(t_cube c, t_object b);
 void    save_additional_vals(t_object b);
 void    save_texture(void *txt, t_texture_type type);
 void    save_camera(t_camera c);
-void    save_ampient(t_ambient a);
+void    save_ambient(t_ambient a);
 
 #endif // PARSING_H
