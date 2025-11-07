@@ -28,7 +28,6 @@ void	get_additional_values(t_vector *v, void *obj, char **split, int index)
 	}
 }
 
-void	cleanup_data(void)
 void	get_additional_texture_values(void *txt, t_texture_type type,
 		char **split, int index)
 {
@@ -50,7 +49,7 @@ void	get_additional_texture_values(void *txt, t_texture_type type,
 	}
 }
 
-void	runtime_error(char *s)
+void	cleanup_data(void)
 {
 	t_engine	*engine;
 	int			i;
