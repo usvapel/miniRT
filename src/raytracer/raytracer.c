@@ -10,14 +10,14 @@ t_color	trace_ray(t_threads *t, t_ray ray, int depth)
 	hit.prev_hit = false;
 	(void)objects_intersection(get_engine(), &ray, &hit);
 	if (!hit.prev_hit)
-		return (int_to_color(color_gradient(get_engine(), t->y)));
+		return (skycolor(&ray, t->y));
 	apply_texture(&hit);
 	phong_model(get_engine(), &hit);
 	reflectance = get_base_object(hit.obj)->material.reflect;
 	indice = get_base_object(hit.obj)->material.refract;
 	t->depth = depth;
 	if (t->depth >= BOUNCES)
-		return (int_to_color(color_gradient(get_engine(), t->y)));
+		return (skycolor(&ray, t->y));
 	if (reflectance == -1 && indice == -1)
 		return (hit.color);
 	rf.reflectance = reflectance;
