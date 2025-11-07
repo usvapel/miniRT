@@ -105,6 +105,7 @@ SRCS_MAIN := \
 	camera_utils.c \
 	color.c \
 	color2.c \
+	shadows.c \
 	viewport.c \
 	vectors.c \
 	vectors2.c \
