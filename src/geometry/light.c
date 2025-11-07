@@ -18,7 +18,9 @@ bool	spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 	ft_memset(&t_h, 0, sizeof(float) * 2);
 	lray.origin = adjusted_light_pos(*g_spot);
 	lray.udir = *get_base_light(g_spot)->axis;
-	if (!solve_plane_hit(new_plane(hit->pos, phong->normal), lray, &t_h[0]))
+	t_h[0] = -1;
+	t_h[1] = -1;
+	if (!solve_plane_hit(new_plane(hit->pos, phong->normal), lray, &t_h[0]) || t_h[0] < 0)
 		return (false);
 	pos = get_point_on_ray(lray, t_h[0]);
 	r1 = tanf(deg_to_radians(g_spot->spot_light.fov))
