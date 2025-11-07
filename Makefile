@@ -99,9 +99,11 @@ SRCS_MAIN := \
 	autosave_utils.c \
 	autosave_utils2.c \
 	cube_utils.c \
+	shadow.c \
 	parse_textures.c \
 	parsing_utility.c \
 	parsing_utility2.c \
+	camera_utils.c \
 	parse_skybox.c \
 	skybox.c \
 	color.c \
