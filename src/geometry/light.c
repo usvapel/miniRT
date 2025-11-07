@@ -1,63 +1,40 @@
-
 #include "minirt.h"
 
-bool light_hit(t_generic_light *g_light, t_ray ray, t_hit *hit)
+bool	light_hit(t_generic_light *g_light, t_ray ray, t_hit *hit)
 {
 	if (!g_light->obj)
-		return false;
-	return obj_intersection(g_light->obj, ray, hit);
+		return (false);
+	return (obj_intersection(g_light->obj, ray, hit));
 }
-float smoothstep( float x )
-{
-  return x*x*x/(3.0*x*x-3.0*x+1.0);
-}
-	
-float smoothstep2( float x, float n )
-{
-  return pow(x,n)/(pow(x,n)+pow(1.0-x,n));
-}
+
 bool	spot_light_hit(t_generic_light *g_spot, t_hit *hit, t_phong *phong)
 {
-	t_plane			p;
-	t_object		*base;
-	t_ray			lray;
-	float			t;
-	float			r;
-	float			r1;
-	float			pos_hit;
-	t_vec3d			pos;
-	t_spot_light	*spot;
-	float			h1;
+	t_ray	lray;
+	float	t_h[2];
+	float	r1;
+	float	pos_hit;
+	t_vec3d	pos;
 
-	p = new_plane(hit->pos, phong->normal);
-	base = get_base_light(g_spot);
-	spot = &g_spot->spot_light;
 	lray.origin = adjusted_light_pos(*g_spot);
-	lray.udir = *base->axis;
-	r = tanf(deg_to_radians(spot->fov)) * spot->range;
-	(void)r;
-	if (!solve_plane_hit(p, lray, &t))
-		return false;
-	pos = get_point_on_ray(lray, t);
-	r1 = tanf(deg_to_radians(spot->fov))
+	lray.udir = *get_base_light(g_spot)->axis;
+	t_h[0] = -1;
+	t_h[1] = -1;
+	if (!solve_plane_hit(new_plane(hit->pos, phong->normal), lray, &t_h[0]) || t_h[0] < 0)
+		return (false);
+	pos = get_point_on_ray(lray, t_h[0]);
+	r1 = tanf(deg_to_radians(g_spot->spot_light.fov))
 		* magnitude_vec3d(sub_vec3d(lray.origin, pos));
-	h1 = magnitude_vec3d(sub_vec3d(lray.origin, pos));
+	t_h[1] = magnitude_vec3d(sub_vec3d(lray.origin, pos));
 	pos_hit = magnitude_vec3d(sub_vec3d(pos, hit->pos));
 	if (pos_hit > r1)
 		return (false);
 	scale_vec3d(&phong->light_color, smoothstep2(1 - pos_hit / r1, 0.5));
-	scale_vec3d(&phong->light_color, smoothstep(1 - h1 / spot->range));
+	scale_vec3d(&phong->light_color, smoothstep(1 - t_h[1]
+			/ g_spot->spot_light.range));
 	phong->light_color = color_to_vec3d(vec3d_to_color(phong->light_color));
 	return (true);
 }
 
-// t_vec3d	opague_by_distance(t_vec3d color, float d, float d_max)
-// {
-// 	t_color col = vec3d_to_color(color);
-
-// 	col.a *= d_max / d;
-// 	return (color_to_vec3d());
-// }
 t_vec3d	adjusted_light_pos(t_generic_light light)
 {
 	t_object	obj_base;
