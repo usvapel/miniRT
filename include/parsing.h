@@ -27,6 +27,7 @@ void	init_cube(t_vector *objects, char **split);
 void	init_checkerboard_text(t_vector *checkers, char **split);
 void	init_image_text(t_vector *images, char **split);
 void	link_texture(t_object *obj, char **split, int type);
+void	init_skybox(char **split);
 
 void	autosave_scene(void);
 void    save_light(t_generic_light l);
