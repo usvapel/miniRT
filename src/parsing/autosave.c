@@ -12,7 +12,10 @@ void	autosave_scene(void)
 	if (fd < 0)
 		return ;
 	if (dup2(fd, STDOUT_FILENO) < 0)
+	{
+		close(fd);
 		return ;
+	}
 	save_camera(engine->camera);
 	auto_save_lights(*engine->g_lights, engine->ambient);
 	auto_save_objects(engine->objects);
