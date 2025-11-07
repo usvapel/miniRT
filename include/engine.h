@@ -66,7 +66,7 @@ typedef struct s_engine {
   t_vector *objects;
   t_vector *g_lights;
   t_textures textures;
-  mlx_texture_t *skybox;
+  t_skybox skybox;
   t_viewport viewport;
   atomic_bool update;
   atomic_bool moving;

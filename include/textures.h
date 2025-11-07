@@ -49,6 +49,11 @@ typedef enum e_texture_type
 	IMAGE
 } t_texture_type ;
 
+typedef struct s_skybox
+{
+    mlx_texture_t *txt;
+    char *src;
+} t_skybox;
 
 // apply texture
 void    apply_texture(t_hit *hit);
