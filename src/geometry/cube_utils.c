@@ -42,7 +42,6 @@ static void	set_cube_min_max(t_cube *cube, float h, float w)
 	cube->min = add2_vec3d(cube->base.pos, nscale_vec3d(u, -0.5));
 	cube->min = add2_vec3d(cube->min, nscale_vec3d(v, -0.5));
 	cube->min = add2_vec3d(cube->min, nscale_vec3d(z, -0.5));
-	cube->min = cube->base.pos;
 	cube->max = add2_vec3d(cube->base.pos, u);
 	cube->max = add2_vec3d(cube->max, v);
 	cube->max = add2_vec3d(cube->max, z);

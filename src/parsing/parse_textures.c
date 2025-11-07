@@ -44,7 +44,7 @@ void	init_image_text(t_vector *images, char **split)
 	if (split[3])
 	{
 		text->bump = mlx_load_png(split[3]);
-		text->bump_source = ft_strdup(split[2]);
+		text->bump_source = ft_strdup(split[3]);
 	}
 	add_elem(images, text);
 }
