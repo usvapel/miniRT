@@ -104,6 +104,8 @@ SRCS_MAIN := \
 	parsing_utility.c \
 	parsing_utility2.c \
 	camera_utils.c \
+	parse_skybox.c \
+	skybox.c \
 	color.c \
 	color2.c \
 	viewport.c \

@@ -1,0 +1,20 @@
+# Camera
+C  1.63,0.56,2.62  -0.29,0.04,-0.96  70
+
+# Lights
+A  0.0  0,0,0
+L  50.00,30.76,0.52  0.7  254,243,226  obj 7
+
+# Objects
+sp  0.43,0.76,0.52  0.8  0,130,255  
+
+# Texture images
+tx img ./textures/earth.png
+tx img ./textures/mud.png  ./textures/mud_normal.png
+
+# Texture checkerboards
+tx ch 255,220,80  255,200,50  0.5
+tx ch 180,80,60  220,100,70  0.5
+
+# Skybox images
+sky ./textures/space2.png
