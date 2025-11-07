@@ -2,8 +2,6 @@
 
 static void	set_values(t_engine *engine, char **split)
 {
-	if (!split[0])
-		return ;
 	if (ft_strcmp(split[0], "A") == 0)
 		return (init_ambient(split));
 	if (ft_strcmp(split[0], "C") == 0)
@@ -26,6 +24,8 @@ static void	set_values(t_engine *engine, char **split)
 		return (init_checkerboard_text(engine->textures.checkers, split));
 	if (ft_strcmp(split[0], "tx") == 0 && ft_strcmp(split[1], "img") == 0)
 		return (init_image_text(engine->textures.images, split));
+	if (ft_strcmp(split[0], "sky") == 0)
+		return (init_skybox(split));
 }
 
 static void	read_and_process_file(t_engine *engine, int fd)
@@ -47,7 +47,8 @@ static void	read_and_process_file(t_engine *engine, int fd)
 			free(line);
 			runtime_error("failure during memory allocation!");
 		}
-		set_values(engine, split);
+		if (split[0])
+			set_values(engine, split);
 		free_array((void *)split);
 		free(line);
 	}

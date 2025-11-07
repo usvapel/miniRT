@@ -1,6 +1,7 @@
 #ifndef PRIMITIVES_H
 # define PRIMITIVES_H
 
+#include "stdint.h"
 
 typedef struct s_engine t_engine;
 
