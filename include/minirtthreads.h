@@ -6,6 +6,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+// Forward declaration to avoid including MLX42.h
+typedef struct mlx_image mlx_image_t;
+
 typedef struct s_threads {
   pthread_t thread;
   int index;
@@ -19,7 +22,7 @@ typedef struct s_threads {
   bool last_move;
   int depth;
   int y;
-  void *target_buffer;
+  mlx_image_t *target_buffer;
 } t_threads;
 
 #endif // MINIRT_THREADS_H
