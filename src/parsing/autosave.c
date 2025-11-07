@@ -8,11 +8,9 @@ void	autosave_scene(void)
 {
 	const t_engine	*engine = get_engine();
 	const int		fd = open(engine->scene, O_WRONLY | O_CREAT | O_TRUNC);
-	int				i;
 
 	if (fd < 0)
 		return ;
-	i = -1;
 	if (dup2(fd, STDOUT_FILENO) < 0)
 		return ;
 	save_camera(engine->camera);
@@ -29,7 +27,7 @@ void	auto_save_lights(t_vector lights, t_ambient ambient)
 
 	i = -1;
 	printf("\n# Lights\n");
-	save_ampient(ambient);
+	save_ambient(ambient);
 	while (++i < lights.count)
 		save_light(*((t_generic_light *)lights.data[i]));
 }
