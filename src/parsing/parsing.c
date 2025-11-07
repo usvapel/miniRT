@@ -28,14 +28,14 @@ static void	set_values(t_engine *engine, char **split)
 		return (init_skybox(split));
 }
 
-static void	read_and_process_file(t_engine *engine, int fd)
+static void	read_and_process_file(t_engine *engine)
 {
 	char	*line;
 	char	**split;
 
 	while (true)
 	{
-		line = get_next_line(fd);
+		line = get_next_line(engine->scene_fd);
 		if (!line)
 			break ;
 		if (line[0] != '\n')
@@ -43,7 +43,7 @@ static void	read_and_process_file(t_engine *engine, int fd)
 		split = ft_split(line, ' ');
 		if (!split)
 		{
-			close(fd);
+			close(engine->scene_fd);
 			free(line);
 			runtime_error("failure during memory allocation!");
 		}
@@ -52,7 +52,7 @@ static void	read_and_process_file(t_engine *engine, int fd)
 		free_array((void *)split);
 		free(line);
 	}
-	close(fd);
+	close(engine->scene_fd);
 }
 
 static char	*check_file_validity(char *file)
@@ -91,7 +91,7 @@ static void	map_lights_to_objects(t_vector *objects, t_vector *g_lights)
 
 void	input_parsing(t_engine *engine, char **av)
 {
-	int	fd;
+	char	*filename;
 
 	engine->objects = new_vector(1);
 	engine->g_lights = new_vector(1);
@@ -99,9 +99,12 @@ void	input_parsing(t_engine *engine, char **av)
 	engine->textures.images = new_vector(1);
 	engine->scene = av[1];
 	engine->autosave = av[2] && !ft_strcmp(av[2], "--autosave");
-	fd = open(check_file_validity(av[1]), O_RDONLY);
-	if (fd < 0)
+	filename = check_file_validity(av[1]);
+	if (!filename)
 		runtime_error("failure opening file!");
-	read_and_process_file(engine, fd);
+	engine->scene_fd = open(filename, O_RDONLY);
+	if (engine->scene_fd < 0)
+		runtime_error("failure opening file!");
+	read_and_process_file(engine);
 	map_lights_to_objects(engine->objects, engine->g_lights);
 }
