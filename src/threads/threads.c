@@ -33,7 +33,7 @@ static void	init_values(t_engine *engine, int i, int x_step, int y_step)
 	engine->threads[i].last_move = 0;
 }
 
-void	setup_threads(void *eng)
+void	setup_threads(void *eng, bool create_threads)
 {
 	t_engine	*engine;
 	int			y_step;
@@ -43,12 +43,11 @@ void	setup_threads(void *eng)
 	engine = eng;
 	y_step = engine->window.height / THREAD_COUNT;
 	x_step = engine->window.width;
-	engine->recalculate = true;
 	i = 0;
 	while (i < THREAD_COUNT)
 	{
 		init_values(engine, i, x_step, y_step);
-		if (pthread_create(&engine->threads[i].thread, NULL, raytracer,
+		if (create_threads && pthread_create(&engine->threads[i].thread, NULL, raytracer,
 				&engine->threads[i]))
 		{
 			engine->thread_failure = true;
@@ -69,7 +68,7 @@ bool	should_recalculate(t_engine *eng)
 		return (true);
 	while (i < THREAD_COUNT)
 	{
-		if (eng->threads[i++].block_size != 1)
+		if (eng->threads[i++].block_size != 0)
 			return (true);
 	}
 	return (false);
