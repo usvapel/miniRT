@@ -12,6 +12,9 @@ typedef struct s_engine t_engine;
 // key hook
 void key_hook(void *param);
 
+// resize hook
+void	resize_screen(int window_width, int window_height, void *eng);
+
 // camera movement
 void handle_cam_movement(t_engine *engine);
 

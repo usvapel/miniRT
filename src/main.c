@@ -25,9 +25,12 @@ void	cleanup_and_exit(void)
 
 void	initialize_mlx(t_engine *engine)
 {
-	get_screen_resolution(&engine->window.width, &engine->window.height);
+	engine->mlx = mlx_init(800, 600, "miniRT | fps: 0", false);
+	mlx_get_monitor_size(0, &engine->window.width, &engine->window.height);
+	mlx_set_window_size(engine->mlx, engine->window.width, engine->window.height);
 	engine->window.aspect_ratio = (float)engine->window.width
 		/ (float)engine->window.height;
+	mlx_terminate(engine->mlx);
 	engine->mlx = mlx_init(engine->window.width, engine->window.height,
 			"miniRT | fps: 0", true);
 }
@@ -47,12 +50,12 @@ int	main(int ac, char **av)
 	engine->image_buffer = mlx_new_image(engine->mlx, engine->window.width,
 			engine->window.height);
 	mlx_image_to_window(engine->mlx, engine->image, 0, 0);
-	engine->moving = false;
 	gettimeofday(&engine->frame.start, NULL);
-	setup_threads(engine);
+	mlx_resize_hook(engine->mlx, resize_screen, engine);
 	mlx_loop_hook(engine->mlx, key_hook, engine);
 	mlx_loop_hook(engine->mlx, draw_scene, engine);
 	mlx_loop_hook(engine->mlx, fps_counter, engine);
+	setup_threads(engine, true);
 	mlx_loop(engine->mlx);
 	cleanup_and_exit();
 	return (0);

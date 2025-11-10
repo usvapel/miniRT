@@ -36,7 +36,7 @@ bool	cube_hit(t_cube *cube, t_ray ray, t_hit *hit)
 	float			tnear;
 	t_vec3d			pos;
 
-	if (!aabb_intersection(new_cube(cube->h, cube->w), lray, &tnear,
+	if (!aabb_intersection(new_cube(cube->h, cube->w, cube->d), lray, &tnear,
 			&hit->face_axis) || tnear < 0.0f)
 		return (false);
 	pos = get_point_on_ray(lray, tnear);

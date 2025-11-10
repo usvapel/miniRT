@@ -58,9 +58,9 @@ static void	calculate_scene(t_threads *t)
 			t->y = y;
 			final_color = trace_ray(t, ray, t->depth);
 			draw_to_buffer(t, x, y, color_to_int(final_color));
-			x += t->block_size;
+			x = clamp(x + t->block_size, t->start_x, t->end_x);
 		}
-		y += t->block_size;
+		y = clamp(y + t->block_size, t->start_y, t->end_y);
 	}
 }
 
@@ -76,20 +76,15 @@ void	*raytracer(void *thread)
 		return (NULL);
 	while (!t->end)
 	{
-		while (engine->recalculate == false)
-		{
-			if (t->end)
-				return (NULL);
+		while (t->done && !t->end)
 			usleep(10);
-		}
-		t->done = false;
+		if (t->end)
+			return (NULL);
 		t->last_move = timer(engine->last_move_time, QUALITY_DELAY_SECONDS);
 		calculate_scene(t);
-		if (engine->moving == false && t->last_move == true
-			&& t->block_size > 1)
+		if (!engine->moving && t->last_move && t->block_size > 0)
 			t->block_size--;
 		t->done = true;
-		engine->recalculate = false;
 	}
 	return (NULL);
 }

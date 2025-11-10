@@ -8,7 +8,7 @@ void	auto_save_skybox(t_skybox skybox);
 void	autosave_scene(void)
 {
 	const t_engine	*engine = get_engine();
-	const int		fd = open(engine->scene, O_WRONLY | O_CREAT | O_TRUNC);
+	const int		fd = open(engine->scene, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
 	if (fd < 0)
 		return ;

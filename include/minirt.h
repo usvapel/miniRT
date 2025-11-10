@@ -27,7 +27,6 @@
 #include "vector.h"
 #include "viewport.h"
 
-#include <X11/Xlib.h>
 #include <errno.h>
 #include <float.h>
 #include <math.h>
@@ -43,7 +42,7 @@
 #define OBJ_SPEED 0.0003
 #define OBJ_S_SPEED 0.0005
 #define PI 3.14159265358979323846
-#define QUALITY_DELAY_SECONDS 1
+#define QUALITY_DELAY_SECONDS 2
 
 // phong
 #define A_CONSTANT 1.0f
@@ -63,11 +62,6 @@ int get_seconds(t_engine *engine);
 void phong_model(t_engine *engine, t_hit *hit);
 int objects_intersection(t_engine *engine, t_ray *ray, t_hit *hit);
 bool obj_intersection(void *obj, t_ray ray, t_hit *hit);
-
-// threads
-void setup_threads(void *eng);
-bool wait_for_threads();
-void thread_cleanup();
 
 // phong
 t_vec3d reflect(t_vec3d direction, t_vec3d normal);
