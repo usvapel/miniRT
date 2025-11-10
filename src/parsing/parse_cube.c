@@ -6,10 +6,11 @@ static void	add_values(t_vector *v, t_cube *cube)
 	cube->base.pos = parse_vec3d(v, v->data[0]);
 	cube->w = ft_atof(((char ***)v->data)[1][0]);
 	cube->h = ft_atof(((char ***)v->data)[2][0]);
-	cube->base.color = parse_color(v, v->data[4]);
+	cube->d = ft_atof(((char ***)v->data)[3][0]);
+	cube->base.color = parse_color(v, v->data[5]);
 	cube->base.texture.index = -1;
 	cube->base.texture.type = -1;
-	cube->axis = parse_vec3d(v, v->data[3]);
+	cube->axis = parse_vec3d(v, v->data[4]);
 	cube->base.axis = &cube->axis;
 	cube->base.material.reflect = -1;
 	cube->base.material.refract = -1;
@@ -28,6 +29,7 @@ void	init_cube(t_vector *objects, char **split)
 	add_elem(v, safe_split(v, split[3]));
 	add_elem(v, safe_split(v, split[4]));
 	add_elem(v, safe_split(v, split[5]));
+	add_elem(v, safe_split(v, split[6]));
 	cube = ft_calloc(1, sizeof(t_cube));
 	if (!cube)
 	{
