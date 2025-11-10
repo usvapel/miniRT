@@ -1,0 +1,18 @@
+# Camera
+C  -16.68,0.89,19.97  0.44,-0.08,-0.90  70
+
+# Lights
+A  0.1  0,0,0
+L  -19.16,11.36,-13.26  1.0  254,255,255  
+
+# Objects
+sp  -1.70,0.14,1.58  9.4  255,255,255  img 1
+
+# Texture images
+tx img ./textures/sun.png
+tx img ./textures/mars.png  ./textures/mars_normal.png
+
+# Texture checkerboards
+
+# Skybox images
+sky ./textures/space3.png
