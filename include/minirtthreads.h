@@ -21,4 +21,9 @@ typedef struct s_threads {
   int y;
 } t_threads;
 
+// threads
+void setup_threads(void *eng, bool create_threads);
+bool wait_for_threads();
+void thread_cleanup();
+
 #endif // MINIRT_THREADS_H
