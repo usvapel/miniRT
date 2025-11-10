@@ -62,6 +62,7 @@ typedef struct s_engine {
   mlx_image_t *image;
   mlx_image_t *image_buffer;
   t_camera camera;
+  t_camera lcamera;
   t_ambient ambient;
   t_vector *objects;
   t_vector *g_lights;
