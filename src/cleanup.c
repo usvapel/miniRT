@@ -3,19 +3,20 @@
 void	clean_textures(const t_engine *engine)
 {
 	int				i;
-	t_image_text	*txt_data;
+	t_image_text	**txt_data;
 
-	txt_data = (((t_image_text *)engine->textures.images->data));
+	txt_data = (((t_image_text **)engine->textures.images->data));
 	if (engine->textures.images)
 	{
 		i = -1;
 		while (++i < engine->textures.images->count)
 		{
-			free(txt_data[i].bump_source);
-			free(txt_data[i].txt_source);
-			if (txt_data[i].bump)
-				mlx_delete_texture(txt_data[i].bump);
-			mlx_delete_texture(txt_data[i].texture);
+			free(txt_data[i]->bump_source);
+			free(txt_data[i]->txt_source);
+			if (txt_data[i]->bump)
+				mlx_delete_texture(txt_data[i]->bump);
+			mlx_delete_texture(txt_data[i]->texture);
+			i++;
 		}
 	}
 	if (engine->skybox.txt)

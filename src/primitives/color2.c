@@ -12,13 +12,13 @@ uint32_t	color_to_int(t_color color)
 	g = (uint8_t)(color.g);
 	b = (uint8_t)(color.b);
 	a = (uint8_t)(color.a);
-	result = (r << 24) | (g << 16) | (b << 8) | a;
+	result = ((uint32_t)r << 24) | ((uint32_t)g << 16) | ((uint32_t)b << 8) | a;
 	return (result);
 }
 
 int	get_rgba(int r, int g, int b, int a)
 {
-	return (r << 24 | g << 16 | b << 8 | a);
+	return (((uint32_t)r << 24) | ((uint32_t)g << 16) | ((uint32_t)b << 8) | a);
 }
 
 float	clamp(float value, float min, float max)
