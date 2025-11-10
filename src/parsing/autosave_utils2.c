@@ -11,12 +11,14 @@ void	save_texture(void *txt, t_texture_type type)
 		printf("tx img %s", img->txt_source);
 		if (img->bump_source)
 			printf("  %s", img->bump_source);
+		if (img->block_size > 1.0f)
+			printf(" s %.1f", img->block_size);
 		printf("\n");
 	}
 	else if (type == CHECKERBOARD)
 	{
 		ch = (t_checker *)txt;
-		printf("tx ch %.0f,%.0f,%.0f  %.0f,%.0f,%.0f  %.1f\n", ch->color1.r,
+		printf("tx ch %.0f,%.0f,%.0f  %.0f,%.0f,%.0f  s %.1f\n", ch->color1.r,
 			ch->color1.g, ch->color1.b, ch->color2.r, ch->color2.g,
 			ch->color2.b, ch->block_size);
 	}
