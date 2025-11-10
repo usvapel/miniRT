@@ -37,7 +37,7 @@ void	init_cube(t_vector *objects, char **split)
 		runtime_error("failure during memory allocation!");
 	}
 	add_values(v, cube);
-	get_additional_values(v, (void *)&cube->base, split, 6);
+	get_additional_values(v, (void *)&cube->base, split, 7);
 	free_split_vector(v);
 	validate_color(cube->base.color);
 	add_elem(objects, cube);
