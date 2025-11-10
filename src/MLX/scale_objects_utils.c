@@ -24,10 +24,10 @@ void	scale_cylinder(t_cylinder *cy, float dx, float dy, float dt)
 {
 	cy->r += OBJ_S_SPEED * -dx * dt;
 	cy->h += OBJ_S_SPEED * dy * dt;
-	if (cy->r <= 0.05f)
-		cy->r = 0.05f;
-	if (cy->h <= 0.05f)
-		cy->h = 0.05f;
+	if (cy->r <= 0.1f)
+		cy->r = 0.1f;
+	if (cy->h <= 0.1f)
+		cy->h = 0.1f;
 }
 
 void	scale_sphere(t_sphere *sphere, float dx, float dt)

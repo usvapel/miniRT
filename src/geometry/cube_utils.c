@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static void	set_cube_min_max(t_cube *cube, float h, float w);
+static void	set_cube_min_max(t_cube *cube);
 
 float	compute_axis_tbounds(t_cube cube, t_ray ray, int index, bool max)
 {
@@ -33,11 +33,11 @@ void	set_min_max_tbounds(float *t1, float *t2, float *tmin, float *tmax)
 		*tmax = *t2;
 }
 
-static void	set_cube_min_max(t_cube *cube, float h, float w)
+static void	set_cube_min_max(t_cube *cube)
 {
-	const t_vec3d	u = new_vec3d(w, 0, 0);
-	const t_vec3d	v = new_vec3d(0, h, 0);
-	const t_vec3d	z = new_vec3d(0, 0, sqrtf(w * w + h * h));
+	const t_vec3d	u = new_vec3d(cube->w, 0, 0);
+	const t_vec3d	v = new_vec3d(0, cube->h, 0);
+	const t_vec3d	z = new_vec3d(0, 0, cube->d);
 
 	cube->min = add2_vec3d(cube->base.pos, nscale_vec3d(u, -0.5));
 	cube->min = add2_vec3d(cube->min, nscale_vec3d(v, -0.5));
@@ -47,11 +47,14 @@ static void	set_cube_min_max(t_cube *cube, float h, float w)
 	cube->max = add2_vec3d(cube->max, z);
 }
 
-t_cube	new_cube(float h, float w)
+t_cube	new_cube(float h, float w, float d)
 {
 	t_cube	cube;
 
 	cube = (t_cube){0};
-	set_cube_min_max(&cube, h, w);
+	cube.h = h;
+	cube.w = w;
+	cube.d = d;
+	set_cube_min_max(&cube);
 	return (cube);
 }

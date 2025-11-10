@@ -10,6 +10,7 @@ void	setup_viewport(void)
 
 	engine = get_engine();
 	update_viewport(&engine->viewport, engine->window);
+	engine->lcamera = engine->camera;
 }
 
 void	update_viewport(t_viewport *viewport, t_window window)
