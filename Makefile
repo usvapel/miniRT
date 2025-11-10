@@ -111,7 +111,6 @@ SRCS_MAIN := \
 	color2.c \
 	viewport.c \
 	vectors.c \
-	utility.c \
 	vectors2.c \
 	vectors3.c \
 	vectors4.c \
@@ -121,6 +120,7 @@ SRCS_MAIN := \
 	sphere.c \
 	fps.c \
 	key_hooks.c \
+	resize_hook.c \
 	plane.c \
 	hit.c \
 	draw.c \
