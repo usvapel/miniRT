@@ -44,6 +44,7 @@ void	move_objects(t_engine *engine)
 				return ;
 			grabbed = true;
 		}
+		engine->moving = true;
 		move_object(obj, engine->mouse.pos.x, engine->mouse.pos.y);
 	}
 	else
@@ -88,6 +89,7 @@ void	rotate_objects(t_engine *engine)
 				return ;
 			grabbed = true;
 		}
+		engine->moving = true;
 		rotate_object(obj, dx, dy);
 	}
 	else

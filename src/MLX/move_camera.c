@@ -11,9 +11,10 @@ static bool	move_camera(t_engine *engine)
 	t_vec3d		tmp_dir;
 	bool		oriented;
 
-	camera = &engine->camera;
+	camera = &engine->lcamera;
 	tmp_dir = nscale_vec3d(camera->dir, CAM_SPEED * engine->frame.delta);
 	oriented = orient_camera(engine);
+	engine->moving = oriented;
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_W) && ++oriented)
 		add_vec3d(&camera->pos, tmp_dir);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_S) && ++oriented)
@@ -23,9 +24,9 @@ static bool	move_camera(t_engine *engine)
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_A) && ++oriented)
 		move_left_right(camera, LEFT);
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_SPACE) && ++oriented)
-		engine->camera.pos.y += CAM_SPEED * engine->frame.delta;
+		camera->pos.y += CAM_SPEED * engine->frame.delta;
 	if (mlx_is_key_down(engine->mlx, MLX_KEY_LEFT_CONTROL) && ++oriented)
-		engine->camera.pos.y -= CAM_SPEED * engine->frame.delta;
+		camera->pos.y -= CAM_SPEED * engine->frame.delta;
 	return (oriented);
 }
 
@@ -72,8 +73,8 @@ static bool	orient_camera(t_engine *engine)
 	dy = engine->mouse.prev_pos.y - engine->mouse.pos.y;
 	dx = engine->mouse.prev_pos.x - engine->mouse.pos.x;
 	dt = fminf(get_engine()->frame.delta, 1.0f / 30.0f);
-	rotatey_vec3d(&engine->camera.dir, CAM_SENS * -dx * dt);
-	look_up_down(&engine->camera, CAM_SENS * dy * dt * 0.001f);
+	rotatey_vec3d(&engine->lcamera.dir, CAM_SENS * -dx * dt);
+	look_up_down(&engine->lcamera, CAM_SENS * dy * dt * 0.001f);
 	engine->mouse.prev_pos.x = engine->mouse.pos.x;
 	engine->mouse.prev_pos.y = engine->mouse.pos.y;
 	return (true);
@@ -83,6 +84,9 @@ void	handle_cam_movement(t_engine *engine)
 {
 	if (!move_camera(engine))
 		return ;
+	engine->moving = true;
+	engine->update = true;
 	wait_for_threads();
 	update_camera();
+	engine->update = false;
 }
