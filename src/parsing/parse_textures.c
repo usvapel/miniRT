@@ -56,5 +56,4 @@ void	link_texture(t_object *obj, char **split, int type)
 {
 	obj->texture.type = type;
 	obj->texture.index = ft_atoi(split[1]);
-	printf("Linkage type: %d, i: %d\n", obj->type, obj->texture.index);
 }
