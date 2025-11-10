@@ -49,13 +49,13 @@ void	map_uv_by_cube_face_axis(t_cube cube, t_hit *hit, float *u, float *v)
 
 	if (hit->face_axis == 0)
 	{
-		*u = l_hit.z / cube.h;
+		*u = l_hit.z / cube.d;
 		*v = l_hit.y / cube.h;
 	}
 	else if (hit->face_axis == 1)
 	{
 		*u = l_hit.x / cube.w;
-		*v = l_hit.z / cube.h;
+		*v = l_hit.z / cube.d;
 	}
 	else if (hit->face_axis == 2)
 	{
