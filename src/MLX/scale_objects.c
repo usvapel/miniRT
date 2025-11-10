@@ -12,8 +12,8 @@ void	scale_objects(t_engine *engine)
 		obj = inside_object(&ray, engine->mouse.pos.x, engine->mouse.pos.y);
 		if (!obj)
 			return ;
+		engine->moving = true;
 		scale_object(obj);
-		update_camera();
 	}
 }
 
