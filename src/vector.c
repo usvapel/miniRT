@@ -37,7 +37,7 @@ void	expand_vector(t_vector *vector)
 		i++;
 	}
 	vector->data = new;
-	vector->size *= 2;
+	vector->size *= 2 + 1;
 	free(old);
 }
 
