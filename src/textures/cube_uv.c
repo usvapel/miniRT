@@ -44,22 +44,23 @@ void	wrap_img_cube(t_hit *hit, int txt_index, float u, float v)
 
 void	map_uv_by_cube_face_axis(t_cube cube, t_hit *hit, float *u, float *v)
 {
-	const t_basis3d	local = build_local_basis(cube.axis);
-	const t_vec3d	l_hit = point_in_basis(hit->pos, local, cube.base.pos);
+ 	t_basis3d tbn = build_tbn_basis(hit->normal);
+    t_vec3d lhit = point_in_basis(hit->pos, tbn, cube.base.pos);
+    float face_w;
+	float face_h;
 
-	if (hit->face_axis == 0)
+    if ( hit->face_axis  == 0)
 	{
-		*u = l_hit.z / cube.d;
-		*v = l_hit.y / cube.h;
-	}
-	else if (hit->face_axis == 1)
+        face_w = cube.d;
+        face_h = cube.h;
+    } else if (hit->face_axis == 1)
 	{
-		*u = l_hit.x / cube.w;
-		*v = l_hit.z / cube.d;
-	}
-	else if (hit->face_axis == 2)
-	{
-		*u = l_hit.x / cube.w;
-		*v = l_hit.y / cube.h;
-	}
+        face_w = cube.w;
+        face_h = cube.d;
+    } else {
+        face_w = cube.w;
+        face_h = cube.h;
+    }
+    *u = (lhit.x / face_w) + 0.5f;
+    *v = (lhit.y / face_h) + 0.5f;
 }
