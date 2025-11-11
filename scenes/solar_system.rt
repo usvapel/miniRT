@@ -1,0 +1,25 @@
+# Camera
+C  0.95,8.28,13.96  0.34,-0.24,-0.91  70
+
+# Lights
+A  0.5  0,0,0
+L  0.00,0.00,0.52  1.0  254,255,255  obj 0
+L  0.00,0.00,0.52  0.6  254,255,255  obj 1
+
+# Objects
+sp  21.39,9.04,-5.25  7.5  255,255,255  img 1
+sp  -2.25,1.23,7.97  1.2  255,255,255  img 1
+sp  4.65,2.98,-2.40  2.1  255,255,255  img 0
+sp  3.37,5.68,-1.99  0.8  255,255,255  img 2
+sp  -0.16,3.86,1.68  3.0  255,255,255  img 3
+
+# Texture images
+tx img ./textures/8k_earth.png  ./textures/8k_earth_normal.png
+tx img ./textures/sun.png
+tx img ./textures/moon.png  ./textures/moon_normals.png
+tx img ./textures/mars.png  ./textures/mars_normal.png
+
+# Texture checkerboards
+
+# Skybox images
+sky ./textures/space2.png
