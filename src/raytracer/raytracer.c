@@ -1,4 +1,3 @@
-#include "MLX42.h"
 #include "minirt.h"
 
 t_color	trace_ray(t_threads *t, t_ray ray, int depth)
