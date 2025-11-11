@@ -47,6 +47,7 @@ typedef struct s_refract
 	float		reflectance;
 	float		indice;
 }				t_refract;
+  float prev_indice;
 
 void			*raytracer(void *engine);
 t_color			trace_ray(t_threads *t, t_ray ray, int depth);
