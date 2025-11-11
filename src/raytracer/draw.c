@@ -1,20 +1,18 @@
 #include "minirt.h"
 
-void thread_recalculate(t_engine *engine);
+void	thread_recalculate(t_engine *engine);
 void	reset_pixel_block_size(t_engine *engine);
 
 void	draw_scene(void *eng)
 {
-	t_engine		*engine;
-	
+	t_engine	*engine;
 
 	engine = eng;
 	usleep(1000);
 	wait_for_threads();
 	while (engine->update)
 		usleep(20);
-	ft_memcpy(engine->image->pixels,
-		engine->image_buffer->pixels,
+	ft_memcpy(engine->image->pixels, engine->image_buffer->pixels,
 		engine->window.width * engine->window.height * 4);
 	engine->frame.delta = time_in_ms() - engine->frame.t_last_frame;
 	engine->frame.t_last_frame = time_in_ms();
@@ -66,9 +64,11 @@ void	reset_pixel_block_size(t_engine *engine)
 	}
 }
 
-void thread_recalculate(t_engine *engine)
+void	thread_recalculate(t_engine *engine)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (i < THREAD_COUNT)
 		engine->threads[i++].done = false;
 }

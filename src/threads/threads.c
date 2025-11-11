@@ -47,8 +47,8 @@ void	setup_threads(void *eng, bool create_threads)
 	while (i < THREAD_COUNT)
 	{
 		init_values(engine, i, x_step, y_step);
-		if (create_threads && pthread_create(&engine->threads[i].thread, NULL, raytracer,
-				&engine->threads[i]))
+		if (create_threads && pthread_create(&engine->threads[i].thread, NULL,
+				raytracer, &engine->threads[i]))
 		{
 			engine->thread_failure = true;
 			while (i)
