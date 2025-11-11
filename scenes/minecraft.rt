@@ -222,7 +222,7 @@ cu  -1.60,-0.70,-1.15  0.1  0.1  0.1    0,1,0    20,20,20 img 6
 
 sky ./textures/NightSkyHD1.png
 tx img ./textures/gravel.png ./textures/gravel_normal.png
-tx img ./textures/forest_ground.png ./textures/forest_ground_normal.png
+tx img ./textures/Grass.png ./textures/Grass_normal.png
 tx img ./textures/pine_bark.png ./textures/pine_bark_normal.png
 tx img ./textures/leaves.png ./textures/leaves_normal.png
 tx img ./textures/water.png ./textures/water_normal.png s 0.4
