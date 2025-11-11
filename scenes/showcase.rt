@@ -16,10 +16,8 @@ sp  0.00,-5.60,0.00  10.20  255,255,255 rl 1.0 rf 1.58
 # cy  0,5.6,10  0.00,1.00,0.00  1.9  2.6  90,90,90
 # pa  0,5.6,10  0.00,-1.00,0.00  1  1  255,245,182
 
-# sp  15.00,5.60,0.00  10.18  255,255,255 img 1
 # Texture images
 tx img ./textures/water.png  ./textures/water_normal.png s 4.0
-tx img ./textures/onyx.png ./textures/onyx_normal.png
 
 # Texture checkerboards
 tx ch 64,64,64  224,224,224  s 3.0
