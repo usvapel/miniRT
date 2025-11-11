@@ -48,5 +48,5 @@ void	cleanup_and_exit(void)
 	thread_cleanup();
 	cleanup_data();
 	mlx_terminate(engine->mlx);
-	exit(1);
+	exit(EXIT_SUCCESS);
 }
