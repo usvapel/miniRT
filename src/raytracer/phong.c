@@ -28,11 +28,14 @@ static void	loop_through_lights(t_phong *p, t_engine *engine, t_hit *hit)
 		if (get_base_object(light)->type == SPOT_LIGHT && !spot_light_hit(light,
 				hit, p))
 			continue ;
+		shadow = (t_vec3d){1,1,1};
 		shadow = get_shadow_attenuation(p, *hit, *light);
 		if (shadow.x < EPSILON && shadow.y < EPSILON && shadow.z < EPSILON)
 			continue ;
 		get_diffuse(p);
 		if (hit->type != PLANE && hit->type != CUBE)
+			get_specular(engine, hit, p, *light);
+		if ((hit->type == PLANE || hit->type == CUBE) && get_base_object(hit->obj)->texture.index != -1)
 			get_specular(engine, hit, p, *light);
 		accumulate_colors(p, light, shadow);
 	}
