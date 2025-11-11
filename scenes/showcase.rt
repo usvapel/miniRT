@@ -1,0 +1,40 @@
+# Camera
+C  0.00,0.60,-1.06  -0.01,-0.04,1.00  70
+
+# Lights
+A  0.0  255,255,255
+L  40.00,40.00,0.00  0.5  255,255,255 
+
+# Objects
+sp  0.00,0.60,0.00  0.20  255,255,255 rl 1.0 rf 1.58
+sp  0.00,0.60,0.00  0.18  255,255,255 rl 1.0 rf 1.0003
+
+pl  0.00,0.00,0.00  0.00,1.00,0.00  173,161,146  ch 0
+
+# Texture checkerboards
+tx ch 64,64,64  224,224,224  1.0
+tx ch 128,128,128  160,160,160  0.5
+
+sky ./textures/NightSkyHD1.png
+
+
+# Material	Index of Refraction
+# Vacuum	           1.0000
+# Air	               1.0003
+# Ice	               1.309
+# Water	               1.333
+# Ethyl Alcohol        1.361
+# Teflon	           1.38
+# Fluorite	           1.434
+# Glycerine	           1.473
+# Benzene	           1.501
+# Plexiglas	           1.51
+# Crown Glass	       1.52
+# Light Flint Glass    1.58
+# Polycarbonate Glass  1.59
+# Dense Flint Glass    1.66
+# Sapphire gemstone    1.77
+# Zircon               1.923
+# Diamond              2.417
+# Rutile               2.907
+# Gallium phosphide    3.50
