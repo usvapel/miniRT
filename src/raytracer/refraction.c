@@ -60,14 +60,14 @@ t_color	handle_refraction(t_threads *t, t_refract *rf, t_ray ray, t_hit *hit)
 {
 	calculate_face_normal(ray, hit, rf);
 	rf->should_reflect = false;
-	rf->R = refract(ray.udir, rf->normal, rf->eta_ratio, &rf->should_reflect);
+	rf->r = refract(ray.udir, rf->normal, rf->eta_ratio, &rf->should_reflect);
 	if (rf->should_reflect)
 	{
-		rf->R = reflect(ray.udir, rf->normal);
-		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->R, true);
+		rf->r = reflect(ray.udir, rf->normal);
+		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->r, true);
 	}
 	else
-		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->R,
+		rf->reflected = create_reflected_ray(hit->pos, rf->normal, rf->r,
 				false);
 	rf->reflect_color = trace_ray(t, rf->reflected, t->depth + 1);
 	return (mix_colors(hit->color, rf->reflect_color, rf->reflectance));
