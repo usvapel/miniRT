@@ -65,6 +65,6 @@ void	apply_normal_bump(mlx_texture_t *txt_normal, t_hit *hit, float u,
 
 	lnormal = new_vec3d(col.r / 255, col.g / 255, col.b / 255);
 	lnormal = sub_vec3d(nscale_vec3d(lnormal, 2), new_vec3d(1, 1, 1));
-	hit->normal = point_from_basis(lnormal, tbn, hit->pos);
+	hit->normal = point_from_basis(lnormal, tbn, new_vec3d(0, 0, 0));
 	normlize_vec3d(&hit->normal);
 }
