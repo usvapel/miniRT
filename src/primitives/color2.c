@@ -8,10 +8,10 @@ uint32_t	color_to_int(t_color color)
 	uint8_t		a;
 	uint32_t	result;
 
-	r = (uint8_t)(color.r);
-	g = (uint8_t)(color.g);
-	b = (uint8_t)(color.b);
-	a = (uint8_t)(color.a);
+	r = (uint8_t)(clamp(color.r, 0.0f, 255.0f));
+	g = (uint8_t)(clamp(color.g, 0.0f, 255.0f));
+	b = (uint8_t)(clamp(color.b, 0.0f, 255.0f));
+	a = (uint8_t)(clamp(color.a, 0.0f, 255.0f));
 	result = ((uint32_t)r << 24) | ((uint32_t)g << 16) | ((uint32_t)b << 8) | a;
 	return (result);
 }
