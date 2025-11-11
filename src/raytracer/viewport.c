@@ -22,6 +22,7 @@ void	update_viewport(t_viewport *viewport, t_window window)
 
 	engine = get_engine();
 	fov = engine->camera.fov;
+	engine->camera.dir = normalize_vec3d(engine->camera.dir);
 	w = nscale_vec3d(engine->camera.dir, -1);
 	engine->camera.u = cross_vec3d(w, vu);
 	engine->camera.v = cross_vec3d(w, engine->camera.u);
