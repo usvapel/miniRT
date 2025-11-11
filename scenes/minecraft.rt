@@ -2,18 +2,10 @@ C   0,0,0         1,0,0                       70
 
 A   0.2                                          82,107,122
 
-L   000000,100000,000000         0.6               255,255,255
-L   100000,100000,000000         0.6               255,255,255
-L   000000,100000,100000         0.6               255,255,255
-L   -100000,100000,000000        0.6               255,255,255
-L   000000,100000,-100000        0.6               255,255,255
-L   -100000,100000,-100000       0.6               255,255,255
-L   100000,100000,100000         0.6               255,255,255
+LS  -1.00,40.00,-1.00  0.0,-1.0,0.0  1.0  1000  60   255,255,255
 
-
-pl  0.00,-5.00,0.00  0.00,1.00,0.00  0,0,255 img 4
-# pl  0.00,-100,0.00  0.00,1.00,0.00  0,0,255 img 0
-
+pl  0.00,-5.00,0.00  0.00,1.00,0.00  0,0,255 img 4 rl 0.8 rf 1.3325
+pl  0.00,-100,0.00  0.00,1.00,0.00  0,0,255 img 0
 
 #cube  #pos   #width #height #depth #orientation #color
 # Classic Minecraft Skyblock Map
@@ -227,14 +219,11 @@ cu  -1.60,-0.70,-1.30  0.1  0.08  0.1    0,1,0    255,0,0 rl 0.1 rf 1.63 img 5
 cu  -1.60,-0.70,-1.15  0.1  0.1  0.1    0,1,0    20,20,20 img 6
 
 sky ./textures/DaySkyHD.png
+tx img ./textures/gravel.png ./textures/gravel_normal.png
+tx img ./textures/forest_ground.png ./textures/forest_ground_normal.png
+tx img ./textures/pine_bark.png ./textures/pine_bark_normal.png
+tx img ./textures/leaves.png ./textures/leaves_normal.png
+tx img ./textures/water.png ./textures/water_normal.png s 4
+tx img ./textures/lava.png ./textures/lava_normal.png
+tx img ./textures/volcanic_rock.png ./textures/volcanic_rock_normal.png
 
-tx img ./textures/rocky_gravel_diff_4k.png ./textures/rocky_gravel_nor_gl_4k.png
-
-tx img ./textures/aerial_grass_rock_diff_4k.png ./textures/aerial_grass_rock_nor_gl_4k.png
-
-tx img ./textures/pine_bark_diff_4k.png ./textures/pine_bark_nor_gl_4k.png s 4
-tx img ./textures/ScatteredLeaves008_4K-PNG_Color.png ./textures/ScatteredLeaves008_4K-PNG_NormalGL.png s 4
-tx img ./textures/Water_002_COLOR.png ./textures/Water_002_NORM.png
-
-tx img ./textures/Lava004_4K-PNG_Color.png ./textures/Lava004_4K-PNG_NormalGL.png
-tx img ./textures/Rock013_4K-PNG_Color.png ./textures/Rock013_4K-PNG_NormalGL.png
