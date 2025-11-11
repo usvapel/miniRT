@@ -21,7 +21,6 @@ void	init_checkerboard_text(t_vector *checkers, char **split)
 	check->block_size = 3.0f;
 	get_additional_texture_values(check, CHECKERBOARD, split, 3);
 	free_split_vector(v);
-	print_vec(color_to_vec3d(check->color1), "Color: ");
 	add_elem(checkers, check);
 }
 
