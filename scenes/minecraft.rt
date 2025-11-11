@@ -1,11 +1,13 @@
-C   0,0,0         1,0,0                       70
+# Camera
+C  1.90,0.79,-4.00  -0.69,-0.23,0.69  140
 
 A   0.2                                          82,107,122
 
 LS  -1.00,40.00,-1.00  0.0,-1.0,0.0  1.0  1000  60   255,255,255
 
-pl  0.00,-5.00,0.00  0.00,1.00,0.00  0,0,255 img 4 rl 0.8 rf 1.3325
-pl  0.00,-100,0.00  0.00,1.00,0.00  0,0,255 img 0
+# pl  0.00,-5.00,0.00  0.00,1.00,0.00  0,0,255 img 4 rl 1.0 rf 1.3325
+sp  0.00,-520,0.00  1000  255,255,255  img 4 rl 1.0 rf 1.3325
+# pl  0.00,-100,0.00  0.00,1.00,0.00  0,0,255 img 0
 
 #cube  #pos   #width #height #depth #orientation #color
 # Classic Minecraft Skyblock Map
@@ -218,12 +220,12 @@ cu  -1.60,-0.70,-1.30  0.1  0.08  0.1    0,1,0    255,0,0 rl 0.1 rf 1.63 img 5
 #cobblestone
 cu  -1.60,-0.70,-1.15  0.1  0.1  0.1    0,1,0    20,20,20 img 6
 
-sky ./textures/DaySkyHD.png
+sky ./textures/NightSkyHD1.png
 tx img ./textures/gravel.png ./textures/gravel_normal.png
 tx img ./textures/forest_ground.png ./textures/forest_ground_normal.png
 tx img ./textures/pine_bark.png ./textures/pine_bark_normal.png
 tx img ./textures/leaves.png ./textures/leaves_normal.png
-tx img ./textures/water.png ./textures/water_normal.png s 4
+tx img ./textures/water.png ./textures/water_normal.png s 0.4
 tx img ./textures/lava.png ./textures/lava_normal.png
 tx img ./textures/volcanic_rock.png ./textures/volcanic_rock_normal.png
 
