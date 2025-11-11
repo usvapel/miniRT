@@ -11,10 +11,18 @@ static void	accumulate_colors(t_phong *p, t_generic_light *light,
 	p->final_color = add2_vec3d(p->final_color, p->specular);
 }
 
+static void	init_phong(t_phong *p, t_hit *hit, t_generic_light *light)
+{
+	t_object	*base;
+
+	base = get_base_light(light);
+	p->light_color = color_to_vec3d(base->color);
+	p->nlight_dir = normalize_vec3d(sub_vec3d(base->pos, hit->pos));
+}
+
 static void	loop_through_lights(t_phong *p, t_engine *engine, t_hit *hit)
 {
 	t_generic_light	*light;
-	t_object		*base;
 	t_vec3d			shadow;
 	int				i;
 
@@ -22,20 +30,19 @@ static void	loop_through_lights(t_phong *p, t_engine *engine, t_hit *hit)
 	while (i < engine->g_lights->count)
 	{
 		light = engine->g_lights->data[i++];
-		base = get_base_light(light);
-		p->light_color = color_to_vec3d(base->color);
-		p->nlight_dir = normalize_vec3d(sub_vec3d(base->pos, hit->pos));
+		init_phong(p, hit, light);
 		if (get_base_object(light)->type == SPOT_LIGHT && !spot_light_hit(light,
 				hit, p))
 			continue ;
-		shadow = (t_vec3d){1,1,1};
+		shadow = (t_vec3d){1, 1, 1};
 		shadow = get_shadow_attenuation(p, *hit, *light);
 		if (shadow.x < EPSILON && shadow.y < EPSILON && shadow.z < EPSILON)
 			continue ;
 		get_diffuse(p);
 		if (hit->type != PLANE && hit->type != CUBE)
 			get_specular(engine, hit, p, *light);
-		if ((hit->type == PLANE || hit->type == CUBE) && get_base_object(hit->obj)->texture.index != -1)
+		if ((hit->type == PLANE || hit->type == CUBE)
+			&& get_base_object(hit->obj)->texture.index != -1)
 			get_specular(engine, hit, p, *light);
 		accumulate_colors(p, light, shadow);
 	}

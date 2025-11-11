@@ -40,3 +40,13 @@ void	cleanup_data(void)
 	if (engine->scene_fd != -1)
 		close(engine->scene_fd);
 }
+
+void	cleanup_and_exit(void)
+{
+	const t_engine	*engine = get_engine();
+
+	thread_cleanup();
+	cleanup_data();
+	mlx_terminate(engine->mlx);
+	exit(1);
+}
