@@ -6,7 +6,7 @@
 #    By: zfarah <zfarah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 20:55:03 by jpelline          #+#    #+#              #
-#    Updated: 2025/11/06 15:48:05 by zfarah           ###   ########.fr        #
+#    Updated: 2025/11/11 14:09:12 by zfarah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,6 +86,7 @@ VPATH	:= $(SRC_DIR): \
 # Parsing and syntax analysis
 SRCS_MAIN := \
 	main.c \
+	utils.c \
 	parsing.c \
 	parse_ambient.c \
 	parse_camera.c \
@@ -119,6 +120,7 @@ SRCS_MAIN := \
 	intersection.c \
 	sphere.c \
 	fps.c \
+	init.c \
 	key_hooks.c \
 	resize_hook.c \
 	plane.c \
