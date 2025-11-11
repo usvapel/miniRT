@@ -5,24 +5,26 @@ t_color	trace_ray(t_threads *t, t_ray ray, int depth)
 	t_refract	rf;
 	t_hit		hit;
 	float		reflectance;
-	float		indice;
+	float		refract_indice;
 
+	rf.prev_indice = 1;
 	hit.prev_hit = false;
-	(void)objects_intersection(get_engine(), &ray, &hit);
+	objects_intersection(get_engine(), &ray, &hit);
 	if (!hit.prev_hit)
 		return (skycolor(&ray, t->y));
 	apply_texture(&hit);
 	phong_model(get_engine(), &hit);
 	reflectance = get_base_object(hit.obj)->material.reflect;
-	indice = get_base_object(hit.obj)->material.refract;
+	refract_indice = get_base_object(hit.obj)->material.refract;
 	t->depth = depth;
 	if (t->depth >= BOUNCES)
 		return (skycolor(&ray, t->y));
-	if (reflectance == -1 && indice == -1)
+	if (reflectance == -1 && refract_indice == -1)
 		return (hit.color);
 	rf.reflectance = reflectance;
-	rf.indice = indice;
-	if (indice != -1)
+	rf.prev_indice = rf.indice;
+	rf.indice = refract_indice;
+	if (refract_indice != -1)
 		return (handle_refraction(t, &rf, ray, &hit));
 	return (handle_reflection(t, ray, &hit, reflectance));
 }
