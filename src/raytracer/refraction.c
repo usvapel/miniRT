@@ -19,12 +19,12 @@ static void	calculate_face_normal(t_ray ray, t_hit *hit, t_refract *rf)
 	if (rf->front_face)
 	{
 		rf->normal = hit->normal;
-		rf->eta_ratio = (1.0f / rf->indice);
+		rf->eta_ratio = (rf->prev_indice / rf->indice);
 	}
 	else
 	{
 		rf->normal = nscale_vec3d(hit->normal, -1.0f);
-		rf->eta_ratio = (rf->indice / 1.0f);
+		rf->eta_ratio = (rf->indice / rf->prev_indice);
 	}
 }
 
