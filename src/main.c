@@ -5,7 +5,7 @@ int	main(int ac, char **av)
 	t_engine	*engine;
 
 	if (ac < 2)
-		return (0);
+		return (EINVAL);
 	engine = get_engine();
 	input_parsing(engine, av);
 	initialize_mlx(engine);
@@ -17,5 +17,5 @@ int	main(int ac, char **av)
 	setup_threads(engine, true);
 	mlx_loop(engine->mlx);
 	cleanup_and_exit();
-	return (0);
+	return (EXIT_SUCCESS);
 }
